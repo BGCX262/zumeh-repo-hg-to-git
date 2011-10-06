@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/17/trunk/src/com/es/zumeh/server/model
+END
+UserServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/17/trunk/src/com/es/zumeh/server/model/UserServiceImpl.java
+END
+GoogleUserInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/server/model/GoogleUserInfo.java
+END
+SessionManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/17/trunk/src/com/es/zumeh/server/model/SessionManager.java
+END

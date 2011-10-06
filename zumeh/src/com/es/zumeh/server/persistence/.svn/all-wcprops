@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/15/trunk/zumeh/src/com/es/zumeh/server/persistence
+END
+HibernateUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/15/trunk/zumeh/src/com/es/zumeh/server/persistence/HibernateUtil.java
+END
+GenericDAO.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/15/trunk/zumeh/src/com/es/zumeh/server/persistence/GenericDAO.java
+END
+GenericDAOImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/15/trunk/zumeh/src/com/es/zumeh/server/persistence/GenericDAOImpl.java
+END
+ZumehDAOFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/15/trunk/zumeh/src/com/es/zumeh/server/persistence/ZumehDAOFactory.java
+END
+ConsultaParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/15/trunk/zumeh/src/com/es/zumeh/server/persistence/ConsultaParser.java
+END
+ZumehDAOFactoryImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/15/trunk/zumeh/src/com/es/zumeh/server/persistence/ZumehDAOFactoryImpl.java
+END
+EMF.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/15/trunk/zumeh/src/com/es/zumeh/server/persistence/EMF.java
+END

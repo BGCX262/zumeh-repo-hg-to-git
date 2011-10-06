@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/17/trunk/src/com/es/zumeh/client/facade
+END
+UserService.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/17/trunk/src/com/es/zumeh/client/facade/UserService.java
+END
+ZumehCallBack.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/facade/ZumehCallBack.java
+END
+ZumehServiceAsync.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/facade/ZumehServiceAsync.java
+END
+ZumehService.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/facade/ZumehService.java
+END
+UserServiceAsync.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/17/trunk/src/com/es/zumeh/client/facade/UserServiceAsync.java
+END

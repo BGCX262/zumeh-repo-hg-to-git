@@ -1,0 +1,40 @@
+10
+
+dir
+17
+http://zumeh.googlecode.com/svn/trunk/zumeh/src/com/es/zumeh/server
+http://zumeh.googlecode.com/svn
+
+
+
+2011-09-29T05:27:01.567712Z
+15
+htrmeira@gmail.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+0e4526d7-8aa3-dbfb-5f59-1cba2ebff964
+
+model
+dir
+
+facade
+dir
+
+persistence
+dir
+
+util
+dir
+

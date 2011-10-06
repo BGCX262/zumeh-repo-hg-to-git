@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/15/trunk/zumeh/war/genfilesforspeedtracer/com/google/gwt/user/client/rpc
+END
+IncompatibleRemoteServiceException_FieldSerializer.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/!svn/ver/15/trunk/zumeh/war/genfilesforspeedtracer/com/google/gwt/user/client/rpc/IncompatibleRemoteServiceException_FieldSerializer.java
+END
+XsrfToken_FieldSerializer.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/15/trunk/zumeh/war/genfilesforspeedtracer/com/google/gwt/user/client/rpc/XsrfToken_FieldSerializer.java
+END
+RpcTokenException_FieldSerializer.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/!svn/ver/15/trunk/zumeh/war/genfilesforspeedtracer/com/google/gwt/user/client/rpc/RpcTokenException_FieldSerializer.java
+END

@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/svn/!svn/ver/16/trunk/lib
+END
+mysql-connector-java-5.1.16-bin.jar
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/16/trunk/lib/mysql-connector-java-5.1.16-bin.jar
+END
+hibernate-validator-4.0.2.GA.jar
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/16/trunk/lib/hibernate-validator-4.0.2.GA.jar
+END
+javassist-3.12.0.GA.jar
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/16/trunk/lib/javassist-3.12.0.GA.jar
+END
+geronimo-jpa_3.0_spec-1.0.jar
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/16/trunk/lib/geronimo-jpa_3.0_spec-1.0.jar
+END
+gwt-links-1.4.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/16/trunk/lib/gwt-links-1.4.2.jar
+END
+geronimo-jta_1.1_spec-1.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/16/trunk/lib/geronimo-jta_1.1_spec-1.1.jar
+END
+hibernate3.jar
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/16/trunk/lib/hibernate3.jar
+END
+commons-collections-3.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/16/trunk/lib/commons-collections-3.2.jar
+END
+commons-lang-2.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/16/trunk/lib/commons-lang-2.1.jar
+END
+serp-1.13.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/16/trunk/lib/serp-1.13.1.jar
+END
+openjpa-1.2.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/16/trunk/lib/openjpa-1.2.1.jar
+END
+geronimo-jms_1.1_spec-1.0.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/16/trunk/lib/geronimo-jms_1.1_spec-1.0.1.jar
+END
+hibernate-jpa-2.0-api-1.0.0.Final.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/16/trunk/lib/hibernate-jpa-2.0-api-1.0.0.Final.jar
+END
+gwt-incubator-20101117-r1766.jar
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/16/trunk/lib/gwt-incubator-20101117-r1766.jar
+END
+gwt-dnd-3.1.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/16/trunk/lib/gwt-dnd-3.1.2.jar
+END

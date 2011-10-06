@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/model/work
+END
+InvalidContentException.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/model/work/InvalidContentException.java
+END
+Comment.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/model/work/Comment.java
+END
+Work.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/model/work/Work.java
+END
+Node.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/model/work/Node.java
+END
+WorkStatus.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/model/work/WorkStatus.java
+END
+Atachments.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/model/work/Atachments.java
+END
+NodeStatus.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/model/work/NodeStatus.java
+END
+Revision.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/16/trunk/src/com/es/zumeh/client/model/work/Revision.java
+END

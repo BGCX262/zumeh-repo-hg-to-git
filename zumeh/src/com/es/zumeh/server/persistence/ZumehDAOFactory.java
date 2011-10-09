@@ -1,6 +1,6 @@
 package com.es.zumeh.server.persistence;
 
-import com.es.zumeh.server.model.User;
+import com.es.zumeh.client.model.user.User;
 
 /**
  * Defines all DAOs and the concrete factories to get the conrecte DAOs.

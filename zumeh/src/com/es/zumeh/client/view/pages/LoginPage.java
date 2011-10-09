@@ -135,7 +135,6 @@ public class LoginPage extends Widget implements EntryPoint {
 	}
 	
 	
-	
 	private class GoogleClickHandler implements ClickHandler {
 		public Auth AUTH;
 		
@@ -163,42 +162,45 @@ public class LoginPage extends Widget implements EntryPoint {
 						@Override
 						public void onSuccess(final String token2) {
 							// TODO Auto-generated method stub
-							System.out.println("ACertou sem servir pra nada... " + token2);
-							rootPanel.clear();
-				            FirstAccessPage pagTest = ScreenFactory.getInstance().getFirstAccessPage(token);
-				            pagTest.onModuleLoad();
-							System.out.println("Deu certo. lol");
+							//zumehService.getUserEmail(token, );
+							//if (!userExist()) {
+								//System.out.println("ACertou sem servir pra nada... " + token2);
+								rootPanel.clear();
+					            FirstAccessPage pagTest = ScreenFactory.getInstance().getFirstAccessPage(token);
+					            pagTest.onModuleLoad();
+								System.out.println("Deu certo. lol");
+							
+//							} else {
+//								rootPanel.clear();
+//								ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().getProfileReadOnlyPage(token);
+//								profilePage.onModuleLoad();
+//							}
+							
+							
+							
+							
+							
 						}
 						
+						private boolean userExist() {
+//							ZumehDAOFactory factory = ZumehDAOFactoryImpl.sharedSessionFactory();
+//							UserDAO userDAO = factory.getUserDAO();
+							
+							//User userRec = userDAO.findByPK(user.getId());
+							
+							return false;
+						}
+						
+						
+
+					
+
 						@Override
 						public void onFailure(Throwable arg0) {
-							// TODO Auto-generated method stub
 							System.out.println("Falhou sem servir pra nada...");
 						}
 					});
-					
-					
-					/*ZumehCallBack callBack = new ZumehCallBack() {
-						@Override
-						public void onSuccess(String arg0) {
-							
-							// TODO Auto-generated method stub
-							
-						}
-						
-						@Override
-						public void onFailure(Throwable arg0) {
-							// TODO Auto-generated method stub
-							System.out.println("Deu merda...");
-							
-						}
-					};*/
-					
-		            /*greetingService.greetServer(token, callBack);
-		            rootPanel.clear();
-		            FirstAccessPage pagTest = ScreenFactory.getInstance().getFirstAccessPage();
-		            pagTest.onModuleLoad();*/
-		            
+							            
 		            //TODO FAZER a tela de editar dados.
 		            
 				}

@@ -3,12 +3,11 @@ package com.es.zumeh.server.model;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
+import com.es.zumeh.client.model.user.User;
 import com.google.gdata.client.GoogleService;
 import com.google.gdata.data.BaseFeed;
-import com.google.gdata.data.Entry;
 import com.google.gdata.data.Feed;
 import com.google.gdata.data.Person;
 import com.google.gdata.util.ServiceException;

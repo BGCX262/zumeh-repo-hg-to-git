@@ -8,13 +8,22 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
+import com.es.zumeh.client.model.user.User;
+
 
 public class ProfileReadOnlyPage implements EntryPoint {
 	
+	private User user;
+	
 	//private User user; //TODO add the user.
+	public ProfileReadOnlyPage(User user) {
+		this.user = user;
+	}
 
 	@Override
 	public void onModuleLoad() {
+		
+
 		
 		final Label errorLabel = new Label();
 		

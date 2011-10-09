@@ -5,7 +5,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.es.zumeh.server.model.User;
+import com.es.zumeh.client.model.user.User;
 import com.es.zumeh.server.persistence.ZumehDAOFactory.UserDAO;
 
 public class UserDAOTest {

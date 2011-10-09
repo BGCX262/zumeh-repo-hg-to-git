@@ -1,20 +1,13 @@
 package com.es.zumeh.server.facade;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
 import com.es.zumeh.client.facade.ZumehService;
+import com.es.zumeh.client.model.user.User;
 import com.es.zumeh.client.model.work.Work;
 import com.es.zumeh.server.model.GoogleUserInfo;
 import com.es.zumeh.server.model.SessionManager;
-import com.es.zumeh.server.model.User;
-import com.google.gdata.client.GoogleService;
-import com.google.gdata.data.BaseFeed;
-import com.google.gdata.data.Feed;
-import com.google.gdata.data.Person;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -113,5 +106,23 @@ public class ZumehServiceImpl extends RemoteServiceServlet implements ZumehServi
 		e.printStackTrace();
 	}*/
 		return input;
+	}
+
+	@Override
+	public List<User> getUserList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User getUser(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User addUser(User user) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -5,7 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
-import com.es.zumeh.server.model.User;
+import com.es.zumeh.client.model.user.User;
 
 /**
  * Classe utilitaria que levanta o hibernate. HIBERNATE_CFG_XML define as

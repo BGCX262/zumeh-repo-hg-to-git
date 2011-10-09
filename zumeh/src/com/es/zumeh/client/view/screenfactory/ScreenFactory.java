@@ -2,6 +2,8 @@ package com.es.zumeh.client.view.screenfactory;
 
 import com.es.zumeh.client.view.pages.FirstAccessPage;
 import com.es.zumeh.client.view.pages.LoginPage;
+import com.es.zumeh.client.model.user.User;
+
 import com.es.zumeh.client.view.pages.ProfileReadOnlyPage;
 
 public class ScreenFactory {
@@ -30,8 +32,8 @@ public class ScreenFactory {
 		return pag;
 	}
 
-	public ProfileReadOnlyPage getProfileReadOnlyPage() {
-		this.profileReadOnlyPage = new ProfileReadOnlyPage();
+	public ProfileReadOnlyPage getProfileReadOnlyPage(User user) {
+		this.profileReadOnlyPage = new ProfileReadOnlyPage(user);
 		return profileReadOnlyPage;
 	}
 	

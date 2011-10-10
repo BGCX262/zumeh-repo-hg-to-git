@@ -8,6 +8,9 @@ import com.es.zumeh.client.model.user.User;
 import com.es.zumeh.client.model.work.Work;
 import com.es.zumeh.server.model.GoogleUserInfo;
 import com.es.zumeh.server.model.SessionManager;
+import com.es.zumeh.server.persistence.ZumehDAOFactory;
+import com.es.zumeh.server.persistence.ZumehDAOFactory.UserDAO;
+import com.es.zumeh.server.persistence.ZumehDAOFactoryImpl;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -122,7 +125,7 @@ public class ZumehServiceImpl extends RemoteServiceServlet implements ZumehServi
 
 	@Override
 	public User addUser(User user) {
-		// TODO Auto-generated method stub
-		return null;
+		sessionManager.addUser(user);
+		return user;
 	}
 }

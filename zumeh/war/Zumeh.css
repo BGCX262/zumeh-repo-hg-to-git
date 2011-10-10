@@ -15,6 +15,26 @@ h1 {
   font-size: 16pt;
 }
 
+.gwt-PopupPanel {
+  position: absolute;
+  border: 3px solid #e7e7e7;
+  padding: 9px;
+  background: white;
+}
+
+.imageProfileBoard {
+	border-width: 6px;
+	border-color: #000000;
+}
+
+.profileBackGround {
+	background-color: #F5F5F5;
+}
+
+.teste {
+	background-color: #FFCCCC;
+}
+
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
   width: 400px;
@@ -31,4 +51,7 @@ h1 {
 /** Set ids using widget.getElement().setId("idOfElement") */
 #closeButton {
   margin: 15px 6px 6px;
+}
+.profileBackGround-works {
+	background-color: #D9D9F3
 }

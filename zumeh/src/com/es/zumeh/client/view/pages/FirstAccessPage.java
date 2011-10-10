@@ -1,8 +1,6 @@
 package com.es.zumeh.client.view.pages;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import com.es.zumeh.client.facade.ZumehService;
 import com.es.zumeh.client.facade.ZumehServiceAsync;
@@ -37,8 +35,6 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class FirstAccessPage implements EntryPoint {
 	
@@ -55,8 +51,6 @@ public class FirstAccessPage implements EntryPoint {
 	private String email;
 	private String whoAreYou;
 	private String fullName;
-	
-	private List<User> users;
 	
 	private RootPanel rootPanel;
 	
@@ -84,12 +78,12 @@ public class FirstAccessPage implements EntryPoint {
 		fullName = "";
 		
 		rootPanel = RootPanel.get("nameFieldContainer");
-		rootPanel.setStyleName("rootPanelProfile");
+		rootPanel.setStyleName("profileBackGround-works");
 		rootPanel.setSize("1024", "768");
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 		
 		AbsolutePanel absolutePanel = new AbsolutePanel();
-		absolutePanel.setStyleName("h1");
+		absolutePanel.setStyleName("profileBackGround-works");
 		rootPanel.add(absolutePanel, 143, 74);
 		absolutePanel.setSize("657px", "489px");
 		
@@ -98,11 +92,11 @@ public class FirstAccessPage implements EntryPoint {
 		absolutePanel_1.setSize("821px", "68px");
 		
 		AbsolutePanel absolutePanel_2 = new AbsolutePanel();
-		rootPanel.add(absolutePanel_2, 27, 45);
-		absolutePanel_2.setSize("100px", "100px");
+		rootPanel.add(absolutePanel_2, 10, 36);
+		absolutePanel_2.setSize("135px", "181px");
 		
 		AbsolutePanel absolutePanel_3 = new AbsolutePanel();
-		absolutePanel_3.setStyleName("h2");
+		absolutePanel_3.setStyleName("teste");
 		absolutePanel.add(absolutePanel_3, 10, 20);
 		absolutePanel_3.setSize("313px", "350px");
 		
@@ -201,16 +195,6 @@ public class FirstAccessPage implements EntryPoint {
 //				
 //			}
 //		});
-	}
-	
-	public Widget onInitialize() {
-		VerticalPanel vPanel = new VerticalPanel();
-	    vPanel.setSpacing(5);
-	    
-	    vPanel.add(new Button());
-		
-		return vPanel;
-		
 	}
 
 	private void whoAreYouTextArea(AbsolutePanel absolutePanel) {
@@ -422,20 +406,15 @@ public class FirstAccessPage implements EntryPoint {
 						}
 					};
 					
-					users = new ArrayList<User>();
-					User newUser = createUser();
-					
-					users.add(newUser);
+					User newUser = createUser(); //FIXME Deveria adicionar o usuario no BD.
 					zumehService.addUser(newUser, w);
 					
-					Window.confirm("Your informations was saved with success."
-							+ "\nSEXO: " + newUser.getGender()  +
-							"\n" + "Nascimento: " + newUser.getBirthday() + "\n" + "name = " + newUser.getName() +
-							"\n" + "EMAIL = " + newUser.getEmail());
+					Window.confirm("Your informations was saved with success.");
 					//sendMail();
 					
 					rootPanel.clear();
-					ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().getProfileReadOnlyPage(newUser);
+					ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().
+							getProfileReadOnlyPage(newUser);
 					profilePage.onModuleLoad();
 
 					//
@@ -467,9 +446,9 @@ public class FirstAccessPage implements EntryPoint {
 	}
 
 	private void loadImages(AbsolutePanel absolutePanel, AbsolutePanel absolutePanel_2) {
-		Image image = new Image("images/macaco1.jpg");
-		absolutePanel_2.add(image, 0, 0);
-		image.setSize("100px", "100px");
+		Image image = new Image("images/sheldon.jpg");
+		absolutePanel_2.add(image, 14, 0);
+		image.setSize("121px", "164px");
 		
 		Image image_1 = new Image("images/bode2.png");
 		absolutePanel.add(image_1, 358, 20);

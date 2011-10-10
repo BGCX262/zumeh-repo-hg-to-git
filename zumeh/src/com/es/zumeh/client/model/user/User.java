@@ -13,15 +13,12 @@ public class User implements Serializable {
 	
 	private static final long serialVersionUID = 6974269351580312846L;
 	
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
 	private String login;
 
-	@NotNull
 	private String password;
 
 	private String email;

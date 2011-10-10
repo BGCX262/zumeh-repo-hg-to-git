@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.es.zumeh.client.model.user.User;
+import com.es.zumeh.server.persistence.ZumehDAOFactory;
+import com.es.zumeh.server.persistence.ZumehDAOFactoryImpl;
+import com.es.zumeh.server.persistence.ZumehDAOFactory.UserDAO;
 import com.google.gdata.client.GoogleService;
 import com.google.gdata.data.BaseFeed;
 import com.google.gdata.data.Feed;
@@ -15,9 +18,13 @@ import com.google.gdata.util.ServiceException;
 public class SessionManager {
 	private static SessionManager thisInstance;
 	private HashMap<String, User> openedSessions;
+	private ZumehDAOFactory factory;
+	private UserDAO userDAO;
 	
 	private SessionManager() {
 		openedSessions = new HashMap<String, User>();
+		factory = ZumehDAOFactoryImpl.sharedSessionFactory();
+		userDAO = factory.getUserDAO();
 	}
 	
 	public User getLoggedUser(String token) {
@@ -71,6 +78,10 @@ public class SessionManager {
 		user.setEmail(person.getEmail());
 		
 		return user;
+	}
+
+	public void addUser(User user) {
+		userDAO.makePersistent(user);
 	}
 }
 

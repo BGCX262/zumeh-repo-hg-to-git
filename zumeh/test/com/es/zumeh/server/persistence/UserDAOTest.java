@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.es.zumeh.client.model.user.User;
-import com.es.zumeh.server.persistence.ZumehDAOFactory.UserDAO;
 
 public class UserDAOTest {
 	
@@ -23,8 +22,10 @@ public class UserDAOTest {
 		User user = new User();
 		user.setLogin("login");
 		user.setPassword("password");
-		
 		userDAO.makePersistent(user);
+
+//		Não deu certo!
+//		userDAO.saveUser(user.getLogin(), user.getPassword());
 		User userRec = userDAO.findByPK(user.getId());
 		Assert.assertNotNull(userRec);
 	}

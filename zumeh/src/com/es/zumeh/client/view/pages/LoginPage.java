@@ -12,6 +12,7 @@ import com.google.api.gwt.oauth2.client.AuthRequest;
 import com.google.api.gwt.oauth2.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -55,6 +56,7 @@ public class LoginPage extends Widget implements EntryPoint {
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 		
 		Image image = new Image(StringConstants.ZUMEH_LOGO_IMAGE.getValue());
+		rootPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
 		rootPanel.add(image, 72, 132);
 		image.setSize("245px", "171px");
 		

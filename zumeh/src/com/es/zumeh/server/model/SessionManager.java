@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.es.zumeh.client.model.user.User;
+import com.es.zumeh.server.persistence.UserDAO;
 import com.es.zumeh.server.persistence.ZumehDAOFactory;
 import com.es.zumeh.server.persistence.ZumehDAOFactoryImpl;
-import com.es.zumeh.server.persistence.ZumehDAOFactory.UserDAO;
 import com.google.gdata.client.GoogleService;
 import com.google.gdata.data.BaseFeed;
 import com.google.gdata.data.Feed;

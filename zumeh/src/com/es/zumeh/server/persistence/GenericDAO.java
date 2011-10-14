@@ -3,6 +3,14 @@ package com.es.zumeh.server.persistence;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * All DAO classes must extends this GenericDAO. See {@link GenericDAOImpl}
+ * 
+ * @author Ana Clara Lacerda
+ *
+ * @param <DTO> entity
+ * @param <ID> id type
+ */
 public interface GenericDAO<DTO, ID extends Serializable> {
 
 	/**

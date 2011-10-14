@@ -1,6 +1,5 @@
 package com.es.zumeh.server.persistence;
 
-import com.es.zumeh.client.model.user.User;
 
 /**
  * Defines all DAOs and the concrete factories to get the conrecte DAOs.
@@ -49,7 +48,5 @@ public abstract class ZumehDAOFactory {
 	            throw new RuntimeException("Couldn't create DAOFactory: " + factory);
 	        }
 	    }
-
-	    public static class UserDAO extends GenericDAOImpl<User, Long>{};
 	    
 }

@@ -125,4 +125,10 @@ public class ZumehServiceImpl extends RemoteServiceServlet implements ZumehServi
 		sessionManager.addUser(user);
 		return user;
 	}
+
+	@Override
+	public void sendEmail(String from, String to, String subject, String message) {
+		sessionManager.sendMail(from, to, subject, message);
+		
+	}
 }

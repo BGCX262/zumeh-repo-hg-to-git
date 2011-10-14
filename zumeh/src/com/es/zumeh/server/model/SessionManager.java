@@ -9,6 +9,7 @@ import com.es.zumeh.client.model.user.User;
 import com.es.zumeh.server.persistence.UserDAO;
 import com.es.zumeh.server.persistence.ZumehDAOFactory;
 import com.es.zumeh.server.persistence.ZumehDAOFactoryImpl;
+import com.es.zumeh.server.util.SendMail;
 import com.google.gdata.client.GoogleService;
 import com.google.gdata.data.BaseFeed;
 import com.google.gdata.data.Feed;
@@ -16,15 +17,19 @@ import com.google.gdata.data.Person;
 import com.google.gdata.util.ServiceException;
 
 public class SessionManager {
+	
 	private static SessionManager thisInstance;
 	private HashMap<String, User> openedSessions;
 	private ZumehDAOFactory factory;
 	private UserDAO userDAO;
+	private SendMail sendEmail;
+	
 	
 	private SessionManager() {
 		openedSessions = new HashMap<String, User>();
 		factory = ZumehDAOFactoryImpl.sharedSessionFactory();
 		userDAO = factory.getUserDAO();
+		sendEmail = new SendMail();
 	}
 	
 	public User getLoggedUser(String token) {
@@ -82,6 +87,10 @@ public class SessionManager {
 
 	public void addUser(User user) {
 		userDAO.makePersistent(user);
+	}
+	
+	public void sendMail(String from, String to, String subject, String message) {
+		sendEmail.sendMail(from, to, subject, message);
 	}
 }
 

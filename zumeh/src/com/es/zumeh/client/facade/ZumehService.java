@@ -27,4 +27,6 @@ public interface ZumehService extends RemoteService {
 	List<User> getUserList();
 	User getUser(String id);
 	User addUser(User user);
+	
+	void sendEmail(String from, String to, String title, String text);
 }

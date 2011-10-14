@@ -25,4 +25,6 @@ public interface ZumehServiceAsync {
 	void getUser(String id, AsyncCallback<User> callback);
 	void addUser(User user, AsyncCallback<User> callback);
 	void getUserList(AsyncCallback<List<User>> callback);
+	void sendEmail(String from, String to, String title, String text,
+			AsyncCallback<Void> callback);
 }

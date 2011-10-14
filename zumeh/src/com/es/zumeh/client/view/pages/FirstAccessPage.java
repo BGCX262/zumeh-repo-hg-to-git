@@ -64,7 +64,12 @@ public class FirstAccessPage implements EntryPoint {
 	private static final String[] LOCATIONS = {"Campina Grande", "Pesqueira",
 			"Fortaleza", "Joao Pessoa", "Recife"};
 	
+	private static final String MESSAGE = "Welcome to Zumeh\nThanks for use Zumeh app!" +
+			"\n\nMore details HERE{Link} ";
+	
 	private final ZumehServiceAsync zumehService = GWT.create(ZumehService.class);
+	
+	private static final String ZUMEH_USER = "zumeh.app@gmail.com";
 	
 	
 	public FirstAccessPage(String token) {
@@ -393,34 +398,63 @@ public class FirstAccessPage implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				if (isAlldataCompleted()) {
 					
-					AsyncCallback<User> w = new AsyncCallback<User>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							caught.printStackTrace();
-						}
-
-						@Override
-						public void onSuccess(User result) {
-							System.out.println(result);
-						}
-					};
+					AsyncCallback<User> w = createAsyncCallbackForUser();
+					
+					AsyncCallback<Void> em = createAsyncCallbackForEmail();
 					
 					User newUser = createUser(); //FIXME Deveria adicionar o usuario no BD.
 					zumehService.addUser(newUser, w);
 					
+					sendMail(em);
+					
 					Window.confirm("Your informations was saved with success.");
-					//sendMail();
 					
 					rootPanel.clear();
 					ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().
 							getProfileReadOnlyPage(newUser);
 					profilePage.onModuleLoad();
 
-					//
 				} else {
 					Window.alert("Some informations is incomplete.");
 				}
+			}
+
+			private void sendMail(AsyncCallback<Void> em) {
+				zumehService.sendEmail(ZUMEH_USER, email,
+						"Welcome to Zumeh", MESSAGE, em);
+			}
+
+			private AsyncCallback<User> createAsyncCallbackForUser() {
+				AsyncCallback<User> w = new AsyncCallback<User>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.printStackTrace();
+					}
+
+					@Override
+					public void onSuccess(User result) {
+						System.out.println(result);
+					}
+				};
+				return w;
+			}
+
+			private AsyncCallback<Void> createAsyncCallbackForEmail() {
+				AsyncCallback<Void> em = new AsyncCallback<Void>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.printStackTrace();
+					}
+
+					@Override
+					public void onSuccess(Void result) {
+						System.out.println(result);
+						
+					}
+				};
+				return em;
 			}
 
 			private User createUser() {
@@ -434,14 +468,6 @@ public class FirstAccessPage implements EntryPoint {
 				newUser.setWhoAreYou(whoAreYou);
 				return newUser;
 			}
-
-
-
-//			private void sendMail() {
-//				SendMail sendEmail = new SendMail();
-//				sendEmail.sendMail("chalanger@gmail.com", email, "Teste Zumeh app", "Welcome guy!");
-//
-//			}
 		});
 	}
 

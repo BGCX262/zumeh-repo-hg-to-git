@@ -13,10 +13,16 @@ public class ZumehDAOFactoryImpl extends ZumehDAOFactory {
 		}
 	}
 
-	//Adicionar aqui todos os DAOs criados
 	@Override
 	public UserDAO getUserDAO() {
-		return (UserDAO) instantiateDAO(UserDAO.class);
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+//	//Adicionar aqui todos os DAOs criados
+//	@Override
+//	public UserDAO getUserDAO() {
+//		return (UserDAO) instantiateDAO(UserDAO.class);
+//	}
 
 }

@@ -11,9 +11,11 @@
     <property name="hibernate.connection.password">zum3hDB</property>
     <property name="hibernate.connection.pool_size">50</property>
     <property name="hibernate.show_sql">true</property>
-    <property name="hibernate.hbm2ddl.auto">create-drop</property> 
+    <property name="hibernate.hbm2ddl.auto">create-drop-update</property> 
     <property name="packagesToScan">com.es.zumeh.server.persistence</property>
     <property name="hibernate.current_session_context_class">thread</property>
+    
+    <mapping class="com.es.zumeh.server.model.persistence.User"/>
     
     </session-factory>
 </hibernate-configuration>

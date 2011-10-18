@@ -3,8 +3,8 @@ package com.es.zumeh.client.facade;
 import java.util.HashMap;
 import java.util.List;
 
-import com.es.zumeh.client.model.user.User;
 import com.es.zumeh.client.model.work.Work;
+import com.es.zumeh.server.model.persistence.User;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**

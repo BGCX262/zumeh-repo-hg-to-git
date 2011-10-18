@@ -2,9 +2,9 @@ package com.es.zumeh.client.view.screenfactory;
 
 import com.es.zumeh.client.view.pages.FirstAccessPage;
 import com.es.zumeh.client.view.pages.LoginPage;
-import com.es.zumeh.client.model.user.User;
 
 import com.es.zumeh.client.view.pages.ProfileReadOnlyPage;
+import com.es.zumeh.server.model.persistence.User;
 
 public class ScreenFactory {
 	

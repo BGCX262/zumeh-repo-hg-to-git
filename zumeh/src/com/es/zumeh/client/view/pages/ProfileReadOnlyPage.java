@@ -1,6 +1,6 @@
 package com.es.zumeh.client.view.pages;
 
-import com.es.zumeh.client.model.user.User;
+import com.es.zumeh.server.model.persistence.User;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -33,7 +33,7 @@ public class ProfileReadOnlyPage implements EntryPoint {
 		final Label errorLabel = new Label();
 		
 		RootPanel rootPanel = RootPanel.get("nameFieldContainer");
-		rootPanel.setSize("1024", "768");
+		rootPanel.setSize("640", "480");
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 		rootPanel.setStyleName(".teste");
 		

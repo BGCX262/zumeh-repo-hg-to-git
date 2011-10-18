@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
-import com.es.zumeh.client.model.user.User;
+import com.es.zumeh.server.model.persistence.User;
 import com.es.zumeh.server.persistence.UserDAO;
 import com.es.zumeh.server.persistence.ZumehDAOFactory;
 import com.es.zumeh.server.persistence.ZumehDAOFactoryImpl;
@@ -22,13 +22,16 @@ public class SessionManager {
 	private HashMap<String, User> openedSessions;
 	private ZumehDAOFactory factory;
 	private UserDAO userDAO;
+	private DAOManager daoManager;
 	private SendMail sendEmail;
 	
 	
 	private SessionManager() {
+		daoManager = new DAOManager();
 		openedSessions = new HashMap<String, User>();
 		factory = ZumehDAOFactoryImpl.sharedSessionFactory();
-		userDAO = factory.getUserDAO();
+		//userDAO = factory.getUserDAO();
+		userDAO = new UserDAO();
 		sendEmail = new SendMail();
 	}
 	
@@ -86,11 +89,18 @@ public class SessionManager {
 	}
 
 	public void addUser(User user) {
-		userDAO.makePersistent(user);
+		userDAO.saveUser(user.getLogin(), user.getPassword(), user.getEmail(), user.getName(),
+				user.getWhoAreYou(), user.getInterestedArea(),
+				user.getGender(), user.getLocation(), user.getBirthday());
+		//userDAO.makePersistent(user);
 	}
 	
 	public void sendMail(String from, String to, String subject, String message) {
 		sendEmail.sendMail(from, to, subject, message);
+	}
+
+	public UserDAO getUserDAO() {
+		return userDAO;
 	}
 }
 

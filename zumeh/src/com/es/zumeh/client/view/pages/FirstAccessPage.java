@@ -4,9 +4,10 @@ import java.util.HashMap;
 
 import com.es.zumeh.client.facade.ZumehService;
 import com.es.zumeh.client.facade.ZumehServiceAsync;
-import com.es.zumeh.client.model.user.User;
+import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.model.work.Work;
 import com.es.zumeh.client.view.screenfactory.ScreenFactory;
+import com.es.zumeh.server.model.persistence.User;
 import com.es.zumeh.shared.util.Validate;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -84,7 +85,7 @@ public class FirstAccessPage implements EntryPoint {
 		
 		rootPanel = RootPanel.get("nameFieldContainer");
 		rootPanel.setStyleName("profileBackGround-works");
-		rootPanel.setSize("1024", "768");
+		rootPanel.setSize("640", "480");
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 		
 		AbsolutePanel absolutePanel = new AbsolutePanel();
@@ -402,17 +403,17 @@ public class FirstAccessPage implements EntryPoint {
 					
 					AsyncCallback<Void> em = createAsyncCallbackForEmail();
 					
-					User newUser = createUser(); //FIXME Deveria adicionar o usuario no BD.
-					zumehService.addUser(newUser, w);
+					UserTO newUser = createUser(); //FIXME Deveria adicionar o usuario no BD.
+					//zumehService.addUser(newUser, w); //FIXME ADD USER
 					
 					sendMail(em);
 					
 					Window.confirm("Your informations was saved with success.");
 					
 					rootPanel.clear();
-					ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().
-							getProfileReadOnlyPage(newUser);
-					profilePage.onModuleLoad();
+//					ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().
+//							getProfileReadOnlyPage(newUser);
+				//	profilePage.onModuleLoad();
 
 				} else {
 					Window.alert("Some informations is incomplete.");
@@ -457,8 +458,8 @@ public class FirstAccessPage implements EntryPoint {
 				return em;
 			}
 
-			private User createUser() {
-				User newUser = new User();
+			private UserTO createUser() {
+				UserTO newUser = new UserTO();
 				newUser.setBirthday(birthDay);
 				newUser.setEmail(email);
 				newUser.setName(fullName);

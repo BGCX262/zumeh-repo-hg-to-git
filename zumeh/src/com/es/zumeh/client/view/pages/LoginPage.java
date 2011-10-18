@@ -52,7 +52,7 @@ public class LoginPage extends Widget implements EntryPoint {
 		// Use RootPanel.get() to get the entire body element
 		rootPanel = RootPanel.get("nameFieldContainer");
 		rootPanel.setStyleName("gwt-DialogBox");
-		rootPanel.setSize("1024", "768");
+		rootPanel.setSize("640", "480");
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 		
 		Image image = new Image(StringConstants.ZUMEH_LOGO_IMAGE.getValue());

@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
+import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.server.model.persistence.User;
 import com.es.zumeh.server.persistence.UserDAO;
 import com.es.zumeh.server.persistence.ZumehDAOFactory;
@@ -85,10 +86,12 @@ public class SessionManager {
 		user.setName(person.getName());
 		user.setEmail(person.getEmail());
 		
+		System.out.println("ENTROU");
+		
 		return user;
 	}
 
-	public void addUser(User user) {
+	public void addUser(UserTO user) {
 		userDAO.saveUser(user.getLogin(), user.getPassword(), user.getEmail(), user.getName(),
 				user.getWhoAreYou(), user.getInterestedArea(),
 				user.getGender(), user.getLocation(), user.getBirthday());

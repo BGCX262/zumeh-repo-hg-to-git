@@ -6,8 +6,6 @@ import com.es.zumeh.client.facade.ZumehService;
 import com.es.zumeh.client.facade.ZumehServiceAsync;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.model.work.Work;
-import com.es.zumeh.client.view.screenfactory.ScreenFactory;
-import com.es.zumeh.server.model.persistence.User;
 import com.es.zumeh.shared.util.Validate;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -399,12 +397,12 @@ public class FirstAccessPage implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				if (isAlldataCompleted()) {
 					
-					AsyncCallback<User> w = createAsyncCallbackForUser();
+					AsyncCallback<UserTO> w = createAsyncCallbackForUser();
 					
 					AsyncCallback<Void> em = createAsyncCallbackForEmail();
 					
 					UserTO newUser = createUser(); //FIXME Deveria adicionar o usuario no BD.
-					//zumehService.addUser(newUser, w); //FIXME ADD USER
+					zumehService.addUser(newUser, w); //FIXME ADD USER
 					
 					sendMail(em);
 					
@@ -425,8 +423,8 @@ public class FirstAccessPage implements EntryPoint {
 						"Welcome to Zumeh", MESSAGE, em);
 			}
 
-			private AsyncCallback<User> createAsyncCallbackForUser() {
-				AsyncCallback<User> w = new AsyncCallback<User>() {
+			private AsyncCallback<UserTO> createAsyncCallbackForUser() {
+				AsyncCallback<UserTO> w = new AsyncCallback<UserTO>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -434,7 +432,7 @@ public class FirstAccessPage implements EntryPoint {
 					}
 
 					@Override
-					public void onSuccess(User result) {
+					public void onSuccess(UserTO result) {
 						System.out.println(result);
 					}
 				};

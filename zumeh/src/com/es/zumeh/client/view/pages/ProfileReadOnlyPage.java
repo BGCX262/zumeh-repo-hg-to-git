@@ -1,6 +1,6 @@
 package com.es.zumeh.client.view.pages;
 
-import com.es.zumeh.server.model.persistence.User;
+import com.es.zumeh.client.model.to.UserTO;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,10 +19,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ProfileReadOnlyPage implements EntryPoint {
 	
-	private User user;
+	private UserTO user;
 	
 	//private User user; //TODO add the user.
-	public ProfileReadOnlyPage(User user) {
+	public ProfileReadOnlyPage(UserTO user) {
 		this.user = user;
 	}
 
@@ -154,11 +154,11 @@ public class ProfileReadOnlyPage implements EntryPoint {
 		stackLayoutPanel.setSize("100px", "101px");
 	}
 	
-	public User getUser() {
+	public UserTO getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserTO user) {
 		this.user = user;
 	}
 }

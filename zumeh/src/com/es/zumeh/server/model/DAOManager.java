@@ -7,7 +7,7 @@ public class DAOManager {
 	
 	private UserDAO userDAO;
 	
-	private static final String HIBERNATE_CFG_XML = "hibernate.cfg.xml";
+	private static final String HIBERNATE_CFG_XML = "/com/es/zumeh/server/hibernate.cfg.xml";
 	
 	public DAOManager() {
 		HibernateUtil.setUp(HIBERNATE_CFG_XML);

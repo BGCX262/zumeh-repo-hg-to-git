@@ -47,13 +47,13 @@ public class UserDAO {
 			String name, String whoAreYou, String interestedArea,
 			String gender, String location, String birthday) {
 
-		if (!existsLogin(login)) { // FIXME add log
-			return false;
-		}
-
-		if (!existsEmail(email)) { // FIXME add log
-			return false;
-		}
+//		if (!existsLogin(login)) { // FIXME add log
+//			return false;
+//		}
+//
+//		if (!existsEmail(email)) { // FIXME add log
+//			return false;
+//		}
 
 		saveUser(login, password, email, name, whoAreYou, interestedArea,
 				gender, location, birthday);

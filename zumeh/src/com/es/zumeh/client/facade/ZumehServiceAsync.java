@@ -3,8 +3,8 @@ package com.es.zumeh.client.facade;
 import java.util.HashMap;
 import java.util.List;
 
+import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.model.work.Work;
-import com.es.zumeh.server.model.persistence.User;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
@@ -22,9 +22,10 @@ public interface ZumehServiceAsync {
 	void getGoogleInfo(String token,
 			AsyncCallback<HashMap<String, String>> callback);
 	void getWork(int identifier, AsyncCallback<Work> callback);
-	void getUser(String id, AsyncCallback<User> callback);
-	void addUser(User user, AsyncCallback<User> callback);
-	void getUserList(AsyncCallback<List<User>> callback);
+	void getUser(String id, AsyncCallback<UserTO> callback);
+	void getUserList(AsyncCallback<List<UserTO>> callback);
 	void sendEmail(String from, String to, String title, String text,
 			AsyncCallback<Void> callback);
+	
+	void addUser(UserTO newUser, AsyncCallback<UserTO> w);
 }

@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.es.zumeh.client.facade.ZumehService;
+import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.model.work.Work;
 import com.es.zumeh.server.model.GoogleUserInfo;
 import com.es.zumeh.server.model.SessionManager;
-import com.es.zumeh.server.model.persistence.User;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -109,19 +109,19 @@ public class ZumehServiceImpl extends RemoteServiceServlet implements ZumehServi
 	}
 
 	@Override
-	public List<User> getUserList() {
+	public List<UserTO> getUserList() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public User getUser(String id) {
+	public UserTO getUser(String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public User addUser(User user) {
+	public UserTO addUser(UserTO user) {
 		sessionManager.addUser(user);
 		return user;
 	}

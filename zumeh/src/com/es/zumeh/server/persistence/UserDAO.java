@@ -47,18 +47,23 @@ public class UserDAO {
 			String name, String whoAreYou, String interestedArea,
 			String gender, String location, String birthday) {
 
-//		if (!existsLogin(login)) { // FIXME add log
+//		if (!existsLogin(user.getLogin())) { // FIXME add log
 //			return false;
 //		}
 //
-//		if (!existsEmail(email)) { // FIXME add log
+//		if (!existsEmail(user.getEmail())) { // FIXME add log
 //			return false;
 //		}
 
-		saveUser(login, password, email, name, whoAreYou, interestedArea,
-				gender, location, birthday);
+		saveUser(login, password, email,
+				 name, whoAreYou, interestedArea,
+				 gender, location, birthday);
 
 		return true;
+	}
+	
+	public boolean userExists(User user) {
+		return (existsLogin(user.getLogin()) || existsEmail(user.getEmail()));
 	}
 
 	private boolean existsEmail(String email) {

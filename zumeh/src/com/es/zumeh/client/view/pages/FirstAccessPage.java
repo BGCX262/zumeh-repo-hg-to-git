@@ -6,6 +6,7 @@ import com.es.zumeh.client.facade.ZumehService;
 import com.es.zumeh.client.facade.ZumehServiceAsync;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.model.work.Work;
+import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.es.zumeh.shared.util.Validate;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -397,7 +398,7 @@ public class FirstAccessPage implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				if (isAlldataCompleted()) {
 					
-					AsyncCallback<UserTO> w = createAsyncCallbackForUser();
+					AsyncCallback<Boolean> w = createAsyncCallbackForUser();
 					
 					AsyncCallback<Void> em = createAsyncCallbackForEmail();
 					
@@ -409,9 +410,9 @@ public class FirstAccessPage implements EntryPoint {
 					Window.confirm("Your informations was saved with success.");
 					
 					rootPanel.clear();
-//					ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().
-//							getProfileReadOnlyPage(newUser);
-				//	profilePage.onModuleLoad();
+					ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().
+							getProfileReadOnlyPage(newUser);
+					profilePage.onModuleLoad();
 
 				} else {
 					Window.alert("Some informations is incomplete.");
@@ -423,8 +424,8 @@ public class FirstAccessPage implements EntryPoint {
 						"Welcome to Zumeh", MESSAGE, em);
 			}
 
-			private AsyncCallback<UserTO> createAsyncCallbackForUser() {
-				AsyncCallback<UserTO> w = new AsyncCallback<UserTO>() {
+			private AsyncCallback<Boolean> createAsyncCallbackForUser() {
+				AsyncCallback<Boolean> w = new AsyncCallback<Boolean>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -432,7 +433,7 @@ public class FirstAccessPage implements EntryPoint {
 					}
 
 					@Override
-					public void onSuccess(UserTO result) {
+					public void onSuccess(Boolean result) {
 						System.out.println("DEBUG1: On succes do createAsyncCallbackForUser");
 						System.out.println(result);
 					}

@@ -13,7 +13,6 @@
   <inherits name='com.google.api.gwt.oauth2.OAuth2'/>
   
   <!-- Other module inherits                                      -->
-  <inherits name='org.vaadin.gwtgraphics.GWTGraphics' />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.es.zumeh.client.main.Zumeh'/>

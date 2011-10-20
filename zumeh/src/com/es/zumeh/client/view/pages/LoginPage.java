@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import com.es.zumeh.client.facade.ZumehCallBack;
 import com.es.zumeh.client.facade.ZumehService;
 import com.es.zumeh.client.facade.ZumehServiceAsync;
+import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.es.zumeh.shared.util.StringConstants;
 import com.google.api.gwt.oauth2.client.Auth;
@@ -39,6 +40,8 @@ public class LoginPage extends Widget implements EntryPoint {
 	private static final Logger log = Logger.getLogger(LoginPage.class.getName());
 	private RootPanel rootPanel;
 	private final ZumehServiceAsync zumehService = GWT.create(ZumehService.class);
+	private static boolean isOlder = false;
+	private static UserTO currentUser;
 
 	
 	/**
@@ -135,6 +138,23 @@ public class LoginPage extends Widget implements EntryPoint {
 		dialogBox.setWidget(dialogVPanel);
 
 	}
+	
+//	private boolean isYourFirstAccess() {
+//		AsyncCallback<SessionManager> callback = new AsyncCallback<SessionManager>() {
+//
+//			@Override
+//			public void onSuccess(SessionManager result) {
+//				isOlder = result.isOldUser();
+//			}
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//			}
+//		};
+//
+//		zumehService.getSessionManager(callback);
+//		return isOlder;
+//	}
 	
 	
 	private class GoogleClickHandler implements ClickHandler {

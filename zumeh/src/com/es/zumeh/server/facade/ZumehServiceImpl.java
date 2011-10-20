@@ -121,9 +121,10 @@ public class ZumehServiceImpl extends RemoteServiceServlet implements ZumehServi
 	}
 
 	@Override
-	public UserTO addUser(UserTO user) {
-		sessionManager.addUser(user);
-		return user;
+	public boolean addUser(UserTO user) {
+		return sessionManager.getDaoManager().addUser(user.getLogin(), user.getPassword(), user.getEmail(),
+				user.getEmail(), user.getWhoAreYou(), user.getInterestedArea(), user.getGender(),
+				user.getLocation(), user.getBirthday());
 	}
 
 	@Override

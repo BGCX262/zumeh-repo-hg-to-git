@@ -25,6 +25,7 @@ public class SessionManager {
 	private UserDAO userDAO;
 	private DAOManager daoManager;
 	private SendMail sendEmail;
+	private boolean oldUser;
 	
 	
 	private SessionManager() {
@@ -44,7 +45,9 @@ public class SessionManager {
 	
 	public void openSession(String token) {
 		try {
+			oldUser = false;
 			openedSessions.put(token, getUser(token));
+			oldUser = verifyUser(getUser(token));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -90,13 +93,34 @@ public class SessionManager {
 		
 		return user;
 	}
+	
+	private boolean verifyUser(User user) {
+		return getDaoManager().verifyUser(user);
+	}
 
-	public void addUser(UserTO user) {
-		userDAO.saveUser(user.getLogin(), user.getPassword(), user.getEmail(), user.getName(),
-				user.getWhoAreYou(), user.getInterestedArea(),
-				user.getGender(), user.getLocation(), user.getBirthday());
-		//daoManager.addUser(login, password, email, name, whoAreYou, interestedArea, gender, location, birthday);
-		//userDAO.makePersistent(user);
+//	public boolean addUser(UserTO user) {
+//		return daoManager.addUser(user.getLogin(), user.getPassword(), user.getEmail(),
+//				user.getEmail(), user.getWhoAreYou(), user.getInterestedArea(), user.getGender(), user.getLocation(), user.getBirthday());
+//	}
+
+	private User convertToRealUser(UserTO user) {
+		User newUser = new User();
+		user.setLogin(user.getLogin());
+		user.setPassword(user.getPassword());
+		user.setEmail(user.getEmail());
+		user.setBirthday(user.getBirthday());
+		user.setGender(user.getGender());
+		user.setInterestedArea(user.getInterestedArea());
+		user.setLocation(user.getLocation());
+		user.setName(user.getName());
+		user.setWhoAreYou(user.getWhoAreYou());
+		return newUser;
+	}
+	
+	
+	
+	public DAOManager getDaoManager() {
+		return daoManager;
 	}
 	
 	public void sendMail(String from, String to, String subject, String message) {

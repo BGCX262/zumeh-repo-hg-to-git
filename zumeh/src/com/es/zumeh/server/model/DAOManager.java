@@ -1,5 +1,6 @@
 package com.es.zumeh.server.model;
 
+import com.es.zumeh.server.model.persistence.User;
 import com.es.zumeh.server.persistence.HibernateUtil;
 import com.es.zumeh.server.persistence.UserDAO;
 
@@ -29,6 +30,14 @@ public class DAOManager {
 		}
 		
 		return addUser; 
+	}
+	
+	public boolean verifyUser(User user) {
+		return getUserDAO().userExists(user);
+	}
+	
+	private UserDAO getUserDAO() {
+		return userDAO;
 	}
 
 }

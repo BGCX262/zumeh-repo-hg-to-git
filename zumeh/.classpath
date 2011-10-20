@@ -4,12 +4,13 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-core-1.1.5.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-jpa-1.1.5.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/serp-1.13.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-lang-2.1.jar"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/antlr-2.7.6.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-api-1.0-sdk-1.5.2.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-api-labs-1.5.2.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-jsr107cache-1.5.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/dom4j-1.6.1.jar"/>
@@ -67,19 +68,18 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-webmastertools-meta-2.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-youtube-2.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-youtube-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/DocumentListDemo.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/google-collect-snapshot.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/mail.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-enhancer-1.1.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-appengine-1.0.9.final.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="/home/heitor/workspace/Teste/war/WEB-INF/lib/gwt-graphics-1.0.0.jar"/>
-	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/geronimo-jpa_3.0_spec-1.0.jar"/>
-	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
-	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/hibernate-validator-4.0.2.GA.jar"/>
-	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/hibernate3.jar"/>
-	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/javassist-3.12.0.GA.jar"/>
-	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/mysql-connector-java-5.1.16-bin.jar"/>
-	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/openjpa-1.2.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jms_1.1_spec-1.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jpa_3.0_spec-1.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/hibernate-validator-4.0.2.GA.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/javassist-3.12.0.GA.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/mysql-connector-java-5.1.16-bin.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/openjpa-1.2.1.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

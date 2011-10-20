@@ -4,13 +4,6 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-core-1.1.5.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-jpa-1.1.5.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate-validator-4.0.2.GA.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate3.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.16-bin.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/javassist-3.12.0.GA.jar"/>
-	<classpathentry kind="lib" path="lib/geronimo-jpa_3.0_spec-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/openjpa-1.2.1.jar"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/antlr-2.7.6.jar"/>
@@ -80,5 +73,13 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-enhancer-1.1.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-appengine-1.0.9.final.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/Teste/war/WEB-INF/lib/gwt-graphics-1.0.0.jar"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/geronimo-jpa_3.0_spec-1.0.jar"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/hibernate-validator-4.0.2.GA.jar"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/javassist-3.12.0.GA.jar"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/mysql-connector-java-5.1.16-bin.jar"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/Zumeh/lib/openjpa-1.2.1.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

@@ -433,6 +433,7 @@ public class FirstAccessPage implements EntryPoint {
 
 					@Override
 					public void onSuccess(UserTO result) {
+						System.out.println("DEBUG1: On succes do createAsyncCallbackForUser");
 						System.out.println(result);
 					}
 				};

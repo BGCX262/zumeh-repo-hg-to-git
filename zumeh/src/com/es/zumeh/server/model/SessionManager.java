@@ -95,6 +95,7 @@ public class SessionManager {
 		userDAO.saveUser(user.getLogin(), user.getPassword(), user.getEmail(), user.getName(),
 				user.getWhoAreYou(), user.getInterestedArea(),
 				user.getGender(), user.getLocation(), user.getBirthday());
+		//daoManager.addUser(login, password, email, name, whoAreYou, interestedArea, gender, location, birthday);
 		//userDAO.makePersistent(user);
 	}
 	

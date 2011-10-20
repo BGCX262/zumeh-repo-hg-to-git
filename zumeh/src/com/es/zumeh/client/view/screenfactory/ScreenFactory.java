@@ -4,6 +4,7 @@ import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.view.pages.FirstAccessPage;
 import com.es.zumeh.client.view.pages.LoginPage;
 import com.es.zumeh.client.view.pages.ProfileReadOnlyPage;
+import com.es.zumeh.client.view.pages.WorkPage;
 
 public class ScreenFactory {
 	
@@ -11,6 +12,7 @@ public class ScreenFactory {
 	private LoginPage loginPage;
 	private FirstAccessPage pag;
 	private ProfileReadOnlyPage profileReadOnlyPage;
+	private WorkPage workPage;
 	
 	private ScreenFactory() {}
 	
@@ -34,6 +36,11 @@ public class ScreenFactory {
 	public ProfileReadOnlyPage getProfileReadOnlyPage(UserTO user) {
 		this.profileReadOnlyPage = new ProfileReadOnlyPage(user);
 		return profileReadOnlyPage;
+	}
+	
+	public WorkPage getWorkPage() {
+		this.workPage = new WorkPage();
+		return this.workPage;
 	}
 	
 }

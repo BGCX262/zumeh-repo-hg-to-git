@@ -1,6 +1,7 @@
 package com.es.zumeh.client.view.pages;
 
 import com.es.zumeh.client.model.to.UserTO;
+import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -20,6 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class ProfileReadOnlyPage implements EntryPoint {
 	
 	private UserTO user;
+	private RootPanel rootPanel; 
 	
 	//private User user; //TODO add the user.
 	public ProfileReadOnlyPage(UserTO user) {
@@ -32,7 +34,7 @@ public class ProfileReadOnlyPage implements EntryPoint {
 		
 		final Label errorLabel = new Label();
 		
-		RootPanel rootPanel = RootPanel.get("nameFieldContainer");
+		rootPanel = RootPanel.get("nameFieldContainer");
 		rootPanel.setSize("640", "480");
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 		rootPanel.setStyleName(".teste");
@@ -78,6 +80,16 @@ public class ProfileReadOnlyPage implements EntryPoint {
 		
 		Hyperlink hprlnkWorker = new Hyperlink("Work 1", false, "newHistoryToken");
 		absolutePanel_3.add(hprlnkWorker, 0, 10);
+		hprlnkWorker.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				rootPanel.clear();
+				WorkPage workPage = ScreenFactory.getInstance().getWorkPage();
+				workPage.onModuleLoad();
+			}
+		});
 		
 		Hyperlink hprlnkWorker_1 = new Hyperlink("Work 2", false, "newHistoryToken");
 		absolutePanel_3.add(hprlnkWorker_1, 0, 34);

@@ -10,9 +10,12 @@
   <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
   <inherits name='com.google.gwt.user.theme.chrome.Chrome'/>
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
-  <inherits name='com.google.api.gwt.oauth2.OAuth2'/>
   
   <!-- Other module inherits                                      -->
+  <inherits name='com.orange.links.Links' />
+  <inherits name='com.google.gwt.widgetideas.WidgetIdeas' />   
+  <inherits name='com.google.gwt.libideas.LibIdeas' />
+  <inherits name='com.google.api.gwt.oauth2.OAuth2'/>
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.es.zumeh.client.main.Zumeh'/>

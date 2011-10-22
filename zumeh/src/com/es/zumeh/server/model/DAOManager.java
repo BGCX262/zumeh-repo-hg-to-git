@@ -1,5 +1,6 @@
 package com.es.zumeh.server.model;
 
+import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.server.model.persistence.User;
 import com.es.zumeh.server.persistence.HibernateUtil;
 import com.es.zumeh.server.persistence.UserDAO;
@@ -16,28 +17,62 @@ public class DAOManager {
 		
 	}
 	
-	public boolean addUser(String login, String password, String email,
-			String name, String whoAreYou, String interestedArea,
-			String gender, String location, String birthday) {
+	public boolean addUser(UserTO user) {
 		boolean addUser = false;
 		
 		try {
-			addUser = userDAO.addUser(login, password, email, name, whoAreYou,
-					interestedArea, gender, location, birthday);
+			addUser = userDAO.addUser(user);
 		} catch (Exception e) {
 			e.printStackTrace();
 			HibernateUtil.rollbackAndCloseSession();
+		} finally {
+			HibernateUtil.closeSession();
 		}
 		
 		return addUser; 
+	}
+	
+//	public boolean addUser(String login, String password, String email,
+//			String name, String whoAreYou, String interestedArea,
+//			String gender, String location, String birthday) {
+//		boolean addUser = false;
+//		
+//		try {
+//			addUser = userDAO.addUser(login, password, email, name, whoAreYou,
+//					interestedArea, gender, location, birthday);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			HibernateUtil.rollbackAndCloseSession();
+//		} finally {
+//			HibernateUtil.closeSession();
+//		}
+//		
+//		return addUser; 
+//	}
+	
+	public void deleteAllUsers() {
+		getUserDAO().deleteFromUsers();
+	}
+	
+	public UserTO verifyUserTO(UserTO user) {
+		return getUserDAO().verifyUserTO(user);
 	}
 	
 	public boolean verifyUser(User user) {
 		return getUserDAO().userExists(user);
 	}
 	
+	public User getUser(String login) {
+		return getUserDAO().getUserByLogin(login);
+	}
+	
 	private UserDAO getUserDAO() {
 		return userDAO;
+	}
+
+	public void deleteUserData() {
+		//getUserDAO().deleteUserData();
+		
 	}
 
 }

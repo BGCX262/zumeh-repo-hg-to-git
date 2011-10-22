@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
@@ -14,8 +15,6 @@ import javax.persistence.Table;
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 6974269351580312846L;
-	
-	public User() {}
 	
 	private Long id;
 	private String login;
@@ -39,7 +38,7 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	@Column(length = 50)
+	@Column(nullable=false, length = 50)
 	public String getLogin() {
 		return login;
 	}
@@ -48,7 +47,7 @@ public class User implements Serializable {
 		this.login = login;
 	}
 
-	@Column(length = 50)
+	@Column(nullable=false, length = 100)
 	public String getPassword() {
 		return password;
 	}
@@ -57,7 +56,7 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	@Column(length = 50)
+	@Column(nullable=false, length = 100)
 	public String getEmail() {
 		return email;
 	}
@@ -66,7 +65,7 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	@Column(length = 50)
+	@Column(length = 100)
 	public String getName() {
 		return name;
 	}
@@ -75,7 +74,7 @@ public class User implements Serializable {
 		this.name = name;
 	}
 
-	@Column(length = 50)
+	@Column(length = 20)
 	public String getBirthday() {
 		return birthday;
 	}
@@ -84,7 +83,8 @@ public class User implements Serializable {
 		this.birthday = birthday;
 	}
 
-	@Column(length = 50)
+	
+	@Lob
 	public String getWhoAreYou() {
 		return whoAreYou;
 	}
@@ -93,7 +93,7 @@ public class User implements Serializable {
 		this.whoAreYou = whoAreYou;
 	}
 
-	@Column(length = 50)
+	@Column(length = 255)
 	public String getInterestedArea() {
 		return interestedArea;
 	}
@@ -102,7 +102,7 @@ public class User implements Serializable {
 		this.interestedArea = interestedArea;
 	}
 
-	@Column(length = 50)
+	@Column(length = 10)
 	public String getGender() {
 		return gender;
 	}
@@ -111,7 +111,7 @@ public class User implements Serializable {
 		this.gender = gender;
 	}
 	
-	@Column(length = 50)
+	@Column(length = 100)
 	public String getLocation() {
 		return location;
 	}

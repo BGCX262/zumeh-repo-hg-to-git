@@ -2,14 +2,12 @@ package com.es.zumeh.client.view.pages;
 
 import java.util.HashMap;
 
-import com.es.zumeh.client.facade.ZumehService;
-import com.es.zumeh.client.facade.ZumehServiceAsync;
+import com.es.zumeh.client.model.Password;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.model.work.Work;
 import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.es.zumeh.shared.util.Validate;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -29,6 +27,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -36,7 +35,7 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 
-public class FirstAccessPage implements EntryPoint {
+public class FirstAccessPage extends Page implements EntryPoint {
 	
 	private TextArea whoAreYouTextArea;
 	private TextBox firstNameTextBox;
@@ -51,6 +50,8 @@ public class FirstAccessPage implements EntryPoint {
 	private String email;
 	private String whoAreYou;
 	private String fullName;
+	private String login;
+	private String password;
 	
 	private RootPanel rootPanel;
 	
@@ -61,19 +62,17 @@ public class FirstAccessPage implements EntryPoint {
 			"distributed systems", "networks", "formal methods", 
 			"software engineering", "artificial intelligence"};
 	
-	private static final String[] LOCATIONS = {"Campina Grande", "Pesqueira",
+	private static final String[] LOCATIONS = {"Select...", "Campina Grande", "Pesqueira",
 			"Fortaleza", "Joao Pessoa", "Recife"};
 	
 	private static final String MESSAGE = "Welcome to Zumeh\nThanks for use Zumeh app!" +
 			"\n\nMore details HERE{Link} ";
 	
-	private final ZumehServiceAsync zumehService = GWT.create(ZumehService.class);
-	
 	private static final String ZUMEH_USER = "zumeh.app@gmail.com";
 	
 	
 	public FirstAccessPage(String token) {
-		this.token = token;
+		this.token = token; //FIXME TROCAR ISSO
 	}
 
 	@Override
@@ -103,7 +102,7 @@ public class FirstAccessPage implements EntryPoint {
 		AbsolutePanel absolutePanel_3 = new AbsolutePanel();
 		absolutePanel_3.setStyleName("teste");
 		absolutePanel.add(absolutePanel_3, 10, 20);
-		absolutePanel_3.setSize("313px", "350px");
+		absolutePanel_3.setSize("313px", "459px");
 		
 		whoAreYouTextArea(absolutePanel);
 		
@@ -133,8 +132,76 @@ public class FirstAccessPage implements EntryPoint {
 		
 		emailTextBox(absolutePanel_3);
 		
+		AbsolutePanel absolutePanel_4 = new AbsolutePanel();
+		absolutePanel_3.add(absolutePanel_4, 10, 356);
+		absolutePanel_4.setSize("256px", "100px");
+		
+		Label lblLogin = new Label("Login: ");
+		absolutePanel_4.add(lblLogin, 10, 10);
+		
+		Label lblPassword = new Label("Password: ");
+		absolutePanel_4.add(lblPassword, 10, 50);
+		lblPassword.setSize("63px", "18px");
+		
+		loginAndPassTextBox(absolutePanel_4);
+		
+		Label label_4 = new Label("*");
+		absolutePanel_4.add(label_4, 239, 0);
+		label_4.setSize("5px", "18px");
+		
+		Label label_5 = new Label("*");
+		absolutePanel_4.add(label_5, 240, 40);
+		label_5.setSize("5px", "18px");
+		
+		Label label = new Label("*");
+		absolutePanel_3.add(label, 234, 10);
+		
+		Label label_1 = new Label("*");
+		absolutePanel_3.add(label_1, 234, 39);
+		label_1.setSize("5px", "18px");
+		
+		Label label_2 = new Label("*");
+		absolutePanel_3.add(label_2, 234, 123);
+		label_2.setSize("5px", "18px");
+		
+		Label label_3 = new Label("*");
+		absolutePanel_3.add(label_3, 213, 172);
+		label_3.setSize("5px", "18px");
+		
 		Label lblDescriptionAboutThis = new Label("Description about this project");
-		absolutePanel.add(lblDescriptionAboutThis, 25, 388);
+		absolutePanel.add(lblDescriptionAboutThis, 415, 431);
+	}
+
+	private void loginAndPassTextBox(AbsolutePanel absolutePanel_4) {
+		final TextBox loginTextBox = new TextBox();
+		absolutePanel_4.add(loginTextBox, 79, 4);
+		loginTextBox.setSize("146px", "16px");
+		
+		loginTextBox.addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				setLogin(loginTextBox.getText());
+			}
+		});
+		
+		final PasswordTextBox passwordTextBox = new PasswordTextBox();
+		absolutePanel_4.add(passwordTextBox, 79, 40);
+		
+		passwordTextBox.addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				Password pass = new Password();
+				try {
+					pass.setPassword(passwordTextBox.getText());
+					setPassword(pass.getPassword()); //FIXME Deixa ja aqui ou la p frente?
+					//acho que la p frente fica legal..
+				} catch (Exception e) {
+					e.printStackTrace(); //TODO LOG
+				}
+			}
+		});
 	}
 
 	private void emailTextBox(AbsolutePanel absolutePanel_3) {
@@ -149,11 +216,24 @@ public class FirstAccessPage implements EntryPoint {
 			
 			@Override
 			public void onChange(ChangeEvent event) {
-				email = emailTextBox.getText();
+				setEmail(emailTextBox.getText());
 				
 			}
 		});
 		
+	}
+	
+	private void setEmail(String inputEmail) {
+		this.email = inputEmail;
+	}
+	
+	private void setLogin(String inputLogin) {
+		this.login = inputLogin;
+		
+	}
+	
+	private void setPassword(String inputPassword) {
+		this.password = inputPassword.toString();
 	}
 
 	private void loadLocationListBox(AbsolutePanel absolutePanel_3) {
@@ -385,7 +465,8 @@ public class FirstAccessPage implements EntryPoint {
 	}
 	
 	private boolean isAlldataCompleted() {
-		return true;//birthDay != null;
+		return email != null &&	login != null && password != null &&
+				fullName != null && !userLocation.equals("Select...");
 	}
 
 	private void saveButton(AbsolutePanel absolutePanel) {
@@ -467,6 +548,8 @@ public class FirstAccessPage implements EntryPoint {
 				newUser.setInterestedArea(interestAreas);
 				newUser.setLocation(userLocation);
 				newUser.setWhoAreYou(whoAreYou);
+				newUser.setLogin(login);
+				newUser.setPassword(password);
 				return newUser;
 			}
 		});

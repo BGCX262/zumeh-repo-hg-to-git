@@ -28,4 +28,5 @@ public interface ZumehServiceAsync {
 			AsyncCallback<Void> callback);
 	
 	void addUser(UserTO newUser, AsyncCallback<Boolean> w);
+	void verifyUser(UserTO user, AsyncCallback<UserTO> callback);
 }

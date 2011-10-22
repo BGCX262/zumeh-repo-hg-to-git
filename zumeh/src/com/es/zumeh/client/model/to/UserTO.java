@@ -2,6 +2,8 @@ package com.es.zumeh.client.model.to;
 
 import java.io.Serializable;
 
+import com.es.zumeh.client.model.Password;
+
 public class UserTO implements Serializable{
 
 	private static final long serialVersionUID = 5958457385870267972L;
@@ -30,8 +32,15 @@ public class UserTO implements Serializable{
 		return password;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPassword(String password) { //TODO retirar isso daqui
+		Password pass = new Password();
+		try {
+			pass.setPassword(password);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.password = pass.getPassword();
 	}
 
 	public String getEmail() {

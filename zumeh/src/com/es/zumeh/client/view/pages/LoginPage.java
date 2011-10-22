@@ -3,8 +3,7 @@ package com.es.zumeh.client.view.pages;
 import java.util.logging.Logger;
 
 import com.es.zumeh.client.facade.ZumehCallBack;
-import com.es.zumeh.client.facade.ZumehService;
-import com.es.zumeh.client.facade.ZumehServiceAsync;
+import com.es.zumeh.client.model.Password;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.es.zumeh.shared.util.StringConstants;
@@ -12,10 +11,13 @@ import com.google.api.gwt.oauth2.client.Auth;
 import com.google.api.gwt.oauth2.client.AuthRequest;
 import com.google.api.gwt.oauth2.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -29,25 +31,22 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimpleCheckBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class LoginPage extends Widget implements EntryPoint {
+public class LoginPage extends Page implements EntryPoint {
 	
 	private static final Auth AUTH = Auth.get();
 	private static final Logger log = Logger.getLogger(LoginPage.class.getName());
 	private RootPanel rootPanel;
-	private final ZumehServiceAsync zumehService = GWT.create(ZumehService.class);
-	private static boolean isOlder = false;
-	private static UserTO currentUser;
-
+	private UserTO userTO;
 	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		userTO = new UserTO();
 		final Label errorLabel = new Label();
 		
 
@@ -65,15 +64,13 @@ public class LoginPage extends Widget implements EntryPoint {
 		
 		AbsolutePanel absolutePanel = new AbsolutePanel();
 		absolutePanel.setStyleName("h1");
-		rootPanel.add(absolutePanel, 650, 92);
+		rootPanel.add(absolutePanel, 336, 89);
 		absolutePanel.setSize("254px", "332px");
 		
 		Label lblSignInWith = new Label("Sign In With Your Account");
 		absolutePanel.add(lblSignInWith, 10, 10);
 		
-		TextBox textBoxUserName = new TextBox();
-		absolutePanel.add(textBoxUserName, 91, 58);
-		textBoxUserName.setSize("145px", "13px");
+		textBoxLogin(absolutePanel);
 		
 		Label lblUsername = new Label("Username:");
 		absolutePanel.add(lblUsername, 10, 58);
@@ -81,16 +78,12 @@ public class LoginPage extends Widget implements EntryPoint {
 		Label lblNewLabel = new Label("e.g. pat@example.com ");
 		absolutePanel.add(lblNewLabel, 91, 80);
 		
-		PasswordTextBox textBoxPassword = new PasswordTextBox();
-		absolutePanel.add(textBoxPassword, 91, 122);
-		textBoxPassword.setSize("145px", "13px");
+		textBoxPassword(absolutePanel);
 		
 		Label lblPassword = new Label("Password:");
 		absolutePanel.add(lblPassword, 12, 122);
 		
-		Button signInButton = new Button("Sign in");
-		absolutePanel.add(signInButton, 118, 185);
-		signInButton.setSize("66px", "25px");
+		signInButton(absolutePanel);
 		
 		Label lblStaySignedIn = new Label("Stay signed in");
 		absolutePanel.add(lblStaySignedIn, 91, 161);
@@ -110,11 +103,8 @@ public class LoginPage extends Widget implements EntryPoint {
 		facebookButton.getUpFace().setImage(facebookImage);
 		facebookButton.setSize("51px", "45px");
 		
-		Hyperlink cantAccessButton = new Hyperlink("Can't access your account?", true,
-				"www.google.com");
-		absolutePanel.add(cantAccessButton, 93, 304);
+		cantAccessYourAccount(absolutePanel);
 		
-		cantAccessButton.setDirectionEstimator(true);
 		googleButton.addClickHandler(new GoogleClickHandler(AUTH));
 
 		// Create the popup dialog box
@@ -138,23 +128,129 @@ public class LoginPage extends Widget implements EntryPoint {
 		dialogBox.setWidget(dialogVPanel);
 
 	}
+
+
+	@SuppressWarnings("deprecation")
+	private void cantAccessYourAccount(AbsolutePanel absolutePanel) {
+		Hyperlink cantAccessLink = new Hyperlink("Can't access your account?", true,
+				"");
+		absolutePanel.add(cantAccessLink, 93, 304);
+		
+		cantAccessLink.addClickHandler(clickHandler());
+		
+	}
+
+
+	private ClickHandler clickHandler() {
+		return new ClickHandler() {
+			
+			@Override
+			public void onClick(final ClickEvent event) {
+				firstPageAccess(null);
+			}
+		};
+	}
 	
-//	private boolean isYourFirstAccess() {
-//		AsyncCallback<SessionManager> callback = new AsyncCallback<SessionManager>() {
-//
+	private AsyncCallback<UserTO> signInCallback() {
+		return new AsyncCallback<UserTO>() {
+			
+			@Override
+			public void onSuccess(UserTO result) {
+				if (result == null) {
+					Window.alert("Incorrect username or password. Please try again!");
+				} else {
+					profilePageAccess(result);
+				}
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+	}
+	
+
+	private void signInButton(AbsolutePanel absolutePanel) {
+		Button signInButton = new Button("Sign in");
+		absolutePanel.add(signInButton, 118, 185);
+		signInButton.setSize("66px", "25px"); //FIXME add keydownhandler
+		
+		final AsyncCallback<UserTO> signInCall = signInCallback();
+		
+//		signInButton.addKeyDownHandler(new KeyDownHandler() {
+//			
 //			@Override
-//			public void onSuccess(SessionManager result) {
-//				isOlder = result.isOldUser();
+//			public void onKeyDown(KeyDownEvent event) {
+//				if (event.getNativeKeyCode() ==KeyCodes.KEY_RIGHT) {
+//					//
+//					Window.alert("DEU CERTO");
+//				}
+//				
 //			}
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//			}
-//		};
-//
-//		zumehService.getSessionManager(callback);
-//		return isOlder;
-//	}
+//		});
+		
+		signInButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				zumehService.verifyUser(userTO, signInCall);
+				
+			}
+		});
+	}
+
+
+	private void textBoxPassword(AbsolutePanel absolutePanel) {
+		final PasswordTextBox textBoxPassword = new PasswordTextBox();
+		absolutePanel.add(textBoxPassword, 91, 122);
+		textBoxPassword.setSize("145px", "13px");
+		
+		textBoxPassword.addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				Password pass = new Password();
+				try {
+					pass.setPassword(textBoxPassword.getText());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				userTO.setPassword(pass.getPassword());
+				
+			}
+		});
+	}
+
+
+	private void textBoxLogin(AbsolutePanel absolutePanel) {
+		final TextBox textBoxUserName = new TextBox();
+		absolutePanel.add(textBoxUserName, 91, 58);
+		textBoxUserName.setSize("145px", "13px");
+		
+		textBoxUserName.addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				userTO.setLogin(textBoxUserName.getText());
+				
+			}
+		});
+	}
+	
+	private void firstPageAccess(final String token) {
+		rootPanel.clear();
+		FirstAccessPage pagTest = ScreenFactory
+				.getInstance().getFirstAccessPage(token);
+		pagTest.onModuleLoad();
+	}
+	
+	private void profilePageAccess(UserTO user) {
+		rootPanel.clear();
+		ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().getProfileReadOnlyPage(user);
+		profilePage.onModuleLoad();
+	}
 	
 	
 	private class GoogleClickHandler implements ClickHandler {
@@ -183,39 +279,9 @@ public class LoginPage extends Widget implements EntryPoint {
 						
 						@Override
 						public void onSuccess(final String token2) {
-							// TODO Auto-generated method stub
-							//zumehService.getUserEmail(token, );
-							//if (!userExist()) {
-								//System.out.println("ACertou sem servir pra nada... " + token2);
-								rootPanel.clear();
-					            FirstAccessPage pagTest = ScreenFactory.getInstance().getFirstAccessPage(token);
-					            pagTest.onModuleLoad();
-								System.out.println("Deu certo. lol");
-							
-//							} else {
-//								rootPanel.clear();
-//								ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().getProfileReadOnlyPage(token);
-//								profilePage.onModuleLoad();
-//							}
-							
-							
-							
-							
-							
+							firstPageAccess(token);
+							System.out.println("Deu certo. lol");
 						}
-						
-						private boolean userExist() {
-//							ZumehDAOFactory factory = ZumehDAOFactoryImpl.sharedSessionFactory();
-//							UserDAO userDAO = factory.getUserDAO();
-							
-							//User userRec = userDAO.findByPK(user.getId());
-							
-							return false;
-						}
-						
-						
-
-					
 
 						@Override
 						public void onFailure(Throwable arg0) {

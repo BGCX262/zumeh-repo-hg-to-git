@@ -33,4 +33,6 @@ public interface ZumehService extends RemoteService {
 	UserTO getUser(String id);
 
 	List<UserTO> getUserList();
+
+	UserTO verifyUser(UserTO user);
 }

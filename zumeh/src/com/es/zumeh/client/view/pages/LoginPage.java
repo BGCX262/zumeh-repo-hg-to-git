@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import com.es.zumeh.client.facade.ZumehCallBack;
 import com.es.zumeh.client.model.Password;
 import com.es.zumeh.client.model.to.UserTO;
-import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.es.zumeh.shared.util.StringConstants;
 import com.google.api.gwt.oauth2.client.Auth;
 import com.google.api.gwt.oauth2.client.AuthRequest;
@@ -20,8 +19,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -30,7 +27,6 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimpleCheckBox;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -39,38 +35,62 @@ public class LoginPage extends Page implements EntryPoint {
 	
 	private static final Auth AUTH = Auth.get();
 	private static final Logger log = Logger.getLogger(LoginPage.class.getName());
-	private RootPanel rootPanel;
 	private UserTO userTO;
 	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		userTO = new UserTO();
-		final Label errorLabel = new Label();
-		
+		final Label errorLabel = initializeVariables();
 
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
-		rootPanel = RootPanel.get("nameFieldContainer");
 		rootPanel.setStyleName("gwt-DialogBox");
 		rootPanel.setSize("640", "480");
+		
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 		
-		Image image = new Image(StringConstants.ZUMEH_LOGO_IMAGE.getValue());
-		rootPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-		rootPanel.add(image, 72, 132);
-		image.setSize("245px", "171px");
+		loadImage();
 		
+		AbsolutePanel absolutePanel = createAbsolutePanel();
+
+		textBoxLogin(absolutePanel);
+		
+		loadLabes(absolutePanel);
+		
+		textBoxPassword(absolutePanel);
+		
+		signInButton(absolutePanel);
+		
+		loadSimpleCheckBox(absolutePanel);
+		
+		PushButton googleButton = loadLoginButtons(absolutePanel);
+		
+		cantAccessYourAccount(absolutePanel);
+		
+		googleButton.addClickHandler(new GoogleClickHandler(AUTH));
+	}
+
+
+	private Label initializeVariables() {
+		userTO = new UserTO();
+		final Label errorLabel = new Label();
+		return errorLabel;
+	}
+
+
+	private AbsolutePanel createAbsolutePanel() {
 		AbsolutePanel absolutePanel = new AbsolutePanel();
 		absolutePanel.setStyleName("h1");
-		rootPanel.add(absolutePanel, 336, 89);
+		rootPanel.add(absolutePanel, 600, 97);
 		absolutePanel.setSize("254px", "332px");
-		
+		return absolutePanel;
+	}
+
+
+	private void loadLabes(AbsolutePanel absolutePanel) {
 		Label lblSignInWith = new Label("Sign In With Your Account");
 		absolutePanel.add(lblSignInWith, 10, 10);
-		
-		textBoxLogin(absolutePanel);
 		
 		Label lblUsername = new Label("Username:");
 		absolutePanel.add(lblUsername, 10, 58);
@@ -78,19 +98,30 @@ public class LoginPage extends Page implements EntryPoint {
 		Label lblNewLabel = new Label("e.g. pat@example.com ");
 		absolutePanel.add(lblNewLabel, 91, 80);
 		
-		textBoxPassword(absolutePanel);
 		
 		Label lblPassword = new Label("Password:");
 		absolutePanel.add(lblPassword, 12, 122);
 		
-		signInButton(absolutePanel);
-		
 		Label lblStaySignedIn = new Label("Stay signed in");
 		absolutePanel.add(lblStaySignedIn, 91, 161);
-		
+	}
+
+
+	private void loadSimpleCheckBox(AbsolutePanel absolutePanel) {
 		SimpleCheckBox checkBoxStaySigned = new SimpleCheckBox();
 		absolutePanel.add(checkBoxStaySigned, 65, 160);
-		
+	}
+
+
+	private void loadImage() {
+		Image image = new Image(StringConstants.ZUMEH_LOGO_IMAGE.getValue());
+		rootPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
+		rootPanel.add(image, 72, 132);
+		image.setSize("245px", "171px");
+	}
+
+
+	private PushButton loadLoginButtons(AbsolutePanel absolutePanel) {
 		PushButton googleButton = new PushButton("Google");
 		absolutePanel.add(googleButton, 163, 230);
 		Image googleImage = new Image(StringConstants.GOOGLE_IMAGE.getValue());
@@ -102,31 +133,7 @@ public class LoginPage extends Page implements EntryPoint {
 		Image facebookImage = new Image(StringConstants.FACEBOOK_IMAGE.getValue());
 		facebookButton.getUpFace().setImage(facebookImage);
 		facebookButton.setSize("51px", "45px");
-		
-		cantAccessYourAccount(absolutePanel);
-		
-		googleButton.addClickHandler(new GoogleClickHandler(AUTH));
-
-		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setText("Remote Procedure Call");
-		dialogBox.setAnimationEnabled(true);
-		final Button closeButton = new Button("Close");
-		// We can set the id of a widget by accessing its Element
-		closeButton.getElement().setId("closeButton");
-		final Label textToServerLabel = new Label();
-		final HTML serverResponseLabel = new HTML();
-		
-		VerticalPanel dialogVPanel = new VerticalPanel();
-		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
-		dialogVPanel.add(textToServerLabel);
-		dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
-		dialogVPanel.add(serverResponseLabel);
-		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-		dialogVPanel.add(closeButton);
-		dialogBox.setWidget(dialogVPanel);
-
+		return googleButton;
 	}
 
 
@@ -159,14 +166,13 @@ public class LoginPage extends Page implements EntryPoint {
 				if (result == null) {
 					Window.alert("Incorrect username or password. Please try again!");
 				} else {
-					profilePageAccess(result);
+					loadProfilePage(result);
 				}
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+				//TODO ADD LOG
 			}
 		};
 	}
@@ -179,24 +185,11 @@ public class LoginPage extends Page implements EntryPoint {
 		
 		final AsyncCallback<UserTO> signInCall = signInCallback();
 		
-//		signInButton.addKeyDownHandler(new KeyDownHandler() {
-//			
-//			@Override
-//			public void onKeyDown(KeyDownEvent event) {
-//				if (event.getNativeKeyCode() ==KeyCodes.KEY_RIGHT) {
-//					//
-//					Window.alert("DEU CERTO");
-//				}
-//				
-//			}
-//		});
-		
 		signInButton.addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
 				zumehService.verifyUser(userTO, signInCall);
-				
 			}
 		});
 	}
@@ -206,6 +199,7 @@ public class LoginPage extends Page implements EntryPoint {
 		final PasswordTextBox textBoxPassword = new PasswordTextBox();
 		absolutePanel.add(textBoxPassword, 91, 122);
 		textBoxPassword.setSize("145px", "13px");
+		textBoxPassword.setMaxLength(100);
 		
 		textBoxPassword.addChangeHandler(new ChangeHandler() {
 			
@@ -228,6 +222,7 @@ public class LoginPage extends Page implements EntryPoint {
 		final TextBox textBoxUserName = new TextBox();
 		absolutePanel.add(textBoxUserName, 91, 58);
 		textBoxUserName.setSize("145px", "13px");
+		textBoxUserName.setMaxLength(50);
 		
 		textBoxUserName.addChangeHandler(new ChangeHandler() {
 			
@@ -237,19 +232,6 @@ public class LoginPage extends Page implements EntryPoint {
 				
 			}
 		});
-	}
-	
-	private void firstPageAccess(final String token) {
-		rootPanel.clear();
-		FirstAccessPage pagTest = ScreenFactory
-				.getInstance().getFirstAccessPage(token);
-		pagTest.onModuleLoad();
-	}
-	
-	private void profilePageAccess(UserTO user) {
-		rootPanel.clear();
-		ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().getProfileReadOnlyPage(user);
-		profilePage.onModuleLoad();
 	}
 	
 	
@@ -280,17 +262,16 @@ public class LoginPage extends Page implements EntryPoint {
 						@Override
 						public void onSuccess(final String token2) {
 							firstPageAccess(token);
-							System.out.println("Deu certo. lol");
+							//TODO add LOG
 						}
 
 						@Override
 						public void onFailure(Throwable arg0) {
-							System.out.println("Falhou sem servir pra nada...");
+							System.out.println("FALHOU ");
+							//TODO ADD LOG
 						}
 					});
 							            
-		            //TODO FAZER a tela de editar dados.
-		            
 				}
 
 				@Override

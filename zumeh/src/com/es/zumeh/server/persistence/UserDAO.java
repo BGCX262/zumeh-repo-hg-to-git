@@ -55,6 +55,7 @@ public class UserDAO {
 		newUser.setLocation(user.getLocation());
 		newUser.setName(user.getName());
 		newUser.setWhoAreYou(user.getWhoAreYou());
+		//newUser.setImage(user.getImage());
 		return newUser;
 	}
 	
@@ -69,6 +70,7 @@ public class UserDAO {
 		newUser.setLocation(user.getLocation());
 		newUser.setName(user.getName());
 		newUser.setWhoAreYou(user.getWhoAreYou());
+		//newUser.setImage(user.getImage());
 		return newUser;
 	}
 	

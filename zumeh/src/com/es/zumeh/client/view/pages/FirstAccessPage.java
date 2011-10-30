@@ -5,7 +5,6 @@ import java.util.HashMap;
 import com.es.zumeh.client.model.Password;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.model.work.Work;
-import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.es.zumeh.shared.util.Validate;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -22,7 +21,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -52,8 +50,9 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	private String fullName;
 	private String login;
 	private String password;
+	private byte[] image;
+	//private String fileName;
 	
-	private RootPanel rootPanel;
 	
 	private static final String FEMALE = "Female";
 	private static final String MALE = "Male";
@@ -72,37 +71,28 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	
 	
 	public FirstAccessPage(String token) {
-		this.token = token; //FIXME TROCAR ISSO
+		this.token = token;
 	}
 
 	@Override
 	public void onModuleLoad() {
 		final Label errorLabel = new Label();
-		interestAreas = "";
-		fullName = "";
 		
-		rootPanel = RootPanel.get("nameFieldContainer");
+		initializeSomeVariables();
+		
 		rootPanel.setStyleName("profileBackGround-works");
 		rootPanel.setSize("640", "480");
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 		
-		AbsolutePanel absolutePanel = new AbsolutePanel();
-		absolutePanel.setStyleName("profileBackGround-works");
-		rootPanel.add(absolutePanel, 143, 74);
-		absolutePanel.setSize("657px", "489px");
+		setDefaultFields();
 		
-		AbsolutePanel absolutePanel_1 = new AbsolutePanel();
-		rootPanel.add(absolutePanel_1, 133, 0);
-		absolutePanel_1.setSize("821px", "68px");
+		AbsolutePanel absolutePanel = createAbsolutePanel();
 		
-		AbsolutePanel absolutePanel_2 = new AbsolutePanel();
-		rootPanel.add(absolutePanel_2, 10, 36);
-		absolutePanel_2.setSize("135px", "181px");
+		AbsolutePanel absolutePanel_1 = createAbsolutePanel1();
 		
-		AbsolutePanel absolutePanel_3 = new AbsolutePanel();
-		absolutePanel_3.setStyleName("teste");
-		absolutePanel.add(absolutePanel_3, 10, 20);
-		absolutePanel_3.setSize("313px", "459px");
+		AbsolutePanel absolutePanel_2 = createAbsolutePanel2();
+		
+		AbsolutePanel absolutePanel_3 = createAbsolutePanel3(absolutePanel);
 		
 		whoAreYouTextArea(absolutePanel);
 		
@@ -116,34 +106,91 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		
 		welcomeLabel(absolutePanel_1);
 		
-		Hyperlink hprlnkSignOut = new Hyperlink("sign out", false, "");
-		absolutePanel_1.add(hprlnkSignOut, 749, 10);
-		hprlnkSignOut.asWidget();
+		loadSignOutHyperLink();
 		
 		loadImages(absolutePanel, absolutePanel_2);
 		
-	    MultiWordSuggestOracle oracle = getSuggestOracle();
-		suggestBoxes(absolutePanel_3, oracle);
+	    loadMultiSuggestedBoxes(absolutePanel_3);
 		
 		loadLocationListBox(absolutePanel_3);
 		
-		Label lblLocation = new Label("Location:");
-		absolutePanel_3.add(lblLocation, 154, 170);
+		loadLabels(absolutePanel_3);
 		
-		emailTextBox(absolutePanel_3);
+		loadEmailTextBox(absolutePanel_3);
 		
+		fullNameTextBox(absolutePanel_3);
+		
+		AbsolutePanel absolutePanel_4 = createAbsolutePanel4(absolutePanel_3);
+		
+		loginAndPassTextBox(absolutePanel_4);
+		
+		loadLabelsFromPanel4(absolutePanel_4);
+		
+		loadLabelsFromPanel3(absolutePanel_3);
+		
+		loadLabelsFromPanel1(absolutePanel);
+		
+		//uploadUserImage(absolutePanel);
+	}
+
+	private void initializeSomeVariables() {
+		interestAreas = "";
+	}
+
+	private AbsolutePanel createAbsolutePanel() {
+		AbsolutePanel absolutePanel = new AbsolutePanel();
+		absolutePanel.setStyleName("profileBackGround-works");
+		rootPanel.add(absolutePanel, 143, 74);
+		absolutePanel.setSize("657px", "489px");
+		return absolutePanel;
+	}
+
+	private AbsolutePanel createAbsolutePanel1() {
+		AbsolutePanel absolutePanel_1 = new AbsolutePanel();
+		rootPanel.add(absolutePanel_1, 133, 0);
+		absolutePanel_1.setSize("821px", "68px");
+		return absolutePanel_1;
+	}
+
+	private AbsolutePanel createAbsolutePanel2() {
+		AbsolutePanel absolutePanel_2 = new AbsolutePanel();
+		rootPanel.add(absolutePanel_2, 10, 36);
+		absolutePanel_2.setSize("135px", "181px");
+		return absolutePanel_2;
+	}
+
+	private AbsolutePanel createAbsolutePanel3(AbsolutePanel absolutePanel) {
+		AbsolutePanel absolutePanel_3 = new AbsolutePanel();
+		absolutePanel_3.setStyleName("teste");
+		absolutePanel.add(absolutePanel_3, 10, 30);
+		absolutePanel_3.setSize("313px", "459px");
+		return absolutePanel_3;
+	}
+
+	private void loadMultiSuggestedBoxes(AbsolutePanel absolutePanel_3) {
+		MultiWordSuggestOracle oracle = getSuggestOracle();
+		suggestBoxes(absolutePanel_3, oracle);
+	}
+
+	private AbsolutePanel createAbsolutePanel4(AbsolutePanel absolutePanel_3) {
 		AbsolutePanel absolutePanel_4 = new AbsolutePanel();
 		absolutePanel_3.add(absolutePanel_4, 10, 356);
 		absolutePanel_4.setSize("256px", "100px");
-		
+		return absolutePanel_4;
+	}
+
+	private void loadLabelsFromPanel1(AbsolutePanel absolutePanel) {
+		Label lblDescriptionAboutThis = new Label("Description about this project");
+		absolutePanel.add(lblDescriptionAboutThis, 415, 431);
+	}
+
+	private void loadLabelsFromPanel4(AbsolutePanel absolutePanel_4) {
 		Label lblLogin = new Label("Login: ");
 		absolutePanel_4.add(lblLogin, 10, 10);
 		
 		Label lblPassword = new Label("Password: ");
 		absolutePanel_4.add(lblPassword, 10, 50);
 		lblPassword.setSize("63px", "18px");
-		
-		loginAndPassTextBox(absolutePanel_4);
 		
 		Label label_4 = new Label("*");
 		absolutePanel_4.add(label_4, 239, 0);
@@ -152,7 +199,9 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		Label label_5 = new Label("*");
 		absolutePanel_4.add(label_5, 240, 40);
 		label_5.setSize("5px", "18px");
-		
+	}
+
+	private void loadLabelsFromPanel3(AbsolutePanel absolutePanel_3) {
 		Label label = new Label("*");
 		absolutePanel_3.add(label, 234, 10);
 		
@@ -167,13 +216,56 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		Label label_3 = new Label("*");
 		absolutePanel_3.add(label_3, 213, 172);
 		label_3.setSize("5px", "18px");
-		
-		Label lblDescriptionAboutThis = new Label("Description about this project");
-		absolutePanel.add(lblDescriptionAboutThis, 415, 431);
 	}
+
+	private void loadLabels(AbsolutePanel absolutePanel_3) {
+		Label lblLocation = new Label("Location:");
+		absolutePanel_3.add(lblLocation, 154, 170);
+	}
+
+//	private void uploadUserImage(AbsolutePanel absolutePanel) {
+//		final FileUpload fileUpload = new FileUpload();
+//		
+//		fileUpload.addChangeHandler(new ChangeHandler() {
+//			
+//			@Override
+//			public void onChange(ChangeEvent event) {
+//				fileName = fileUpload.getFilename();
+//				
+//				if (fileName.length() == 0) {
+//					Window.alert("Problems...");
+//				} else {
+//					Window.alert("OK");
+//				}
+//			}
+//		});
+//		
+//		absolutePanel.add(fileUpload, 10, 0);
+//		
+//		
+//		
+//		//File file = new File(fileName);
+//		File file = new File("images" + FILE_SEPARATOR + "sheldon.jpg");
+//		
+//		byte[] bFile = new byte[(int) file.length()];
+//		
+//		try {
+//			BufferedImage im = new BufferedImage(width, height, imageType)
+//			FileInputStream fileInputStream = new FileInputStream(file);
+//			// convert file into array of bytes
+//			fileInputStream.read(bFile);
+//			image = bFile;
+//			fileInputStream.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		
+//	}
 
 	private void loginAndPassTextBox(AbsolutePanel absolutePanel_4) {
 		final TextBox loginTextBox = new TextBox();
+		loginTextBox.setMaxLength(50);
 		absolutePanel_4.add(loginTextBox, 79, 4);
 		loginTextBox.setSize("146px", "16px");
 		
@@ -186,29 +278,35 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		});
 		
 		final PasswordTextBox passwordTextBox = new PasswordTextBox();
+		passwordTextBox.setMaxLength(100);
 		absolutePanel_4.add(passwordTextBox, 79, 40);
 		
-		passwordTextBox.addChangeHandler(new ChangeHandler() {
+		passwordTextBox.addChangeHandler(passwordChangeHandler(passwordTextBox));
+	}
+
+	private ChangeHandler passwordChangeHandler(
+			final PasswordTextBox passwordTextBox) {
+		return new ChangeHandler() {
 			
 			@Override
 			public void onChange(ChangeEvent event) {
 				Password pass = new Password();
 				try {
 					pass.setPassword(passwordTextBox.getText());
-					setPassword(pass.getPassword()); //FIXME Deixa ja aqui ou la p frente?
-					//acho que la p frente fica legal..
+					setPassword(pass.getPassword());
 				} catch (Exception e) {
 					e.printStackTrace(); //TODO LOG
 				}
 			}
-		});
+		};
 	}
 
-	private void emailTextBox(AbsolutePanel absolutePanel_3) {
+	private void loadEmailTextBox(AbsolutePanel absolutePanel_3) {
 		Label lblEmail = new Label("E-mail:");
 		absolutePanel_3.add(lblEmail, 10, 123);
 		
 		emailTextBox = new TextBox();
+		emailTextBox.setMaxLength(100);
 		absolutePanel_3.add(emailTextBox, 82, 123);
 		emailTextBox.setSize("143px", "10px");
 		
@@ -220,7 +318,6 @@ public class FirstAccessPage extends Page implements EntryPoint {
 				
 			}
 		});
-		
 	}
 	
 	private void setEmail(String inputEmail) {
@@ -250,7 +347,6 @@ public class FirstAccessPage extends Page implements EntryPoint {
 			public void onChange(ChangeEvent event) {
 				int index = locationListBox.getSelectedIndex();
 				setUserLocation(locationListBox.getItemText(index));
-				
 			}
 		});
 	}
@@ -268,18 +364,25 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		btnCancel.setText("Cancel");
 		absolutePanel.add(btnCancel, 503, 388);
 		btnCancel.setSize("56px", "24px"); //FIXME ajeitar aqui!
-//		btnCancel.addClickHandler(new ClickHandler() {
-//			
-//			@Override
-//			public void onClick(ClickEvent event) {
-//				//log.info("The clickHandler was called with success. The token for this process is: " + token);
-//				
-//	            rootPanel.clear();
-//	            LoginPage loginPage = ScreenFactory.getInstance().getLoginPage();
-//	            loginPage.onModuleLoad();
-//				
-//			}
-//		});
+		
+		btnCancel.addClickHandler(cancelClickHandler());
+
+	}
+
+	private ClickHandler cancelClickHandler() {
+		return new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				boolean confirmation = Window.confirm("All of your " +
+						"informations will be losted." +
+						"\nAre you sure?");
+				
+				if (confirmation == true) {
+					loadLoginPageAccess();
+				}
+			}
+		};
 	}
 
 	private void whoAreYouTextArea(AbsolutePanel absolutePanel) {
@@ -374,7 +477,6 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	}
 
 	private void informationsAboutTheUsers(AbsolutePanel absolutePanel_3) {
-		fullNameTextBox(absolutePanel_3);
 		
 		Label lblBirthday = new Label("Birthday:");
 		absolutePanel_3.add(lblBirthday, 10, 70);
@@ -401,22 +503,22 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	}
 
 	private void fullNameTextBox(AbsolutePanel absolutePanel_3) {
-		setDefaultFields();
-		
 		Label firstNameLabel = new Label("First name:");
+		//final String temporaryFullName = "";
 		absolutePanel_3.add(firstNameLabel, 10, 10);
 		
 		firstNameTextBox = new TextBox();
+		firstNameTextBox.setMaxLength(50);
 		
 		absolutePanel_3.add(firstNameTextBox, 82, 10);
 		firstNameTextBox.setSize("143px", "10px");
-		fullName += firstNameTextBox.getText();
 		
 		firstNameTextBox.addChangeHandler(new ChangeHandler() {
 			
 			@Override
 			public void onChange(ChangeEvent event) {
-				fullName += firstNameTextBox.getSelectedText();
+				resetFullName();
+				setFullName(firstNameTextBox.getText());
 				
 			}
 		});
@@ -424,19 +526,28 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		Label lblLastName = new Label("Last name:");
 		absolutePanel_3.add(lblLastName, 10, 39);
 		
-		lastNameTextBox = new TextBox(); //TODO criar verificador para o tamanho do nome
+		lastNameTextBox = new TextBox();
+		lastNameTextBox.setMaxLength(50);
 		absolutePanel_3.add(lastNameTextBox, 82, 39);
 		lastNameTextBox.setSize("143px", "10px");
-		fullName += " " + lastNameTextBox.getText();
 		
 		lastNameTextBox.addChangeHandler(new ChangeHandler() {
 			
 			@Override
 			public void onChange(ChangeEvent event) {
-				fullName += " " + lastNameTextBox.getSelectedText();
-				
+				setFullName(" " + lastNameTextBox.getText());
 			}
 		});
+	}
+	
+	private void resetFullName() {
+		this.fullName = "";
+		
+	}
+
+	private void setFullName(String fullName) {
+		this.fullName += fullName;
+		
 	}
 
 	private void radioButtons(AbsolutePanel absolutePanel_3) {
@@ -479,21 +590,18 @@ public class FirstAccessPage extends Page implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				if (isAlldataCompleted()) {
 					
-					AsyncCallback<Boolean> w = createAsyncCallbackForUser();
+					AsyncCallback<Boolean> assyncCallback = createAsyncCallbackForUser();
 					
 					AsyncCallback<Void> em = createAsyncCallbackForEmail();
 					
-					UserTO newUser = createUser(); //FIXME Deveria adicionar o usuario no BD.
-					zumehService.addUser(newUser, w); //FIXME ADD USER
+					UserTO newUser = createUser();
+					zumehService.addUser(newUser, assyncCallback);
 					
-					sendMail(em);
+					//sendMail(em);
 					
-					Window.confirm("Your informations was saved with success.");
+					Window.alert("Your informations was saved with success.");
 					
-					rootPanel.clear();
-					ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().
-							getProfileReadOnlyPage(newUser);
-					profilePage.onModuleLoad();
+					loadProfilePage(newUser);
 
 				} else {
 					Window.alert("Some informations is incomplete.");
@@ -550,6 +658,7 @@ public class FirstAccessPage extends Page implements EntryPoint {
 				newUser.setWhoAreYou(whoAreYou);
 				newUser.setLogin(login);
 				newUser.setPassword(password);
+				newUser.setImage(image);
 				return newUser;
 			}
 		});
@@ -599,14 +708,12 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		zumehService.getWork(0, w);
 		zumehService.getWork(1, w);
 		
-		
-		
 		AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				System.out.println("Could not retrieve user google string informations.");
-				caught.printStackTrace();
+				//caught.printStackTrace();
 			}
 
 			@Override
@@ -615,7 +722,6 @@ public class FirstAccessPage extends Page implements EntryPoint {
 				String lastName = result.get("lastname");
 				email = result.get("email");
 				fullName = completeName(firstName, lastName);
-				
 				
 				firstNameTextBox.setText(firstName);
 				lastNameTextBox.setText(lastName);
@@ -628,6 +734,11 @@ public class FirstAccessPage extends Page implements EntryPoint {
 			
 		};
 		
-		zumehService.getGoogleInfo(token, callback);
+		if (!token.equals(null)) {
+			zumehService.getGoogleInfo(token, callback);
+		} else {
+			//TODO ADD LOG
+		}
+			
 	}
 }

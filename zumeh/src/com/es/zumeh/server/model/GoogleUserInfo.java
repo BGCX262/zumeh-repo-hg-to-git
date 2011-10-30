@@ -45,10 +45,12 @@ public class GoogleUserInfo {
 			resultFeed = googleService.getFeed(feedUrl, Feed.class);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("------------------> ERRO AQUI NO PRIMEIRO CATCH");
 		} catch (ServiceException e) {
+			System.out.println("------------------> ERRO AQUI NO SEGUNDO CATCH");
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		List<Person> authors = resultFeed.getAuthors();

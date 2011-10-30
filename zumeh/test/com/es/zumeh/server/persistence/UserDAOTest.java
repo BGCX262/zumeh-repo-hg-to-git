@@ -1,5 +1,9 @@
 package com.es.zumeh.server.persistence;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
 import junit.framework.Assert;
 
 import org.junit.After;
@@ -13,6 +17,9 @@ import com.es.zumeh.server.model.DAOManager;
 import com.es.zumeh.server.model.persistence.User;
 
 public class UserDAOTest {
+	
+	static final String FILE_SEPARATOR = File.separator;
+	
 	
 	DAOManager daoManager;
 	
@@ -33,6 +40,12 @@ public class UserDAOTest {
 		boolean result = addUser();
 		Assert.assertEquals(true, result);
 	}
+	
+//	@Test
+//	public void test_add_user_with_photo() {
+//		boolean result = addUserWithFoto();
+//		Assert.assertEquals(true, result);
+//	}
 
 	@Test
 	public void test_verify_user_by_email_login() {
@@ -63,6 +76,14 @@ public class UserDAOTest {
 		Assert.assertEquals(true, checkPass);
 		Assert.assertEquals("um cara MUITO DOIDO QUE GOSTA" +
 				" DE INSERIR COISAS MUITO GRANDES", user.getWhoAreYou());
+		
+//		try { //TODO DESCOMENTAR AQUI TVBM
+//			FileOutputStream fos = new FileOutputStream("C:" +FILE_SEPARATOR +"images"+ FILE_SEPARATOR+"output.jpg");
+//			//fos.write(user.getImage());
+//			fos.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	private boolean setPassword(User user) throws Exception {
@@ -89,6 +110,40 @@ public class UserDAOTest {
 		user.setLocation("Pesqueira");
 		user.setInterestedArea("qualquer area");
 		user.setName("PESAO DA SILVA");
+		
+		boolean result = false;
+		
+		result = daoManager.addUser(user);
+		return result;
+	}
+	
+	private boolean addUserWithFoto() {
+		UserTO user = new UserTO();
+		user.setLogin("teste");
+		user.setPassword("leite2");
+		user.setBirthday("27/12/1987");
+		user.setEmail("tiagooleite@gmail.com");
+		user.setWhoAreYou("um cara MUITO DOIDO QUE GOSTA" +
+				" DE INSERIR COISAS MUITO GRANDES");
+		user.setGender("M");
+		user.setLocation("Pesqueira");
+		user.setInterestedArea("qualquer area");
+		user.setName("PESAO DA SILVA");
+		
+		File file = new File("C:" + FILE_SEPARATOR + "eu.jpg");
+		//File file = new File("images" + FILE_SEPARATOR + "sheldon.jpg");
+		
+		byte[] bFile = new byte[(int) file.length()];
+		
+		try {
+			FileInputStream fileInputStream = new FileInputStream(file);
+			// convert file into array of bytes
+			fileInputStream.read(bFile);
+			user.setImage(bFile);
+			fileInputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		boolean result = false;
 		

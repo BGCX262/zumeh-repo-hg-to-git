@@ -18,23 +18,19 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
 
-public class ProfileReadOnlyPage implements EntryPoint {
+public class ProfileReadOnlyPage extends Page implements EntryPoint {
 	
 	private UserTO user;
-	private RootPanel rootPanel; 
 	
-	//private User user; //TODO add the user.
 	public ProfileReadOnlyPage(UserTO user) {
 		this.user = user;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onModuleLoad() {
 		
 		final Label errorLabel = new Label();
 		
-		rootPanel = RootPanel.get("nameFieldContainer");
 		rootPanel.setSize("640", "480");
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 		rootPanel.setStyleName(".teste");
@@ -49,64 +45,45 @@ public class ProfileReadOnlyPage implements EntryPoint {
 		absoluteRootPanel.add(imageAbsolutePanel, 38, 43);
 		imageAbsolutePanel.setSize("121px", "164px");
 		
-		Image image = new Image("images/sheldon.jpg");
-		imageAbsolutePanel.add(image, 0, 0);
-		image.setStyleName("imageProfileBoard");
-		image.setSize("121px", "164px");
+		loadImage(imageAbsolutePanel);
 		
-		AbsolutePanel descriptionAbsolutePanel = new AbsolutePanel();
-		descriptionAbsolutePanel.setStyleName("teste");
-		absoluteRootPanel.add(descriptionAbsolutePanel, 181, 43);
-		descriptionAbsolutePanel.setSize("542px", "100px");
+		AbsolutePanel descriptionAbsolutePanel = 
+				createDescriptionAbsolutePanel(absoluteRootPanel);
 		
 		nameEmailLabel(descriptionAbsolutePanel);
 		
 		whoAreYouText(descriptionAbsolutePanel);
 		
-		AbsolutePanel absolutePanel = new AbsolutePanel();
-		absoluteRootPanel.add(absolutePanel, 38, 239);
-		absolutePanel.setSize("121px", "261px");
+		AbsolutePanel absolutePanel = createAbsolutePanel(absoluteRootPanel);
 		
 		loadStackLayoutPanel(absolutePanel);
 		
-		AbsolutePanel absolutePanel_1 = new AbsolutePanel();
-		absolutePanel_1.setStyleName("profileBackGround-works");
-		absoluteRootPanel.add(absolutePanel_1, 181, 156);
-		absolutePanel_1.setSize("542px", "261px");
+		AbsolutePanel absolutePanel_1 = createAbsolutePanel1(absoluteRootPanel);
 		
-		AbsolutePanel absolutePanel_3 = new AbsolutePanel();
-		absolutePanel_1.add(absolutePanel_3, 115, 35);
-		absolutePanel_3.setSize("100px", "158px");
+		AbsolutePanel absolutePanel_3 = createAbsolutePanel3(absolutePanel_1);
 		
-		Hyperlink hprlnkWorker = new Hyperlink("Work 1", false, "newHistoryToken");
-		absolutePanel_3.add(hprlnkWorker, 0, 10);
-		hprlnkWorker.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				rootPanel.clear();
-				WorkPage workPage = ScreenFactory.getInstance().getWorkPage();
-				workPage.onModuleLoad();
-			}
-		});
+		loadHyperlinkWorker1(absolutePanel_3);
 		
-		Hyperlink hprlnkWorker_1 = new Hyperlink("Work 2", false, "newHistoryToken");
-		absolutePanel_3.add(hprlnkWorker_1, 0, 34);
+		loadHyperlinkWorker2(absolutePanel_3);
 		
-		Hyperlink hprlnkWork = new Hyperlink("Work 3", false, "newHistoryToken");
-		absolutePanel_3.add(hprlnkWork, 0, 58);
+		loadHyperlinkWorker3(absolutePanel_3);
 		
-		AbsolutePanel absolutePanel_2 = new AbsolutePanel();
-		absoluteRootPanel.add(absolutePanel_2, 10, 613);
-		absolutePanel_2.setSize("783px", "25px");
+		AbsolutePanel absolutePanel_2 = createAbsolutePanel2(absoluteRootPanel);
 		
+		loadHyperlinkAboutUs(absoluteRootPanel, absolutePanel_2);
+		
+		//loadSignOut(absoluteRootPanel);
+		loadSignOutHyperLink();
+		
+		
+	}
+
+	@SuppressWarnings("deprecation")
+	private void loadHyperlinkAboutUs(AbsolutePanel absoluteRootPanel,
+			AbsolutePanel absolutePanel_2) {
 		Hyperlink hprlnkAboutUs = new Hyperlink("About Us", false, "newHistoryToken");
 		absolutePanel_2.add(hprlnkAboutUs, 10, 10);
 		
-		Hyperlink hyperlink = new Hyperlink("sign out", false, "");
-		absoluteRootPanel.add(hyperlink, 749, 10);
-		hyperlink.setSize("46px", "18px");
 		hprlnkAboutUs.addClickHandler(new ClickHandler() {
 			final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
 			
@@ -131,7 +108,85 @@ public class ProfileReadOnlyPage implements EntryPoint {
 			}
 		});
 		
+
 		
+	}
+
+	private void loadSignOut(AbsolutePanel absoluteRootPanel) {
+		Hyperlink hyperlink = new Hyperlink("sign out", false, "");
+		absoluteRootPanel.add(hyperlink, 749, 10);
+		hyperlink.setSize("46px", "18px");
+	}
+
+	private AbsolutePanel createAbsolutePanel2(AbsolutePanel absoluteRootPanel) {
+		AbsolutePanel absolutePanel_2 = new AbsolutePanel();
+		absoluteRootPanel.add(absolutePanel_2, 10, 613);
+		absolutePanel_2.setSize("783px", "25px");
+		return absolutePanel_2;
+	}
+
+	private void loadHyperlinkWorker3(AbsolutePanel absolutePanel_3) {
+		Hyperlink hprlnkWork = new Hyperlink("Work 3", false, "newHistoryToken");
+		absolutePanel_3.add(hprlnkWork, 0, 58);
+	}
+
+	private void loadHyperlinkWorker2(AbsolutePanel absolutePanel_3) {
+		Hyperlink hprlnkWorker_1 = new Hyperlink("Work 2", false, "newHistoryToken");
+		absolutePanel_3.add(hprlnkWorker_1, 0, 34);
+	}
+
+	@SuppressWarnings("deprecation")
+	private void loadHyperlinkWorker1(AbsolutePanel absolutePanel_3) {
+		Hyperlink hprlnkWorker1 = new Hyperlink("Work 1", false, "newHistoryToken");
+		absolutePanel_3.add(hprlnkWorker1, 0, 10);
+		hprlnkWorker1.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(final ClickEvent event) {
+				// TODO Auto-generated method stub
+				rootPanel.clear();
+				final WorkPage workPage = ScreenFactory.getInstance().getWorkPage();
+				workPage.onModuleLoad();
+			}
+		});
+	}
+
+	private AbsolutePanel createAbsolutePanel3(AbsolutePanel absolutePanel_1) {
+		AbsolutePanel absolutePanel_3 = new AbsolutePanel();
+		absolutePanel_1.add(absolutePanel_3, 115, 35);
+		absolutePanel_3.setSize("100px", "158px");
+		return absolutePanel_3;
+	}
+
+	private AbsolutePanel createAbsolutePanel1(AbsolutePanel absoluteRootPanel) {
+		AbsolutePanel absolutePanel_1 = new AbsolutePanel();
+		absolutePanel_1.setStyleName("profileBackGround-works");
+		absoluteRootPanel.add(absolutePanel_1, 181, 156);
+		absolutePanel_1.setSize("542px", "261px");
+		return absolutePanel_1;
+	}
+
+	private AbsolutePanel createAbsolutePanel(AbsolutePanel absoluteRootPanel) {
+		AbsolutePanel absolutePanel = new AbsolutePanel();
+		absoluteRootPanel.add(absolutePanel, 38, 239);
+		absolutePanel.setSize("121px", "261px");
+		return absolutePanel;
+	}
+
+	private AbsolutePanel createDescriptionAbsolutePanel(
+			AbsolutePanel absoluteRootPanel) {
+		AbsolutePanel descriptionAbsolutePanel = new AbsolutePanel();
+		descriptionAbsolutePanel.setStyleName("teste");
+		absoluteRootPanel.add(descriptionAbsolutePanel, 181, 43);
+		descriptionAbsolutePanel.setSize("542px", "100px");
+		return descriptionAbsolutePanel;
+	}
+
+	private void loadImage(AbsolutePanel imageAbsolutePanel) {
+		Image image = new Image("images/sheldon.jpg");
+		imageAbsolutePanel.add(image, 0, 0);
+		image.setStyleName("imageProfileBoard");
+		image.setSize("121px", "164px");
 	}
 
 	private void whoAreYouText(AbsolutePanel descriptionAbsolutePanel) {

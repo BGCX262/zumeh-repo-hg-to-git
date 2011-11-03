@@ -1,2 +1,0 @@
-serviceClass: com.es.zumeh.client.GreetingService
-path: 5629DFF26FAEFE2A7B97DCE998BFCAF4.gwt.rpc

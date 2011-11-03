@@ -1,2 +1,0 @@
-serviceClass: com.es.zumeh.client.facade.UserService
-path: 6CF4FA348784A0FDF55F1B85A32BEDFC.gwt.rpc

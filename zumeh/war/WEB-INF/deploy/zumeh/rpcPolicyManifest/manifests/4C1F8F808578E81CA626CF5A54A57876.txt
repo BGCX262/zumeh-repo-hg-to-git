@@ -1,0 +1,2 @@
+serviceClass: com.es.zumeh.client.facade.ZumehService
+path: 5F011C77FDECCC88E2CBDB29C9B3FF2D.gwt.rpc

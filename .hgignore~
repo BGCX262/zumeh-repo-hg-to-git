@@ -1,0 +1,6 @@
+syntax: glob
+zumeh/.hgignore.txt
+zumeh/.gwt/.gwt-log
+syntax: regexp
+zumeh/war/WEB-INF/classes/*
+zumeh/.classpath

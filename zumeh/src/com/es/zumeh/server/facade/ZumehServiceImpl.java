@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.es.zumeh.client.facade.ZumehService;
 import com.es.zumeh.client.model.to.UserTO;
-import com.es.zumeh.client.model.work.Work;
 import com.es.zumeh.server.model.GoogleUserInfo;
 import com.es.zumeh.server.model.SessionManager;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -31,19 +30,6 @@ public class ZumehServiceImpl extends RemoteServiceServlet implements ZumehServi
 	public HashMap<String, String> getGoogleInfo(String token) {
 		googleUserInfo = new GoogleUserInfo(token);
 		return googleUserInfo.getGoogleUserInfo();
-	}
-	
-	@Override
-	public Work getWork(int identifier) {
-		Work w = null;
-		if(identifier == 0) {
-			w = new Work();
-			w.setWorkName("Status 0 => Teste");
-		} else if (identifier == 1) {
-			w = new Work();
-			w.setWorkName("Status 1 => Teste");
-		}
-		return w;
 	}
 	
 	

@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import com.es.zumeh.client.model.Password;
 import com.es.zumeh.client.model.to.UserTO;
-import com.es.zumeh.client.model.work.Work;
 import com.es.zumeh.shared.util.Validate;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -692,21 +691,6 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	
 	private void setDefaultFields() {
 		
-		AsyncCallback<Work> w = new AsyncCallback<Work>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				caught.printStackTrace();
-			}
-
-			@Override
-			public void onSuccess(Work result) {
-				System.out.println(result);
-			}
-		};
-		
-		zumehService.getWork(0, w);
-		zumehService.getWork(1, w);
 		
 		AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>() {
 

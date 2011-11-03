@@ -1,168 +1,65 @@
 package com.es.zumeh.client.view.pages;
 
-import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.es.zumeh.client.facade.ZumehService;
-import com.es.zumeh.client.facade.ZumehServiceAsync;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.logical.shared.AttachEvent;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.orange.links.client.DiagramController;
-import com.orange.links.client.connection.Connection;
-import com.orange.links.client.event.TieLinkEvent;
-import com.orange.links.client.event.TieLinkHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
+import org.vaadin.gwtgraphics.client.DrawingArea;
 
-@SuppressWarnings("deprecation")
-public class WorkPage implements EntryPoint {
-	private RootPanel rootPanel = RootPanel.get();
-	private DiagramController controller = new DiagramController(getScreenWidth()-400, getScreenHeight()-400);
-	private final ZumehServiceAsync zumehService = GWT.create(ZumehService.class);
-	private PickupDragController dragController = new PickupDragController(controller.getView(), true);
-	private Widget node1;
-	private Widget node2;
-	private boolean isCtrlDown;
-	private FocusPanel panel = new FocusPanel();
+public class WorkPage extends AbsolutePanel implements EntryPoint {
+	private String BACKGROUND_COLOR = "#CCCCCC";
+	final private int WIDTH = getScreenWidth()-400;
+	final private int HEIGHT = getScreenHeight()-400;
+	final private int WIDTH_FULL = getScreenWidth();
+	final private int HEIGHT_FULL = getScreenHeight();
+	final DrawingArea workArea = new DrawingArea(WIDTH, HEIGHT);
+	
+	final VerticalPanel workPanel = new VerticalPanel();
+	private WorkNode root;
+	
+	public WorkPage() {
+		setSize(WIDTH+"px", HEIGHT+"px");
+		getElement().getStyle().setBackgroundColor(BACKGROUND_COLOR);
+		workPanel.add(workArea);
+		add(workPanel);
+		
+		root =  new WorkNode(null, workArea, this);
+		root.setDescription("Any Idea?");
+		
+		sinkEvents(Event.ONDBLCLICK);
+	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void onModuleLoad() {
-    	controller.showGrid(true);
-    	
-    	panel.setPixelSize(getScreenWidth()-400, getScreenHeight()-400);
-    	panel.add(controller.getView());
-    	
-    	RootPanel.get().add(panel);
-    	
-    	// **** Apagar isso ******
-    	Label v1 = addVertex(200, 100, "#0000ff", "hello");
-    	Label v2 = addVertex(100, 200, "#ff0000", "word");
-    	Label v3 = addVertex(200, 300, "#00ff00", "fuuuuu");
-    	dragController.makeDraggable(v1);
-    	dragController.makeDraggable(v2);
-    	dragController.makeDraggable(v3);
+	public void onBrowserEvent(Event event) {
+		event.preventDefault();
 		
-    	connectVertex(v1, v2);
-    	
-    	connectVertex(v3, v2);
-    	// **** Apagar isso ******
-    	addMenu();
-    	//timer();
-	}
-	
-	private void connectOnClick(Widget w) {
-		if(node1 == null) {
-			node1 = w;
-		} else if (node2 == null && !node1.equals(w)) {
-			node2 = w;
-			connectVertex(node2, node1);
-			node1 = null;
-			node2 = null;
-		} else {
-			node1 = null;
-			node2 = null;
+		switch (DOM.eventGetType(event)) {
+		case Event.ONDBLCLICK:
+			switchPanelSize();
+			break;
+		default:
+			break;
 		}
+		super.onBrowserEvent(event);
 	}
 	
-	private void addMenu() {
-			final MenuItem menuItem = new MenuItem("Create Node", new Command() {
-			
-			@Override
-			public void execute() {
-				
-				final DialogBox dialogBox = new DialogBox();
-				dialogBox.setText("Adding new node...");
-				dialogBox.setAnimationEnabled(true);
-				
-				final Button closeButton = new Button("Ok");
-				closeButton.getElement().setId("okButton");
-				
-				final VerticalPanel dialogVPanel = new VerticalPanel();
-				dialogVPanel.addStyleName("dialogVPanel");
-				dialogVPanel.add(new HTML("<b>Description:</b>"));
-				
-				final TextBox emailTextBox = new TextBox();
-				emailTextBox.setPixelSize(100, 15);
-				emailTextBox.setMaxLength(15);
-				emailTextBox.setEnabled(true);
-				emailTextBox.setFocus(true);
-				
-				dialogVPanel.add(emailTextBox);
-				dialogBox.setWidget(dialogVPanel);
-				dialogVPanel.add(closeButton);
-				
-				dialogBox.center();
-				dialogBox.setVisible(true);
-				
-				closeButton.setFocus(true);
-				
-				closeButton.addClickHandler(new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						controller.deleteWidget(dialogBox);
-						System.out.println();
-						addVertex(controller.getMousePoint().getLeft(),
-								controller.getMousePoint().getTop(), "#00ff00",
-								emailTextBox.getText());
-					}
-				});
-				
-				controller.getContextMenu().hide();
-				controller.addWidgetAtMousePoint(dialogBox);
-			}
-		});
-			
-		controller.getContextMenu().addItem(menuItem);
+	private void switchPanelSize() {
+		if(getOffsetWidth() == WIDTH_FULL && getOffsetHeight() == HEIGHT_FULL) {
+			setSize(WIDTH+"px", HEIGHT+"px");
+			workArea.setPixelSize(WIDTH, HEIGHT);
+		} else {
+			setSize(WIDTH_FULL+"px", HEIGHT_FULL+"px");
+			workArea.setPixelSize(WIDTH_FULL, HEIGHT_FULL);
+		}
+		root.refreshPositions(root.getMaxColumn()+1);
 	}
 	
-	private void connectVertex(Widget v1, Widget v2) {
-		Connection c1 = controller.drawStraightArrowConnection(v2, v1);
-		c1.drawHighlight();
-		Label decorationLabel = new Label();
-    	controller.addDecoration(decorationLabel, c1);
-	}
-	
-	private WorkNode addVertex(int left, int top, String color, String name) {
-		WorkNode vertex = new WorkNode(panel);
-		vertex.setTitle(name);
-		vertex.setText(name);
-		vertex.getElement().getStyle().setPadding(10, Unit.PX);
-		vertex.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-		vertex.getElement().getStyle().setBorderColor("#000000");
-		vertex.getElement().getStyle().setBorderWidth(3, Unit.PX);
-		vertex.getElement().getStyle().setBackgroundColor(color);
-		vertex.setPixelSize(100, 20);
-		controller.addWidget(vertex, left, top);
-		controller.addWidget(vertex.getPopupPanel(),0,0);
-		dragController.makeDraggable(vertex);	
-		return vertex;
-	}
-	
+	/*
+	 *  Natives
+	 */
 	public static native int getScreenWidth() /*-{ 
 		return $wnd.screen.width;
 	}-*/;
@@ -170,18 +67,10 @@ public class WorkPage implements EntryPoint {
 	public static native int getScreenHeight() /*-{ 
 		return $wnd.screen.height;
 	}-*/;
-	
-	private void clear() {
-		controller.clearDiagram();
-	}
-	
-	private void timer() {
-		Timer timer = new Timer() {
-            @Override
-            public void run() {
-            	//System.out.println(controller.getMousePoint());
-            }
-    	};
-    	timer.scheduleRepeating(50);
+
+	@Override
+	public void onModuleLoad() {
+		WorkPage wp = new WorkPage();
+		RootPanel.get().add(wp, 10, 10);
 	}
 }

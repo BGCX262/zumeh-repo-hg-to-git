@@ -11,12 +11,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/mysql-connector-java-5.1.16-bin.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/openjpa-1.2.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/serp-1.13.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-dnd-3.1.2.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-incubator-20101117-r1766.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-links-1.4.2.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-api-1.6.3.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/validation-api-1.0.0.GA.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-codec-1.5.jar"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/antlr-2.7.6.jar"/>
@@ -47,5 +41,9 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-enhancer-1.1.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-appengine-1.0.9.final.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/zumeh-repo/zumeh/war/WEB-INF/lib/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/zumeh-repo/zumeh/war/WEB-INF/lib/slf4j-api-1.6.3.jar"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/zumeh-repo/zumeh/war/WEB-INF/lib/validation-api-1.0.0.GA.jar"/>
+	<classpathentry kind="lib" path="/home/heitor/workspace/zumeh-repo/zumeh/war/WEB-INF/lib/gwt-graphics-1.0.0.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

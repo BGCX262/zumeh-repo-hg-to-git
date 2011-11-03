@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.es.zumeh.client.model.to.UserTO;
-import com.es.zumeh.client.model.work.Work;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -22,7 +21,6 @@ public interface ZumehService extends RemoteService {
 	void closeSession(String token) throws IllegalArgumentException;
 	
 	HashMap<String, String> getGoogleInfo(String token) throws IllegalArgumentException;
-	Work getWork(int identifier) throws IllegalArgumentException;
 	
 	//List<User> getUserList();
 	//User getUser(String id);

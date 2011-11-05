@@ -18,7 +18,7 @@ public class Zumeh implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		
-		FirstAccessPage loginPage = screenFactory.getFirstAccessPage("te");
+		LoginPage loginPage = screenFactory.getLoginPage();
 		loginPage.onModuleLoad();
 		
 		//WorkPage wp = screenFactory.getWorkPage();

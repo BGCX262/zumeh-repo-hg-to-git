@@ -39,12 +39,21 @@ public class SessionManager {
 	
 	public void openSession(String token) {
 		try {
+			//User user = ;
 			openedSessions.put(token, getUser(token));
+			
+//			if(!getDaoManager().verifyUserByEmail(user.getEmail())) {
+//				return getDaoManager().getUserByEmail(user.getEmail());
+//			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
+		
+		//return null;
+		
 	}
 	
 	public void closeSession(String token) {

@@ -1,7 +1,6 @@
 package com.es.zumeh.client.facade;
 
 import java.util.HashMap;
-import java.util.List;
 
 import com.es.zumeh.client.model.to.UserTO;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -22,15 +21,13 @@ public interface ZumehService extends RemoteService {
 	
 	HashMap<String, String> getGoogleInfo(String token) throws IllegalArgumentException;
 	
-	//List<User> getUserList();
-	//User getUser(String id);
 	boolean addUser(UserTO newUser);
 	
 	void sendEmail(String from, String to, String title, String text);
 
 	UserTO getUser(String id);
 
-	List<UserTO> getUserList();
+	UserTO[] getUserList();
 
 	UserTO verifyUser(UserTO user);
 }

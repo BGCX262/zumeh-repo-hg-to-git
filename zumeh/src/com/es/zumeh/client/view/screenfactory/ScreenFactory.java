@@ -1,5 +1,6 @@
 package com.es.zumeh.client.view.screenfactory;
 
+import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.view.pages.FirstAccessPage;
 import com.es.zumeh.client.view.pages.LoginPage;
@@ -33,13 +34,23 @@ public class ScreenFactory {
 		return pag;
 	}
 
-	public ProfileReadOnlyPage getProfileReadOnlyPage(UserTO user) {
-		this.profileReadOnlyPage = new ProfileReadOnlyPage(user);
+	public ProfileReadOnlyPage getProfileReadOnlyPage(ClientSessionManager clienteSessionManger) {
+		this.profileReadOnlyPage = new ProfileReadOnlyPage(clienteSessionManger);
 		return profileReadOnlyPage;
 	}
 	
-	public WorkPage getWorkPage() {
-		this.workPage = new WorkPage();
+	public ProfileReadOnlyPage getFriendProfile(ClientSessionManager clienteSessionManger) {
+		this.profileReadOnlyPage = new ProfileReadOnlyPage(clienteSessionManger);
+		return profileReadOnlyPage;
+	}
+	
+	public ProfileReadOnlyPage getFriendProfile(ClientSessionManager clienteSessionManger, boolean visitor) {
+		this.profileReadOnlyPage = new ProfileReadOnlyPage(clienteSessionManger, visitor);
+		return profileReadOnlyPage;
+	}
+	
+	public WorkPage getWorkPage(ClientSessionManager clientSessionManger) {
+		this.workPage = new WorkPage(clientSessionManger);
 		return this.workPage;
 	}
 	

@@ -1,7 +1,6 @@
 package com.es.zumeh.client.facade;
 
 import java.util.HashMap;
-import java.util.List;
 
 import com.es.zumeh.client.model.to.UserTO;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -15,13 +14,13 @@ public interface ZumehServiceAsync {
 	void greetServer(String input, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void getUserName(String token, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void getUserEmail(String token, AsyncCallback<String> callback) throws IllegalArgumentException;
-	void openSession(String token, AsyncCallback callback) throws IllegalArgumentException;
+	void openSession(String token, AsyncCallback<Void> callback) throws IllegalArgumentException;
 	void closeSession(String token, AsyncCallback callback) throws IllegalArgumentException;
 	
 	void getGoogleInfo(String token,
 			AsyncCallback<HashMap<String, String>> callback);
 	void getUser(String id, AsyncCallback<UserTO> callback);
-	void getUserList(AsyncCallback<List<UserTO>> callback);
+	void getUserList(AsyncCallback<UserTO[]> callback);
 	void sendEmail(String from, String to, String title, String text,
 			AsyncCallback<Void> callback);
 	

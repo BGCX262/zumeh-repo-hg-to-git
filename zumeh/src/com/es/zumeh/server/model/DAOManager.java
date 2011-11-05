@@ -66,13 +66,26 @@ public class DAOManager {
 		return getUserDAO().getUserByLogin(login);
 	}
 	
-	private UserDAO getUserDAO() {
+	public UserTO getUserByEmail(String email) {
+		return getUserDAO().convertToTransferObjectUser(
+				getUserDAO().getUserByEmail(email));
+	}
+	
+	public UserDAO getUserDAO() {
 		return userDAO;
+	}
+	
+	public UserTO[] getAllUsers() {
+		return userDAO.getAllUsers();
 	}
 
 	public void deleteUserData() {
 		//getUserDAO().deleteUserData();
 		
+	}
+	
+	public boolean verifyUserByEmail(String email) {
+		return getUserDAO().verifyUserByEmail(email);
 	}
 
 }

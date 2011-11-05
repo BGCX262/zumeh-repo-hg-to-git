@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.es.zumeh.client.model.Password;
 
-public class UserTO implements Serializable{
+public class UserTO implements Serializable {
 
 	private static final long serialVersionUID = 5958457385870267972L;
 	

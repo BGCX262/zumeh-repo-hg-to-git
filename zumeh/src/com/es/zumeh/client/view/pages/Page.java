@@ -1,42 +1,35 @@
 package com.es.zumeh.client.view.pages;
 
+import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.facade.ZumehService;
 import com.es.zumeh.client.facade.ZumehServiceAsync;
-import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Page extends Widget{
 	
-	final ZumehServiceAsync zumehService = GWT.create(ZumehService.class);
+	public final ZumehServiceAsync zumehService = GWT.create(ZumehService.class);
 	
-	final RootPanel rootPanel = RootPanel.get("nameFieldContainer");
+	RootPanel rootPanel = RootPanel.get("nameFieldContainer");
 	
-	@SuppressWarnings("deprecation")
 	public void loadSignOutHyperLink() {
-		Hyperlink hprlnkSignOut = new Hyperlink("sign out", false, "");
-		rootPanel.add(hprlnkSignOut, 749, 10);
-		hprlnkSignOut.asWidget();
+		Anchor signOutLink = new Anchor("sign out");
+		rootPanel.add(signOutLink, 749, 10);
 		
-		hprlnkSignOut.addClickHandler(createClickHandlerForSignOutHyperLink());
-		
-		
+		signOutLink.addClickHandler(createClickHandlerForSignOutLink());
 	}
 
-	private ClickHandler createClickHandlerForSignOutHyperLink() {
+	private ClickHandler createClickHandlerForSignOutLink() { //FIXME ADD IMAGE
 		return new ClickHandler() {
-			
 			@Override
 			public void onClick(final ClickEvent event) {
 				loadLoginPageAccess();
 			}
-
-		
 		};
 	}
 	
@@ -47,10 +40,17 @@ public class Page extends Widget{
 		
 	}
 	
-	public void loadProfilePage(UserTO newUser) {
+	public void loadProfilePage(ClientSessionManager clienteSessionManger) {
 		rootPanel.clear();
 		ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().
-				getProfileReadOnlyPage(newUser);
+				getProfileReadOnlyPage(clienteSessionManger);
+		profilePage.onModuleLoad();
+	}
+	
+	public void loadFriendsProfile(ClientSessionManager clienteSessionManger, boolean isVisitor) {
+		rootPanel.clear();
+		ProfileReadOnlyPage profilePage = ScreenFactory.getInstance().
+				getFriendProfile(clienteSessionManger, isVisitor);
 		profilePage.onModuleLoad();
 	}
 	
@@ -59,6 +59,12 @@ public class Page extends Widget{
 		FirstAccessPage pagTest = ScreenFactory
 				.getInstance().getFirstAccessPage(token);
 		pagTest.onModuleLoad();
+	}
+	
+	public void loadWorkPage(ClientSessionManager clientSessionManger) {
+		rootPanel.clear();
+		WorkPage workPage = ScreenFactory.getInstance().getWorkPage(clientSessionManger);
+		workPage.onModuleLoad();
 	}
 
 }

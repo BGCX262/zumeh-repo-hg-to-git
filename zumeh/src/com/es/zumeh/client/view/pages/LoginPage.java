@@ -2,7 +2,7 @@ package com.es.zumeh.client.view.pages;
 
 import java.util.logging.Logger;
 
-import com.es.zumeh.client.facade.ZumehCallBack;
+import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.Password;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.shared.util.StringConstants;
@@ -15,11 +15,14 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
@@ -36,6 +39,7 @@ public class LoginPage extends Page implements EntryPoint {
 	private static final Auth AUTH = Auth.get();
 	private static final Logger log = Logger.getLogger(LoginPage.class.getName());
 	private UserTO userTO;
+	//RootPanel rootPanel = RootPanel.get("nameFieldContainer");
 	
 	/**
 	 * This is the entry point method.
@@ -137,20 +141,15 @@ public class LoginPage extends Page implements EntryPoint {
 	}
 
 
-	@SuppressWarnings("deprecation")
 	private void cantAccessYourAccount(AbsolutePanel absolutePanel) {
-		Hyperlink cantAccessLink = new Hyperlink("Can't access your account?", true,
-				"");
+		Anchor cantAccessLink = new Anchor("Can't access your account?");
 		absolutePanel.add(cantAccessLink, 93, 304);
-		
 		cantAccessLink.addClickHandler(clickHandler());
-		
 	}
 
 
 	private ClickHandler clickHandler() {
 		return new ClickHandler() {
-			
 			@Override
 			public void onClick(final ClickEvent event) {
 				firstPageAccess(null);
@@ -166,8 +165,15 @@ public class LoginPage extends Page implements EntryPoint {
 				if (result == null) {
 					Window.alert("Incorrect username or password. Please try again!");
 				} else {
-					loadProfilePage(result);
+					ClientSessionManager clienteSessionManager = createClienteSessionManager(result);
+					loadProfilePage(clienteSessionManager);
 				}
+			}
+
+			private ClientSessionManager createClienteSessionManager(UserTO result) {
+				ClientSessionManager clientSession = new ClientSessionManager();
+				clientSession.setUserOwner(result);
+				return clientSession;
 			}
 			
 			@Override
@@ -177,21 +183,19 @@ public class LoginPage extends Page implements EntryPoint {
 		};
 	}
 	
-
+ 
 	private void signInButton(AbsolutePanel absolutePanel) {
 		Button signInButton = new Button("Sign in");
 		absolutePanel.add(signInButton, 118, 185);
-		signInButton.setSize("66px", "25px"); //FIXME add keydownhandler
-		
-		final AsyncCallback<UserTO> signInCall = signInCallback();
+		signInButton.setSize("66px", "25px");
 		
 		signInButton.addClickHandler(new ClickHandler() {
-			
+            
 			@Override
 			public void onClick(ClickEvent event) {
-				zumehService.verifyUser(userTO, signInCall);
+				callChecker();
 			}
-		});
+    });
 	}
 
 
@@ -215,6 +219,26 @@ public class LoginPage extends Page implements EntryPoint {
 				
 			}
 		});
+		
+		//addKeyPressHandler(textBoxPassword);
+	}
+	
+	private void addKeyPressHandler(TextBox text) { //FIXME AJEITAR ISSO!
+		
+		text.addKeyPressHandler(new KeyPressHandler() {
+			@Override
+			public void onKeyPress(KeyPressEvent event) {
+				if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+					callChecker();
+				}
+			}
+		});
+		
+	}
+	
+	private void callChecker() {
+		AsyncCallback<UserTO> signInCall = signInCallback();
+		zumehService.verifyUser(userTO, signInCall);
 	}
 
 
@@ -232,6 +256,8 @@ public class LoginPage extends Page implements EntryPoint {
 				
 			}
 		});
+		
+		//addKeyPressHandler(textBoxUserName);
 	}
 	
 	
@@ -257,18 +283,18 @@ public class LoginPage extends Page implements EntryPoint {
 				public void onSuccess(final String token) {
 					log.info("The clickHandler was called with success. The token for this process is: " + token);
 					
-					zumehService.openSession(token, new ZumehCallBack() {
-						
+					zumehService.openSession(token, new AsyncCallback<Void>() {
+
 						@Override
-						public void onSuccess(final String token2) {
-							firstPageAccess(token);
-							//TODO add LOG
+						public void onSuccess(Void result) {
+							firstPageAccess(null);
+							
 						}
 
 						@Override
-						public void onFailure(Throwable arg0) {
-							System.out.println("FALHOU ");
-							//TODO ADD LOG
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub
+							
 						}
 					});
 							            

@@ -1,29 +1,51 @@
 package com.es.zumeh.client.view.pages;
 
+import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.to.UserTO;
-import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 
 public class ProfileReadOnlyPage extends Page implements EntryPoint {
 	
-	private UserTO user;
+	private ClientSessionManager clientSessionManger;
 	
-	public ProfileReadOnlyPage(UserTO user) {
-		this.user = user;
+	private RootPanel rootPanel = RootPanel.get("nameFieldContainer");
+	
+	private AbsolutePanel absolutePanel;
+	
+	private boolean isVisitor;
+
+	public ProfileReadOnlyPage(ClientSessionManager clienteSessionManger) {
+		setClientSessionManger(clienteSessionManger);
+	}
+	
+	public ProfileReadOnlyPage(ClientSessionManager clienteSessionManger, boolean isVisitor) {
+		setClientSessionManger(clienteSessionManger);
+		setVisitor(isVisitor);
 	}
 
 	@Override
@@ -35,28 +57,26 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 		rootPanel.setStyleName(".teste");
 		
-		AbsolutePanel absoluteRootPanel = new AbsolutePanel();
-		absoluteRootPanel.setStyleName("profileBackGround");
-		rootPanel.add(absoluteRootPanel, 10, 0);
-		absoluteRootPanel.setSize("942px", "648px");
+		AbsolutePanel absoluteRootPanel = createAbsolutePanel();
 		
-		AbsolutePanel imageAbsolutePanel = new AbsolutePanel();
-		imageAbsolutePanel.setStyleName("imagePanelSettings");
-		absoluteRootPanel.add(imageAbsolutePanel, 38, 43);
-		imageAbsolutePanel.setSize("121px", "164px");
+		AbsolutePanel imageAbsolutePanel = createImageAbsolutePanel(absoluteRootPanel);
 		
 		loadImage(imageAbsolutePanel);
+		
+		loadAllUsers();
 		
 		AbsolutePanel descriptionAbsolutePanel = 
 				createDescriptionAbsolutePanel(absoluteRootPanel);
 		
 		nameEmailLabel(descriptionAbsolutePanel);
 		
+		loadLocationAndBirthday(descriptionAbsolutePanel);
+		
 		whoAreYouText(descriptionAbsolutePanel);
 		
-		AbsolutePanel absolutePanel = createAbsolutePanel(absoluteRootPanel);
+		loadInterestedAreasLabel(descriptionAbsolutePanel);
 		
-		loadStackLayoutPanel(absolutePanel);
+		setAbsolutePanel(createAbsolutePanel(absoluteRootPanel));
 		
 		AbsolutePanel absolutePanel_1 = createAbsolutePanel1(absoluteRootPanel);
 		
@@ -70,58 +90,93 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		
 		AbsolutePanel absolutePanel_2 = createAbsolutePanel2(absoluteRootPanel);
 		
-		loadHyperlinkAboutUs(absoluteRootPanel, absolutePanel_2);
+		absolutePanel_2.add(createAboutUsLink());
 		
-		//loadSignOut(absoluteRootPanel);
+		loadHomeButton(absoluteRootPanel);
+		
 		loadSignOutHyperLink();
-		
-		
 	}
 
-	@SuppressWarnings("deprecation")
-	private void loadHyperlinkAboutUs(AbsolutePanel absoluteRootPanel,
-			AbsolutePanel absolutePanel_2) {
-		Hyperlink hprlnkAboutUs = new Hyperlink("About Us", false, "newHistoryToken");
-		absolutePanel_2.add(hprlnkAboutUs, 10, 10);
+	private AbsolutePanel createAbsolutePanel() {
+		AbsolutePanel absoluteRootPanel = new AbsolutePanel();
+		absoluteRootPanel.setStyleName("profileBackGround");
+		rootPanel.add(absoluteRootPanel, -26, 0);
+		absoluteRootPanel.setSize("978px", "660px");
+		return absoluteRootPanel;
+	}
+
+	private void loadHomeButton(AbsolutePanel absoluteRootPanel) {
+		PushButton pshbtnHome = new PushButton("Home");
+		absoluteRootPanel.add(pshbtnHome, 38, 11);
+		pshbtnHome.setSize("109px", "18px");
 		
-		hprlnkAboutUs.addClickHandler(new ClickHandler() {
-			final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
-			
+		pshbtnHome.addClickHandler(new ClickHandler() {
 			
 			@Override
-			public void onClick(final ClickEvent event) { //TODO COMPLETAR
-				simplePopup.ensureDebugId("cwBasicPopup-simplePopup");
-			    simplePopup.setWidth("150px");
-			    simplePopup.setHeight("150px");
-			    simplePopup.setVisible(true);
-			    simplePopup.setStyleName("gwt-PopupPanel");
-			    simplePopup.setTitle("About us");
-			    
-				final Widget source = (Widget) event.getSource();
-	            final int left = source.getAbsoluteLeft() + 10;
-	            final int top = source.getAbsoluteTop() - 200;
-	            simplePopup.setPopupPosition(left, top);
+			public void onClick(ClickEvent event) {
+				loadProfilePage(getClientSessionManger());
+			}
+		});
+	}
 
-	            // Show the popup
+	private void loadAllUsers() {
+		zumehService.getUserList(new AsyncCallback<UserTO[]>() {
+			
+			@Override
+			public void onSuccess(UserTO[] result) {
+				loadStackLayoutPanel(getAbsolutePanel(), result);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Add log
+				
+			}
+		});
+	}
+
+	
+	private AbsolutePanel createImageAbsolutePanel(
+			AbsolutePanel absoluteRootPanel) {
+		AbsolutePanel imageAbsolutePanel = new AbsolutePanel();
+		imageAbsolutePanel.setStyleName("imagePanelSettings");
+		absoluteRootPanel.add(imageAbsolutePanel, 38, 43);
+		imageAbsolutePanel.setSize("121px", "164px");
+		return imageAbsolutePanel;
+	}
+	
+	private Widget createAboutUsLink() {
+		
+	    final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
+	    simplePopup.ensureDebugId("cwBasicPopup-simplePopup");
+	    simplePopup.setWidth("150px");
+	    simplePopup.setWidget(new HTML("Algumas coisas sobre o nosso projeto"));
+	    
+	    Anchor link = new Anchor("About Us");
+	    link.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+	            Widget source = (Widget) event.getSource();
+	            int left = source.getAbsoluteLeft() + 10;
+	            int top = source.getAbsoluteTop() - 100;
+	            simplePopup.setPopupPosition(left, top);
+	            
 	            simplePopup.show();
 				
 			}
 		});
-		
+	    VerticalPanel vPanel = new VerticalPanel();
+	    vPanel.setSpacing(5);
+	    vPanel.add(link);
 
-		
-	}
-
-	private void loadSignOut(AbsolutePanel absoluteRootPanel) {
-		Hyperlink hyperlink = new Hyperlink("sign out", false, "");
-		absoluteRootPanel.add(hyperlink, 749, 10);
-		hyperlink.setSize("46px", "18px");
+	    return vPanel;
 	}
 
 	private AbsolutePanel createAbsolutePanel2(AbsolutePanel absoluteRootPanel) {
 		AbsolutePanel absolutePanel_2 = new AbsolutePanel();
-		absoluteRootPanel.add(absolutePanel_2, 10, 613);
-		absolutePanel_2.setSize("783px", "25px");
+		absoluteRootPanel.add(absolutePanel_2, 47, 614);
+		absolutePanel_2.setSize("783px", "36px");
 		return absolutePanel_2;
 	}
 
@@ -135,18 +190,15 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		absolutePanel_3.add(hprlnkWorker_1, 0, 34);
 	}
 
-	@SuppressWarnings("deprecation")
 	private void loadHyperlinkWorker1(AbsolutePanel absolutePanel_3) {
-		Hyperlink hprlnkWorker1 = new Hyperlink("Work 1", false, "newHistoryToken");
-		absolutePanel_3.add(hprlnkWorker1, 0, 10);
-		hprlnkWorker1.addClickHandler(new ClickHandler() {
+		Anchor workerx = new Anchor("Worker 1");
+		absolutePanel_3.add(workerx, 0, 10);
+		
+		workerx.addClickHandler(new ClickHandler() {
 			
 			@Override
-			public void onClick(final ClickEvent event) {
-				// TODO Auto-generated method stub
-				rootPanel.clear();
-				final WorkPage workPage = ScreenFactory.getInstance().getWorkPage();
-				workPage.onModuleLoad();
+			public void onClick(ClickEvent event) {
+				loadWorkPage(clientSessionManger);
 			}
 		});
 	}
@@ -161,15 +213,15 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 	private AbsolutePanel createAbsolutePanel1(AbsolutePanel absoluteRootPanel) {
 		AbsolutePanel absolutePanel_1 = new AbsolutePanel();
 		absolutePanel_1.setStyleName("profileBackGround-works");
-		absoluteRootPanel.add(absolutePanel_1, 181, 156);
-		absolutePanel_1.setSize("542px", "261px");
+		absoluteRootPanel.add(absolutePanel_1, 269, 236);
+		absolutePanel_1.setSize("435px", "261px");
 		return absolutePanel_1;
 	}
 
 	private AbsolutePanel createAbsolutePanel(AbsolutePanel absoluteRootPanel) {
 		AbsolutePanel absolutePanel = new AbsolutePanel();
 		absoluteRootPanel.add(absolutePanel, 38, 239);
-		absolutePanel.setSize("121px", "261px");
+		absolutePanel.setSize("141px", "352px");
 		return absolutePanel;
 	}
 
@@ -178,8 +230,42 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		AbsolutePanel descriptionAbsolutePanel = new AbsolutePanel();
 		descriptionAbsolutePanel.setStyleName("teste");
 		absoluteRootPanel.add(descriptionAbsolutePanel, 181, 43);
-		descriptionAbsolutePanel.setSize("542px", "100px");
+		descriptionAbsolutePanel.setSize("542px", "164px");
+		
 		return descriptionAbsolutePanel;
+	}
+
+	private void loadLocationAndBirthday(AbsolutePanel descriptionAbsolutePanel) {
+		if (isVisitor()) {
+			createLocationAndBirthdayLabel(descriptionAbsolutePanel, getClientSessionManger().getUserFriend());
+		} else {
+			createLocationAndBirthdayLabel(descriptionAbsolutePanel, getClientSessionManger().getUserOwner());
+		}
+	}
+
+	private void createLocationAndBirthdayLabel(AbsolutePanel descriptionAbsolutePanel, UserTO user) {
+		Label lblLocation = new Label("Location: " + user.getLocation());
+		descriptionAbsolutePanel.add(lblLocation, 10, 117);
+		
+		Label birthLabel = new Label("Birthday: " + user.getBirthday());
+		descriptionAbsolutePanel.add(birthLabel, 10, 137);
+	}
+
+	private void loadInterestedAreasLabel(AbsolutePanel descriptionAbsolutePanel) {
+		if (isVisitor()) {
+			createInterestedAreasLabel(descriptionAbsolutePanel,
+					getClientSessionManger().getUserFriend());
+		} else {
+			createInterestedAreasLabel(descriptionAbsolutePanel,
+					getClientSessionManger().getUserOwner());
+		}
+	}
+
+	private void createInterestedAreasLabel(AbsolutePanel descriptionAbsolutePanel,
+			UserTO user) {
+		Label lblInterestedAreas = new Label("Interested Areas: " +
+				user.getInterestedArea());
+		descriptionAbsolutePanel.add(lblInterestedAreas, 10, 97);
 	}
 
 	private void loadImage(AbsolutePanel imageAbsolutePanel) {
@@ -190,42 +276,137 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 	}
 
 	private void whoAreYouText(AbsolutePanel descriptionAbsolutePanel) {
+		if (isVisitor()) {
+			loadTextAreaByUser(descriptionAbsolutePanel, getClientSessionManger().getUserFriend());
+		} else {
+			loadTextAreaByUser(descriptionAbsolutePanel, getClientSessionManger().getUserOwner());
+		}
+		
+	}
+
+	private void loadTextAreaByUser(AbsolutePanel descriptionAbsolutePanel, UserTO user) {
 		TextArea whoAreYoutextArea = new TextArea();
 		whoAreYoutextArea.setReadOnly(true);
-		whoAreYoutextArea.setText(getUser().getWhoAreYou());
+		whoAreYoutextArea.setText(user.getWhoAreYou());
 		descriptionAbsolutePanel.add(whoAreYoutextArea, 10, 36);
 		whoAreYoutextArea.setSize("512px", "48px");
 	}
 
 	private void nameEmailLabel(AbsolutePanel descriptionAbsolutePanel) {
-		Label nameLabel = new Label("Name: " + getUser().getName());
+		if(isVisitor()) {
+			getLabelWithUserInformations(descriptionAbsolutePanel, getClientSessionManger().getUserFriend());
+		} else {
+			getLabelWithUserInformations(descriptionAbsolutePanel, getClientSessionManger().getUserOwner());
+		}
+		
+	}
+
+	private void getLabelWithUserInformations(
+			AbsolutePanel descriptionAbsolutePanel, UserTO user) {
+		Label nameLabel = new Label("Name: " + user.getName());
 		nameLabel.setStyleName("descriptionPanelSettings");
 		descriptionAbsolutePanel.add(nameLabel, 10, 10);
 		nameLabel.setSize("261px", "20px");
 		
-		Label lblNewLabel = new Label("Email: " + getUser().getEmail());
+		Label lblNewLabel = new Label("Email: " + user.getEmail());
 		descriptionAbsolutePanel.add(lblNewLabel, 277, 10);
 		lblNewLabel.setSize("255px", "18px");
 	}
 
-	private void loadStackLayoutPanel(AbsolutePanel absolutePanel) {
+	private void loadStackLayoutPanel(AbsolutePanel absolutePanel, UserTO[] result) {
 		StackLayoutPanel stackLayoutPanel = new StackLayoutPanel(Unit.EM);
-		
-		StackLayoutPanel stackLayoutPanel_1 = new StackLayoutPanel(Unit.EM);
-		
-		StackLayoutPanel stackLayoutPanel_2 = new StackLayoutPanel(Unit.EM);
-		
-		stackLayoutPanel_1.add(stackLayoutPanel_2, new HTML("New Widget"), 2.0);
-		stackLayoutPanel.add(stackLayoutPanel_1, new HTML("New Widget"), 2.0);
 		absolutePanel.add(stackLayoutPanel, 0, 0);
-		stackLayoutPanel.setSize("100px", "101px");
-	}
-	
-	public UserTO getUser() {
-		return user;
+		stackLayoutPanel.setSize("121px", "400px");
+		
+		completeStackLayoutPanel(stackLayoutPanel, result);
+		
 	}
 
-	public void setUser(UserTO user) {
-		this.user = user;
+	private void completeStackLayoutPanel(StackLayoutPanel stackLayoutPanel, UserTO[] result) {
+		 Widget contactsHeader = createHeaderWidget();
+		 stackLayoutPanel.add(createContactsItem(result), contactsHeader, 4);
+	}
+	
+	 
+	private Widget createHeaderWidget() {
+		HorizontalPanel hPanel = new HorizontalPanel();
+		hPanel.setHeight("100%");
+		hPanel.setSpacing(0);
+		hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		HTML headerText = new HTML("Contacts");
+		headerText.setStyleName("cw-StackPanelHeader");
+		hPanel.add(headerText);
+		return new SimplePanel(hPanel);
+	}
+	
+	private Widget createContactsItem(final UserTO[] result) {
+		HorizontalPanel contactPopupContainer = new HorizontalPanel();
+		contactPopupContainer.setSpacing(5);
+		final HTML contactInfo = new HTML();
+		contactPopupContainer.add(contactInfo);
+		final PopupPanel contactPopup = new PopupPanel(true, false);
+		contactPopup.setWidget(contactPopupContainer);
+
+		VerticalPanel contactsPanel = new VerticalPanel();
+		contactsPanel.setSpacing(4);
+		for (int i = 0; i < result.length; i++) {
+			final UserTO actualUser = result[i];
+			final String contactName = result[i].getName();
+			final String contactEmail = result[i].getEmail();
+			final Anchor contactLink = new Anchor(contactName);
+			contactsPanel.add(contactLink);
+
+			contactLink.addMouseOverHandler(new MouseOverHandler() {
+
+				@Override
+				public void onMouseOver(MouseOverEvent event) {
+					SafeHtmlBuilder sb = new SafeHtmlBuilder();
+					sb.appendEscaped(contactName);
+					sb.appendHtmlConstant("<br><i>");
+					sb.appendEscaped(contactEmail);
+					sb.appendHtmlConstant("</i>");
+					contactInfo.setHTML(sb.toSafeHtml());
+
+					int left = contactLink.getAbsoluteLeft() + 14;
+					int top = contactLink.getAbsoluteTop() + 14;
+					contactPopup.setPopupPosition(left, top);
+					contactPopup.show();
+
+				}
+			});
+
+			contactLink.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					boolean isVisitor = true;
+					clientSessionManger.setUserFriend(actualUser);
+					loadFriendsProfile(clientSessionManger, isVisitor);
+				}
+			});
+		}
+		return new SimplePanel(contactsPanel);
+	}
+
+	public boolean isVisitor() {
+		return isVisitor;
+	}
+
+	public void setVisitor(boolean visitor) {
+		this.isVisitor = visitor;
+	}
+
+	public ClientSessionManager getClientSessionManger() {
+		return clientSessionManger;
+	}
+
+	public void setClientSessionManger(ClientSessionManager clientSessionManger) {
+		this.clientSessionManger = clientSessionManger;
+	}
+	
+	public AbsolutePanel getAbsolutePanel() {
+		return absolutePanel;
+	}
+
+	public void setAbsolutePanel(AbsolutePanel absolutePanel) {
+		this.absolutePanel = absolutePanel;
 	}
 }

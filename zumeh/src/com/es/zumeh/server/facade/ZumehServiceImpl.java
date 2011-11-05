@@ -1,7 +1,6 @@
 package com.es.zumeh.server.facade;
 
 import java.util.HashMap;
-import java.util.List;
 
 import com.es.zumeh.client.facade.ZumehService;
 import com.es.zumeh.client.model.to.UserTO;
@@ -31,7 +30,6 @@ public class ZumehServiceImpl extends RemoteServiceServlet implements ZumehServi
 		googleUserInfo = new GoogleUserInfo(token);
 		return googleUserInfo.getGoogleUserInfo();
 	}
-	
 	
 	/*======================== DEPRECATED ==========================*/
 	
@@ -95,9 +93,8 @@ public class ZumehServiceImpl extends RemoteServiceServlet implements ZumehServi
 	}
 
 	@Override
-	public List<UserTO> getUserList() {
-		// TODO Auto-generated method stub
-		return null;
+	public UserTO[] getUserList() {
+		return sessionManager.getDaoManager().getAllUsers();
 	}
 
 	@Override
@@ -108,9 +105,6 @@ public class ZumehServiceImpl extends RemoteServiceServlet implements ZumehServi
 
 	@Override
 	public boolean addUser(UserTO user) {
-//		return sessionManager.getDaoManager().addUser(user.getLogin(), user.getPassword(), user.getEmail(),
-//				user.getEmail(), user.getWhoAreYou(), user.getInterestedArea(), user.getGender(),
-//				user.getLocation(), user.getBirthday());
 		return sessionManager.getDaoManager().addUser(user);
 	}
 

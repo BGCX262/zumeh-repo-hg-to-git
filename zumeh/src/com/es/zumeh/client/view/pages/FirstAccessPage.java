@@ -2,6 +2,7 @@ package com.es.zumeh.client.view.pages;
 
 import java.util.HashMap;
 
+import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.Password;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.shared.util.Validate;
@@ -51,6 +52,7 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	private String password;
 	private byte[] image;
 	//private String fileName;
+	RootPanel rootPanel = RootPanel.get("nameFieldContainer");
 	
 	
 	private static final String FEMALE = "Female";
@@ -591,20 +593,28 @@ public class FirstAccessPage extends Page implements EntryPoint {
 					
 					AsyncCallback<Boolean> assyncCallback = createAsyncCallbackForUser();
 					
-					AsyncCallback<Void> em = createAsyncCallbackForEmail();
+					AsyncCallback<Void> emailCallback = createAsyncCallbackForEmail();
 					
 					UserTO newUser = createUser();
 					zumehService.addUser(newUser, assyncCallback);
 					
-					//sendMail(em);
+					ClientSessionManager clientSessionManager = createClientSessionManager(newUser);
+					
+					//sendMail(emailCallback);
 					
 					Window.alert("Your informations was saved with success.");
 					
-					loadProfilePage(newUser);
+					loadProfilePage(clientSessionManager);
 
 				} else {
 					Window.alert("Some informations is incomplete.");
 				}
+			}
+
+			private ClientSessionManager createClientSessionManager(UserTO newUser) {
+				ClientSessionManager clientSessionManager = new ClientSessionManager();
+				clientSessionManager.setUserOwner(newUser);
+				return clientSessionManager;
 			}
 
 			private void sendMail(AsyncCallback<Void> em) {
@@ -690,14 +700,14 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	}
 	
 	private void setDefaultFields() {
-		
-		
+
 		AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				System.out.println("Could not retrieve user google string informations.");
-				//caught.printStackTrace();
+				System.out
+						.println("Could not retrieve user google string informations.");
+				// caught.printStackTrace();
 			}
 
 			@Override
@@ -706,7 +716,7 @@ public class FirstAccessPage extends Page implements EntryPoint {
 				String lastName = result.get("lastname");
 				email = result.get("email");
 				fullName = completeName(firstName, lastName);
-				
+
 				firstNameTextBox.setText(firstName);
 				lastNameTextBox.setText(lastName);
 				emailTextBox.setText(email);
@@ -715,14 +725,13 @@ public class FirstAccessPage extends Page implements EntryPoint {
 			private String completeName(String firstName, String lastName) {
 				return firstName + " " + lastName;
 			}
-			
 		};
-		
+
 		if (!token.equals(null)) {
 			zumehService.getGoogleInfo(token, callback);
 		} else {
-			//TODO ADD LOG
+			// TODO ADD LOG
 		}
-			
+
 	}
 }

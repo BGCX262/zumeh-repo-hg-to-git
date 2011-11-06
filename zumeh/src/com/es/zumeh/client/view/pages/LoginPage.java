@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimpleCheckBox;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.InlineLabel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -39,17 +40,14 @@ public class LoginPage extends Page implements EntryPoint {
 	private static final Auth AUTH = Auth.get();
 	private static final Logger log = Logger.getLogger(LoginPage.class.getName());
 	private UserTO userTO;
-	//RootPanel rootPanel = RootPanel.get("nameFieldContainer");
+	RootPanel rootPanel = RootPanel.get("nameFieldContainer");
 	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
 		final Label errorLabel = initializeVariables();
-
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		rootPanel.setStyleName("gwt-DialogBox");
+		rootPanel.setStyleName("profileBackGround-works");
 		rootPanel.setSize("640", "480");
 		
 		RootPanel.get("errorLabelContainer").add(errorLabel);
@@ -68,11 +66,7 @@ public class LoginPage extends Page implements EntryPoint {
 		
 		loadSimpleCheckBox(absolutePanel);
 		
-		PushButton googleButton = loadLoginButtons(absolutePanel);
-		
 		cantAccessYourAccount(absolutePanel);
-		
-		googleButton.addClickHandler(new GoogleClickHandler(AUTH));
 	}
 
 
@@ -85,66 +79,75 @@ public class LoginPage extends Page implements EntryPoint {
 
 	private AbsolutePanel createAbsolutePanel() {
 		AbsolutePanel absolutePanel = new AbsolutePanel();
-		absolutePanel.setStyleName("h1");
-		rootPanel.add(absolutePanel, 600, 97);
-		absolutePanel.setSize("254px", "332px");
+		absolutePanel.setStyleName("body");
+		rootPanel.add(absolutePanel, 0, 0);
+		absolutePanel.setPixelSize(getScreenWidth(), getScreenHeight());
+		
+		PushButton googleButton_1 = new PushButton("Google");
+		absolutePanel.add(googleButton_1, 150, 235);
+		googleButton_1.setStyleName("botaoTeste");
+		googleButton_1.addClickHandler(new GoogleClickHandler(AUTH));
+		Image googleImage = new Image(StringConstants.GOOGLE_IMAGE.getValue());
+		googleImage.setHeight("38px");
+		googleButton_1.getUpFace().setImage(googleImage);
+		googleButton_1.setSize("51px", "45px");
+		
+		PushButton facebookButton = new PushButton("Facebook");
+		absolutePanel.add(facebookButton, 38, 235);
+		facebookButton.setStyleName("botaoTeste");
+		Image facebookImage = new Image(StringConstants.FACEBOOK_IMAGE.getValue());
+		facebookImage.setSize("47px", "42px");
+		facebookButton.getUpFace().setImage(facebookImage);
+		facebookButton.setSize("51px", "45px");
+		
+		InlineLabel nlnlblNewInlinelabel = new InlineLabel("User your google or facebook account");
+		absolutePanel.add(nlnlblNewInlinelabel, 26, 203);
+		nlnlblNewInlinelabel.setStyleName("h1");
+		nlnlblNewInlinelabel.setSize("233px", "18px");
+		
+		Button btnCreateNewAccount = new Button("Create New Account");
+		absolutePanel.add(btnCreateNewAccount, 47, 399);
+		btnCreateNewAccount.setStyleName("botaoTeste");
+		btnCreateNewAccount.addClickHandler(clickHandler());
+		btnCreateNewAccount.setSize("164px", "32px");
+		Image image = new Image("images/bode2.png");
+		absolutePanel.add(image, 14, 10);
+		image.setSize("245px", "131px");
 		return absolutePanel;
 	}
 
 
 	private void loadLabes(AbsolutePanel absolutePanel) {
 		Label lblSignInWith = new Label("Sign In With Your Account");
-		absolutePanel.add(lblSignInWith, 10, 10);
+		absolutePanel.add(lblSignInWith, 423, 197);
 		
 		Label lblUsername = new Label("Username:");
-		absolutePanel.add(lblUsername, 10, 58);
+		absolutePanel.add(lblUsername, 423, 245);
 		
 		Label lblNewLabel = new Label("e.g. pat@example.com ");
-		absolutePanel.add(lblNewLabel, 91, 80);
+		absolutePanel.add(lblNewLabel, 504, 267);
 		
 		
 		Label lblPassword = new Label("Password:");
-		absolutePanel.add(lblPassword, 12, 122);
+		absolutePanel.add(lblPassword, 425, 309);
 		
 		Label lblStaySignedIn = new Label("Stay signed in");
-		absolutePanel.add(lblStaySignedIn, 91, 161);
+		absolutePanel.add(lblStaySignedIn, 504, 348);
 	}
 
 
 	private void loadSimpleCheckBox(AbsolutePanel absolutePanel) {
 		SimpleCheckBox checkBoxStaySigned = new SimpleCheckBox();
-		absolutePanel.add(checkBoxStaySigned, 65, 160);
+		absolutePanel.add(checkBoxStaySigned, 478, 347);
 	}
 
 
 	private void loadImage() {
-		Image image = new Image(StringConstants.ZUMEH_LOGO_IMAGE.getValue());
 		rootPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-		rootPanel.add(image, 72, 132);
-		image.setSize("245px", "171px");
-	}
-
-
-	private PushButton loadLoginButtons(AbsolutePanel absolutePanel) {
-		PushButton googleButton = new PushButton("Google");
-		absolutePanel.add(googleButton, 163, 230);
-		Image googleImage = new Image(StringConstants.GOOGLE_IMAGE.getValue());
-		googleButton.getUpFace().setImage(googleImage);
-		googleButton.setSize("51px", "45px");
-		
-		PushButton facebookButton = new PushButton("Facebook");
-		absolutePanel.add(facebookButton, 76, 230);
-		Image facebookImage = new Image(StringConstants.FACEBOOK_IMAGE.getValue());
-		facebookButton.getUpFace().setImage(facebookImage);
-		facebookButton.setSize("51px", "45px");
-		return googleButton;
 	}
 
 
 	private void cantAccessYourAccount(AbsolutePanel absolutePanel) {
-		Anchor cantAccessLink = new Anchor("Can't access your account?");
-		absolutePanel.add(cantAccessLink, 93, 304);
-		cantAccessLink.addClickHandler(clickHandler());
 	}
 
 
@@ -186,7 +189,8 @@ public class LoginPage extends Page implements EntryPoint {
  
 	private void signInButton(AbsolutePanel absolutePanel) {
 		Button signInButton = new Button("Sign in");
-		absolutePanel.add(signInButton, 118, 185);
+		signInButton.setStyleName("botaoTeste");
+		absolutePanel.add(signInButton, 530, 406);
 		signInButton.setSize("66px", "25px");
 		
 		signInButton.addClickHandler(new ClickHandler() {
@@ -201,7 +205,7 @@ public class LoginPage extends Page implements EntryPoint {
 
 	private void textBoxPassword(AbsolutePanel absolutePanel) {
 		final PasswordTextBox textBoxPassword = new PasswordTextBox();
-		absolutePanel.add(textBoxPassword, 91, 122);
+		absolutePanel.add(textBoxPassword, 504, 309);
 		textBoxPassword.setSize("145px", "13px");
 		textBoxPassword.setMaxLength(100);
 		
@@ -244,7 +248,7 @@ public class LoginPage extends Page implements EntryPoint {
 
 	private void textBoxLogin(AbsolutePanel absolutePanel) {
 		final TextBox textBoxUserName = new TextBox();
-		absolutePanel.add(textBoxUserName, 91, 58);
+		absolutePanel.add(textBoxUserName, 504, 245);
 		textBoxUserName.setSize("145px", "13px");
 		textBoxUserName.setMaxLength(50);
 		
@@ -288,13 +292,10 @@ public class LoginPage extends Page implements EntryPoint {
 						@Override
 						public void onSuccess(Void result) {
 							firstPageAccess(null);
-							
 						}
 
 						@Override
 						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
-							
 						}
 					});
 							            

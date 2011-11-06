@@ -2,6 +2,7 @@ package com.es.zumeh.client.main;
 
 import com.es.zumeh.client.view.pages.FirstAccessPage;
 import com.es.zumeh.client.view.pages.LoginPage;
+import com.es.zumeh.client.view.pages.SearchPage;
 import com.es.zumeh.client.view.pages.WorkPage;
 import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.google.gwt.core.client.EntryPoint;
@@ -17,6 +18,9 @@ public class Zumeh implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		
+//		SearchPage s = screenFactory.getSeacrhPage();
+//		s.onModuleLoad();
 		
 		LoginPage loginPage = screenFactory.getLoginPage();
 		loginPage.onModuleLoad();

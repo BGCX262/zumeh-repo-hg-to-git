@@ -55,7 +55,7 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		
 		rootPanel.setSize("640", "480");
 		RootPanel.get("errorLabelContainer").add(errorLabel);
-		rootPanel.setStyleName(".teste");
+		rootPanel.setStyleName("body");
 		
 		AbsolutePanel absoluteRootPanel = createAbsolutePanel();
 		

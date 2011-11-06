@@ -3,17 +3,46 @@
 
 /** Example rules used by the template application (remove for your app) */
 h1 {
-  font-size: 2em;
+  font-size:12px;
+   font-family:Tahoma,sans-serif;
   font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+  color: #052549;
+  margin: 4px 2px 7px;
+  text-align: right;
 }
 
 .sendButton {
   display: block;
   font-size: 16pt;
 }
+
+.body
+{
+	background-image:url('images/barra.png');
+	background-repeat:repeat-x;
+	width:100%;
+}
+
+.botaoTeste
+{
+   font-size:12px;
+   font-family:Tahoma,sans-serif;
+   width:102px;
+   background-color:#CCDDCC;
+   border-top-style:solid;
+   border-top-color:#99AA99;
+   border-top-width:2px;
+   border-bottom-style:solid;
+   border-bottom-color:#99AA99;
+   border-bottom-width:2px;
+   border-left-style:solid;
+   border-left-color:#BBCCBB;
+   border-left-width:5px;
+   border-right-style:solid;
+   border-right-color:#BBCCBB;
+   border-right-width:5px;
+}
+
 
 .gwt-PopupPanel {
   position: absolute;
@@ -32,7 +61,7 @@ h1 {
 }
 
 .teste {
-	background-color: #FFCCCC;
+	background-color: #99CC99;
 }
 
 /** Most GWT widgets already have a style name defined */
@@ -139,4 +168,6 @@ html>body .gwt-DecoratedStackPanel {
   padding-left: 7px;
   font-weight: bold;
   font-size: 1.4em;
+}
+. {
 }

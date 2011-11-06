@@ -14,6 +14,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class Page extends Widget{
 	
 	public final ZumehServiceAsync zumehService = GWT.create(ZumehService.class);
+	protected final int WIDTH = getScreenWidth() - 400;
+	protected final int HEIGHT = getScreenHeight() - 400;
 	
 	RootPanel rootPanel = RootPanel.get("nameFieldContainer");
 	
@@ -66,5 +68,16 @@ public class Page extends Widget{
 		WorkPage workPage = ScreenFactory.getInstance().getWorkPage(clientSessionManger);
 		workPage.onModuleLoad();
 	}
+	
+	/*
+	 * Natives
+	 */
+	public static native int getScreenWidth() /*-{
+		return $wnd.screen.width;
+	}-*/;
+
+	public static native int getScreenHeight() /*-{
+		return $wnd.screen.height;
+	}-*/;
 
 }

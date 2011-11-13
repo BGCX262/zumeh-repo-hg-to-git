@@ -5,6 +5,7 @@ import org.vaadin.gwtgraphics.client.Line;
 import org.vaadin.gwtgraphics.client.VectorObject;
 import org.vaadin.gwtgraphics.client.shape.Ellipse;
 
+import com.es.zumeh.client.model.to.NodeTO;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -46,11 +47,14 @@ public class WorkNode extends Ellipse {
 	
 	private int column = 0;
 	private int childs = 0;
+	private int nodeId = 0;
 	private WorkNode nodeParent;
 	private WorkNode nodeChild1;
 	private WorkNode nodeChild2;
 	private DrawingArea workArea;
 	private Label description;
+	private NodeTO nodeTO;
+	private String nodeStatus = GREEN;
 	static private AbsolutePanel absolutePanel;
 	
 	final private PopupPanel popupPanel = new PopupPanel(true);
@@ -79,6 +83,8 @@ public class WorkNode extends Ellipse {
 		refreshPositions(1+getMaxColumn());
 		
 		this.fullText = new String();
+		
+		setNodeId();
 	}
 	
 	@Override
@@ -90,11 +96,9 @@ public class WorkNode extends Ellipse {
 		
 		switch (DOM.eventGetType(event)) {
 		case Event.ONCONTEXTMENU:
-			System.out.println("Context Menu");
 			showMenu(event);
 			break;
 		case Event.ONCLICK:
-			System.out.println("On Click");
 			createFullText();
 			break;
 		default:
@@ -117,7 +121,7 @@ public class WorkNode extends Ellipse {
 		absolutePanel.add(this.description, posx, posy);
 	}
 	
-	public String getName() {
+	public String getShortDescription() {
 		return this.descriptionText;
 	}
 	
@@ -235,6 +239,22 @@ public class WorkNode extends Ellipse {
 		return (1 + Math.max(col1, col2));
 	}
 	
+	private void setNodeId() {
+		WorkNode node = getRoot();
+		this.nodeId = doWorkSize(node);
+	}
+	
+	private int doWorkSize(WorkNode node) {
+		if(node == null) {
+			return 0;
+		}
+		
+		int size_left = doWorkSize(node.getNodeChild1());
+		int size_right = doWorkSize(node.getNodeChild2());
+		
+		return (size_left + size_right + 1);
+	}
+	
 	private void showMenu(Event event) {
 		int x = DOM.eventGetClientX(event);
 		int y = DOM.eventGetClientY(event);
@@ -245,8 +265,6 @@ public class WorkNode extends Ellipse {
 	
 	private void createFullText() {
 		// deckPanel.showWidget(1);
-		System.out.println("FullTex.");
-		System.out.println(this.fullText);
 		
 		// ================== Dialog Box ========================
 		final DialogBox fullTextBox = new DialogBox();
@@ -370,6 +388,27 @@ public class WorkNode extends Ellipse {
 		}
 	}
 	
+	public NodeTO getNodeTO() {
+			NodeTO tmpNodeTO = new NodeTO();
+			tmpNodeTO.setFullText(this.fullText);
+			tmpNodeTO.setShortDescription(this.descriptionText);
+			tmpNodeTO.setNodeStatus(this.nodeStatus);
+			
+			if(getNodeChild1() != null) {
+				tmpNodeTO.setLeftChildNodeId(getNodeChild1().getNodeId());
+			}
+			if(getNodeChild2() != null) {
+				tmpNodeTO.setRightChildNodeId(getNodeChild2().getNodeId());
+			}
+			tmpNodeTO.setNodeId(getNodeId());
+			
+			return tmpNodeTO;
+	}
+	
+	public int getNodeId() {
+		return nodeId;
+	}
+	
 	private void createPopupMenu() {
 		// REMEBER This should be broken into methods.
 		/* Node Status */
@@ -416,7 +455,6 @@ public class WorkNode extends Ellipse {
 	Command removeNodeCommand = new Command() {
 		public void execute() {
 			// deckPanel.showWidget(0);
-			System.out.println("Remove Node.");
 			popupPanel.hide();
 			
 			removeNode();
@@ -426,7 +464,6 @@ public class WorkNode extends Ellipse {
 	Command editFullContentCommand = new Command() {
 		public void execute() {
 			// deckPanel.showWidget(1);
-			System.out.println("Edit Full Content.");
 			popupPanel.hide();
 			
 			// ================== Dialog Box ========================
@@ -483,7 +520,6 @@ public class WorkNode extends Ellipse {
 	Command editNodeDescriptionCommand = new Command() {
 		public void execute() {
 			// deckPanel.showWidget(2);
-			System.out.println("Edit Node Description.");
 			popupPanel.hide();
 			// ================== Dialog Box ========================
 			final DialogBox dialogBox = new DialogBox();
@@ -525,8 +561,8 @@ public class WorkNode extends Ellipse {
 	Command editNodeStatusGreenCommand = new Command() {
 		public void execute() {
 			// deckPanel.showWidget(3);
-			System.out.println("Green Node Status: ");
 			setFillColor(GREEN);
+			nodeStatus = GREEN;
 			popupPanel.hide();
 		}
 	};
@@ -534,8 +570,8 @@ public class WorkNode extends Ellipse {
 	Command editNodeStatusYellowCommand = new Command() {
 		public void execute() {
 			// deckPanel.showWidget(4);
-			System.out.println("Yellow Node Status.");
 			setFillColor(YELLOW);
+			nodeStatus = YELLOW;
 			popupPanel.hide();
 		}
 	};
@@ -543,8 +579,8 @@ public class WorkNode extends Ellipse {
 	Command editNodeStatusRedCommand = new Command() {
 		public void execute() {
 			// deckPanel.showWidget(5);
-			System.out.println("Red Node Status.");
 			setFillColor(RED);
+			nodeStatus = RED;
 			popupPanel.hide();
 		}
 	};

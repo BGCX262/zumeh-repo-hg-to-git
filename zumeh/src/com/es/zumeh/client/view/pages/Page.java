@@ -65,7 +65,7 @@ public class Page extends Widget{
 	
 	public void loadWorkPage(ClientSessionManager clientSessionManger) {
 		rootPanel.clear();
-		WorkPage workPage = ScreenFactory.getInstance().getWorkPage(clientSessionManger);
+		WorkIntermediario workPage = ScreenFactory.getInstance().getWorkPage(clientSessionManger);
 		workPage.onModuleLoad();
 	}
 	

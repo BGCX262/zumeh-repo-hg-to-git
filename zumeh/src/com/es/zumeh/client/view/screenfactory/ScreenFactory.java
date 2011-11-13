@@ -5,6 +5,7 @@ import com.es.zumeh.client.view.pages.FirstAccessPage;
 import com.es.zumeh.client.view.pages.LoginPage;
 import com.es.zumeh.client.view.pages.ProfileReadOnlyPage;
 import com.es.zumeh.client.view.pages.SearchPage;
+import com.es.zumeh.client.view.pages.WorkIntermediario;
 import com.es.zumeh.client.view.pages.WorkPage;
 
 public class ScreenFactory {
@@ -13,7 +14,7 @@ public class ScreenFactory {
 	private LoginPage loginPage;
 	private FirstAccessPage pag;
 	private ProfileReadOnlyPage profileReadOnlyPage;
-	private WorkPage workPage;
+	private WorkIntermediario workPage;
 	private SearchPage search;
 	
 	private ScreenFactory() {}
@@ -50,8 +51,8 @@ public class ScreenFactory {
 		return profileReadOnlyPage;
 	}
 	
-	public WorkPage getWorkPage(ClientSessionManager clientSessionManger) {
-		this.workPage = new WorkPage(clientSessionManger);
+	public WorkIntermediario getWorkPage(ClientSessionManager clientSessionManger) {
+		this.workPage = new WorkIntermediario(clientSessionManger);
 		return this.workPage;
 	}
 	

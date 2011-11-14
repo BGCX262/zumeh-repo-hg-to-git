@@ -85,6 +85,7 @@ public class WorkNode extends Ellipse {
 		this.fullText = new String();
 		
 		setNodeId();
+		System.out.println("Node Created: " + getNodeId());
 	}
 	
 	@Override
@@ -119,10 +120,6 @@ public class WorkNode extends Ellipse {
 		int posx = getX()-((this.description.getText().length()*CARACTER_SIZE)/2);
 		int posy = getY()-CARACTER_SIZE;
 		absolutePanel.add(this.description, posx, posy);
-	}
-	
-	public String getShortDescription() {
-		return this.descriptionText;
 	}
 	
 	public int getColumn() {
@@ -189,6 +186,10 @@ public class WorkNode extends Ellipse {
 		return this.nodeParent;
 	}
 	
+	public void refreshAll() {
+		refreshPositions(getMaxColumn()+1);
+	}
+	
 	public void refreshPositions(int column) {
 		WorkNode node = getRoot();
 		clearConnections();
@@ -242,6 +243,10 @@ public class WorkNode extends Ellipse {
 	private void setNodeId() {
 		WorkNode node = getRoot();
 		this.nodeId = doWorkSize(node);
+	}
+	
+	public void setNodeId(int nodeId) {
+		this.nodeId = nodeId;
 	}
 	
 	private int doWorkSize(WorkNode node) {
@@ -386,6 +391,30 @@ public class WorkNode extends Ellipse {
 		} else {
 			return this.nodeParent.getRoot();
 		}
+	}
+	
+	public void setShortDescription(String shortDescription) {
+		this.descriptionText = shortDescription;
+	}
+	
+	public void setFullText(String fullText) {
+		this.fullText = fullText;
+	}
+	
+	public String getFullText() {
+		return this.fullText;
+	}
+	
+	public String getShortDescription() {
+		return this.descriptionText;
+	}
+	
+	public void setStatus(String nodeStatus) {
+		this.nodeStatus = nodeStatus;
+	}
+	
+	public String getStatus() {
+		return this.nodeStatus;
 	}
 	
 	public NodeTO getNodeTO() {
@@ -626,4 +655,10 @@ public class WorkNode extends Ellipse {
 			// ================= End of Dialog Box ===================
 		}
 	};
+	
+	@Override
+	public String toString() {
+		return "Short Description: " + this.descriptionText + " Node Id: "
+				+ this.nodeId;
+	}
 }

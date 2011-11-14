@@ -11,60 +11,85 @@ import com.es.zumeh.client.model.to.WorkTO;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class RevisionPanel extends AbsolutePanel {
 	final private String BACKGROUND_COLOR = "#00CCFF";
 	final private int WIDTH = getScreenWidth()-400;
 	final private int HEIGHT = getScreenHeight()-400;
-	final private int RADIUS = 20;
-	final private int POS_Y = 25;
-	final private int NODE_SPACES = WIDTH/6;
-	final private int POS_X_INIT = NODE_SPACES/2;
+	final private String GO_HEAD_REVISION_TEXT = "HEAD";
+	final private String CREATE_REVISION_TEXT = "Create New Revision";
+	final private String DELETE_REVISION_TEXT = "Delete Revision";
+	final private String LEFT_REVISION_TEXT = "<< Go Left Revision";
+	final private String RIGHT_REVISION_TEXT = "Go Right Revision >>";
+	final private String SAVE_REVISION_TEXT = "Save";
+	
+	private int actualRevision = 0;
 	
 	private LinkedList<WorkTO> workRevisions = new LinkedList<WorkTO>();
+	private HorizontalPanel hPanel = new HorizontalPanel();
 	
-	final DrawingArea revisionArea = new DrawingArea(WIDTH, HEIGHT);
+	//final DrawingArea revisionArea = new DrawingArea(WIDTH, HEIGHT);
 	
 	//private Circle goLeft;
-	private Circle goRight;
-	private Circle actualRevision;
+	//private Circle goRight;
+	//private Circle actualRevision;
 	private WorkPage root;
 	
 	public RevisionPanel(WorkPage root) {
-		setHeight(50+"px");
+		setHeight(40+"px");
 		setWidth(WIDTH+"px");
 		getElement().getStyle().setBackgroundColor(BACKGROUND_COLOR);
 		this.root = root;
-		// int x, int y, int radius;
 		
-		// Go left
-		final Circle goLeft = new Circle(POS_X_INIT, POS_Y, RADIUS);
-		goLeft.setFillColor("green");
-		goLeft.addClickHandler(goLeftHandler);
-		revisionArea.add(goLeft);
+		hPanel.setSpacing(6);
 		
-		final Circle node1 = new Circle(goLeft.getX()+RADIUS+RADIUS+NODE_SPACES, POS_Y, RADIUS);
-		node1.setFillColor("green");
-		node1.addClickHandler(goNode1Handler);
-		revisionArea.add(node1);
+		final Button goHeadRevisionBtn = new Button(GO_HEAD_REVISION_TEXT);
+		goHeadRevisionBtn.addClickHandler(goHeadHandler);
+		hPanel.add(goHeadRevisionBtn);
 		
-		final Circle node2 = new Circle(node1.getX()+RADIUS+RADIUS+NODE_SPACES, POS_Y, RADIUS);
-		node2.setFillColor("green");
-		node2.addClickHandler(goNode2Handler);
-		revisionArea.add(node2);
+		final Button createRevisionBtn = new Button(CREATE_REVISION_TEXT);
+		createRevisionBtn.addClickHandler(createRevisionHandler);
+		hPanel.add(createRevisionBtn);
 		
-		final Circle node3 = new Circle(node2.getX()+RADIUS+RADIUS+NODE_SPACES, POS_Y, RADIUS);
-		node3.setFillColor("green");
-		node3.addClickHandler(goNode3Handler);
-		revisionArea.add(node3);
+		final Button deleteRevisionBtn = new Button(DELETE_REVISION_TEXT);
+		deleteRevisionBtn.addClickHandler(deleteHandler);
+		hPanel.add(deleteRevisionBtn);
 		
-		final Circle goRight = new Circle(node3.getX()+RADIUS+RADIUS+NODE_SPACES, POS_Y, RADIUS);
-		goRight.setFillColor("green");
-		goRight.addClickHandler(goRightHandler);
-		revisionArea.add(goRight);
+		final Button goLeftRevisionBtn = new Button(LEFT_REVISION_TEXT);
+		goLeftRevisionBtn.addClickHandler(goLeftRevision);
+		hPanel.add(goLeftRevisionBtn);
 		
+		final Button goRightRevisionBtn = new Button(RIGHT_REVISION_TEXT);
+		goRightRevisionBtn.addClickHandler(goRightRevision);
+		hPanel.add(goRightRevisionBtn);
 		
-		add(revisionArea, 0, 0);
+		final Button saveRevisionBtn = new Button(SAVE_REVISION_TEXT);
+		saveRevisionBtn.addClickHandler(saveHandler);
+		hPanel.add(saveRevisionBtn);
+		
+		add(hPanel, 0, 0);
+	}
+	
+	private void goHeadRevision() {
+		actualRevision = workRevisions.size()-1;
+	}
+	
+	private void goLeftRevision() {
+		if(actualRevision > 0) {
+			actualRevision--;
+		}
+	}
+	
+	private void goRightRevision() {
+		if(actualRevision < workRevisions.size()-1) {
+			actualRevision++;
+		}
+	}
+	
+	private int getActualRevision() {
+		return actualRevision;
 	}
 	
 	public RevisionTO getRevisionTO() {
@@ -75,8 +100,7 @@ public class RevisionPanel extends AbsolutePanel {
 	}
 	
 	// *********************** Handlers ***************************
-	ClickHandler goLeftHandler = new ClickHandler() {
-		
+	ClickHandler createRevisionHandler = new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
@@ -85,47 +109,94 @@ public class RevisionPanel extends AbsolutePanel {
 			tmpWorkTO.setWorkId(workRevisions.size() + 1);
 			System.out.println(tmpWorkTO);
 			workRevisions.add(tmpWorkTO);
+			goHeadRevision();
 			System.out.println("====================");
 		}
 	};
 	
-	ClickHandler goRightHandler = new ClickHandler() {
+	ClickHandler goRightRevision = new ClickHandler() {
 		
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
 			System.out.println("go Right Handler");
+			System.out.println("**************************");
+			goRightRevision();
 			root.clear();
-			//root.add(workRevisions.get(0));
-		}
-	};
-	
-	ClickHandler goNode1Handler = new ClickHandler() {
-		
-		@Override
-		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
-			System.out.println("go Node1 Handler");
+			root.getDrawingArea().clear();
 			
+			//System.out.println(workRevisions.get(1));
+			
+			//root.setWorkFromWorkTO(workRevisions.get(1));
+			System.out.println("Actual Revision: " + getActualRevision());
+			root.setWorkFromWorkTO(workRevisions.get(getActualRevision()));
+			System.out.println("**************************");
+		}
+	};
+	
+	ClickHandler goLeftRevision = new ClickHandler() {
+		
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			System.out.println("go Left Handler");
+			System.out.println("**************************");
+			goLeftRevision();
+			root.clear();
+			root.getDrawingArea().clear();
+			System.out.println("Actual Revision: " + getActualRevision());
+			root.setWorkFromWorkTO(workRevisions.get(getActualRevision()));
+			System.out.println("**************************");
 			
 		}
 	};
 	
-	ClickHandler goNode2Handler = new ClickHandler() {
+	ClickHandler goHeadHandler = new ClickHandler() {
 		
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			System.out.println("go Node2 Handler");
+			System.out.println("go HEAD Handler");
+			System.out.println("**************************");
+			goHeadRevision();
+			root.clear();
+			root.getDrawingArea().clear();
+			System.out.println("Actual Revision: " + getActualRevision());
+			root.setWorkFromWorkTO(workRevisions.get(getActualRevision()));
+			System.out.println("**************************");
 		}
 	};
 	
-	ClickHandler goNode3Handler = new ClickHandler() {
+	ClickHandler saveHandler = new ClickHandler() {
 		
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			System.out.println("go Node3 Handler");
+			System.out.println("Save Handler");
+			System.out.println("-------------------------");
+			System.out.println("Save Handler: " + root.getWorkById(3));
+			System.out.println("-------------------------");
+		}
+	};
+	
+	ClickHandler deleteHandler = new ClickHandler() {
+		
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			System.out.println("Delete Handler");
+			System.out.println("+++++++++++++++++++++++++");
+			
+			workRevisions.get(getActualRevision());
+			workRevisions.remove(getActualRevision());
+			
+			goHeadRevision();
+			root.clear();
+			root.getDrawingArea().clear();
+			System.out.println("Actual Revision: " + getActualRevision());
+			root.setWorkFromWorkTO(workRevisions.get(getActualRevision()));
+			
+			System.out.println("+++++++++++++++++++++++++");
 		}
 	};
 	

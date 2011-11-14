@@ -17,6 +17,15 @@ public class WorkTO implements Serializable {
 		return this.nodeTOList;
 	}
 	
+	public NodeTO getNodeTOByNodeId(int nodeId) {
+		for(NodeTO tmpNodeTO : nodeTOList) {
+			if(tmpNodeTO.getNodeId() == nodeId) {
+				return tmpNodeTO;
+			}
+		}
+		return null;
+	}
+	
 	public void setWorkId(int workId) {
 		this.workId = workId;
 	}

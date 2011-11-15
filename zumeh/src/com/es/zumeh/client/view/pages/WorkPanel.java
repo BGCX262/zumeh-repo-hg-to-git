@@ -36,7 +36,6 @@ public class WorkPanel extends AbsolutePanel {
 		System.out.println("RootId: " + root.getNodeId());
 		
 		sinkEvents(Event.ONDBLCLICK);
-		//setWorkFromWorkTO(null, 1);
 	}
 	
 	public DrawingArea getDrawingArea() {

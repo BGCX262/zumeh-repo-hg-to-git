@@ -2,11 +2,7 @@ package com.es.zumeh.client.view.pages;
 
 import com.es.zumeh.client.control.ClientSessionManager;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -27,11 +23,11 @@ public class WorkWritePage extends WorkPage {
 		CommentPanel cp = new CommentPanel();
 		RevisionPanel rp = new RevisionPanel(wp, cp);
 		
-		workPanel.add(rp);
-		workPanel.add(wp);
+		verticalWorkPanel.add(rp);
+		verticalWorkPanel.add(wp);
 		
 		RootPanel.get().add(verticalMasterWorkDescription, 0, 0);
-		RootPanel.get().add(workPanel, 0, 200);
+		RootPanel.get().add(verticalWorkPanel, 0, 200);
 		RootPanel.get().add(cp, getScreenWidth()-390, 0);
 	}
 	

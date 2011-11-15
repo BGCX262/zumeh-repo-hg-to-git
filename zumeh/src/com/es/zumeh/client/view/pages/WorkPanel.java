@@ -21,16 +21,18 @@ public class WorkPanel extends AbsolutePanel {
 	private WorkNode workaround = null; // Gambiarra pra o find. =P
 	
 	final private DrawingArea workArea = new DrawingArea(WIDTH, HEIGHT);
-	
+	private WorkPage workPage;
 	private WorkNode root;
+	private boolean isFullSizePanel = false;
 	
-	public WorkPanel() {
+	public WorkPanel(WorkPage workPage) {
 		setSize(WIDTH+"px", HEIGHT+"px");
 		//getElement().getStyle().setBackgroundColor(BACKGROUND_COLOR);
 		getElement().getStyle().setBorderColor("#000000");
 		getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 		getElement().getStyle().setBorderWidth(1, Unit.PX);
 		add(workArea);
+		this.workPage = workPage;
 		root =  new WorkNode(null, workArea, this);
 		root.setDescription("Any Idea?");
 		System.out.println("RootId: " + root.getNodeId());
@@ -61,14 +63,19 @@ public class WorkPanel extends AbsolutePanel {
 	}
 	
 	private void switchPanelSize() {
-		if(getOffsetWidth() == WIDTH_FULL && getOffsetHeight() == HEIGHT_FULL) {
+		if(isFullSizePanel) {
 			setSize(WIDTH+"px", HEIGHT+"px");
 			workArea.setPixelSize(WIDTH, HEIGHT);
+			this.workPage.refreshAllComponents();
+			isFullSizePanel = false;
 		} else {
 			setSize(WIDTH_FULL+"px", HEIGHT_FULL+"px");
 			workArea.setPixelSize(WIDTH_FULL, HEIGHT_FULL);
+			this.workPage.refreshToWorkPanel();
+			isFullSizePanel = true;
 		}
-		root.refreshPositions(root.getMaxColumn()+1);
+		//root.refreshPositions(root.getMaxColumn()+1);
+		root.refreshAll();
 	}
 	
 	public WorkTO getWorkTO() {
@@ -105,10 +112,7 @@ public class WorkPanel extends AbsolutePanel {
 	}
 	
 	public void setWorkFromWorkTO(WorkTO workTO) {
-		// TODO
 		ArrayList<NodeTO> tmpWorkTO = workTO.getTONodes();
-		
-		
 		NodeTO rootNodeTO = workTO.getNodeTOByNodeId(1);
 		
 		System.out.println("WorkTO: " + workTO);

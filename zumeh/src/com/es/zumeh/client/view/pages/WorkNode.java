@@ -6,6 +6,7 @@ import org.vaadin.gwtgraphics.client.VectorObject;
 import org.vaadin.gwtgraphics.client.shape.Ellipse;
 
 import com.es.zumeh.client.model.to.NodeTO;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -114,11 +115,12 @@ public class WorkNode extends Ellipse {
 	}
 	
 	private void refreshDescriptionPositio() {
-		absolutePanel.remove(description);
+		absolutePanel.remove(this.description);
 		this.description.setText(this.descriptionText);
 		int posx = getX()-((this.description.getText().length()*CARACTER_SIZE)/2);
 		int posy = getY()-CARACTER_SIZE;
 		absolutePanel.add(this.description, posx, posy);
+		absolutePanel.getElement().getStyle().setPosition(Position.RELATIVE);
 	}
 	
 	public int getColumn() {
@@ -410,6 +412,7 @@ public class WorkNode extends Ellipse {
 	
 	public void setStatus(String nodeStatus) {
 		this.nodeStatus = nodeStatus;
+		setFillColor(nodeStatus);
 	}
 	
 	public String getStatus() {
@@ -557,6 +560,9 @@ public class WorkNode extends Ellipse {
 			final Button closeButton = new Button("Ok");
 			closeButton.getElement().setId("okButton");
 			
+			final Button cancelButton = new Button("Cancel");
+			cancelButton.getElement().setId("cancelButtonEditFullContent");
+			
 			final VerticalPanel dialogVPanel = new VerticalPanel();
 			dialogVPanel.addStyleName("dialogVPanel");
 			dialogVPanel.add(new HTML("<b>Description:</b>"));
@@ -569,7 +575,13 @@ public class WorkNode extends Ellipse {
 			
 			dialogVPanel.add(textBox);
 			dialogBox.setWidget(dialogVPanel);
-			dialogVPanel.add(closeButton);
+			//dialogVPanel.add(closeButton);
+			
+			final HorizontalPanel d = new HorizontalPanel();
+			d.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
+			d.add(closeButton);
+			d.add(cancelButton);
+			dialogVPanel.add(d);
 			
 			dialogBox.center();
 			dialogBox.setVisible(true);
@@ -582,6 +594,12 @@ public class WorkNode extends Ellipse {
 					setDescription(textBox.getText());
 				}
 			});
+			
+			cancelButton.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();
+				}
+			});
 			// ================= End of Dialog Box ===================
 		}
 	};
@@ -589,8 +607,9 @@ public class WorkNode extends Ellipse {
 	Command editNodeStatusGreenCommand = new Command() {
 		public void execute() {
 			// deckPanel.showWidget(3);
-			setFillColor(GREEN);
-			nodeStatus = GREEN;
+			setStatus(GREEN);
+			//setFillColor(GREEN);
+			//nodeStatus = GREEN;
 			popupPanel.hide();
 		}
 	};
@@ -598,8 +617,9 @@ public class WorkNode extends Ellipse {
 	Command editNodeStatusYellowCommand = new Command() {
 		public void execute() {
 			// deckPanel.showWidget(4);
-			setFillColor(YELLOW);
-			nodeStatus = YELLOW;
+			setStatus(YELLOW);
+			//setFillColor(YELLOW);
+			//nodeStatus = YELLOW;
 			popupPanel.hide();
 		}
 	};
@@ -607,8 +627,9 @@ public class WorkNode extends Ellipse {
 	Command editNodeStatusRedCommand = new Command() {
 		public void execute() {
 			// deckPanel.showWidget(5);
-			setFillColor(RED);
-			nodeStatus = RED;
+			//setFillColor(RED);
+			setStatus(RED);
+			//nodeStatus = RED;
 			popupPanel.hide();
 		}
 	};
@@ -626,6 +647,9 @@ public class WorkNode extends Ellipse {
 			final Button closeButton = new Button("Ok");
 			closeButton.getElement().setId("okButton");
 			
+			final Button cancelButton = new Button("Cancel");
+			cancelButton.getElement().setId("cancelButtonCreateNode");
+			
 			final VerticalPanel dialogVPanel = new VerticalPanel();
 			dialogVPanel.addStyleName("dialogVPanel");
 			dialogVPanel.add(new HTML("<b>Description:</b>"));
@@ -636,9 +660,13 @@ public class WorkNode extends Ellipse {
 			textBox.setEnabled(true);
 			textBox.setFocus(true);
 			
+			final HorizontalPanel d = new HorizontalPanel();
+			
 			dialogVPanel.add(textBox);
 			dialogBox.setWidget(dialogVPanel);
-			dialogVPanel.add(closeButton);
+			d.add(closeButton);
+			d.add(cancelButton);
+			dialogVPanel.add(d);
 			
 			dialogBox.center();
 			dialogBox.setVisible(true);
@@ -649,6 +677,12 @@ public class WorkNode extends Ellipse {
 				public void onClick(ClickEvent event) {
 					dialogBox.hide();
 					addChildNode(textBox.getText());
+				}
+			});
+			
+			cancelButton.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();
 				}
 			});
 			// ================= End of Dialog Box ===================

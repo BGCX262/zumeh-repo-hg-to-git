@@ -12,6 +12,9 @@ public abstract class WorkPage implements EntryPoint {
 		return revisionTO;
 	}
 	
+	abstract void refreshToWorkPanel();
+	abstract void refreshAllComponents();
+	
 	/*
 	 *  Natives
 	 */

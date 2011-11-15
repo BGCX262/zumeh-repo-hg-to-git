@@ -9,6 +9,10 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class WorkWritePage extends WorkPage {
+	private VerticalPanel verticalMasterWorkDescription = getMasterDescriptionPanel();
+	private WorkPanel wp = new WorkPanel(this);
+	private CommentPanel cp = new CommentPanel();
+	private RevisionPanel rp = new RevisionPanel(wp, cp);
 	
 	public WorkWritePage(ClientSessionManager clientSessionManger) {
 		// TODO
@@ -17,12 +21,23 @@ public class WorkWritePage extends WorkPage {
 	@Override
 	public void onModuleLoad() {
 		// TODO Auto-generated method stub
-		VerticalPanel verticalMasterWorkDescription = getMasterDescriptionPanel();
+		refreshAllComponents();
+		//refreshToWorkPanel();
+	}
+	
+	public void refreshToWorkPanel() {
+		RootPanel.get().clear();
+		RootPanel.get().add(wp, 0 , 0);
+		/*verticalWorkPanel.add(rp);
+		verticalWorkPanel.add(wp);
 		
-		WorkPanel wp = new WorkPanel();
-		CommentPanel cp = new CommentPanel();
-		RevisionPanel rp = new RevisionPanel(wp, cp);
-		
+		RootPanel.get().add(verticalMasterWorkDescription, 0, 0);
+		RootPanel.get().add(verticalWorkPanel, 0, 200);
+		RootPanel.get().add(cp, getScreenWidth()-390, 0);*/
+	}
+	
+	public void refreshAllComponents() {
+		RootPanel.get().clear();
 		verticalWorkPanel.add(rp);
 		verticalWorkPanel.add(wp);
 		
@@ -55,5 +70,16 @@ public class WorkWritePage extends WorkPage {
 		verticalMasterWorkDescription.add(fullDescriptionBox);
 		
 		return verticalMasterWorkDescription;
+	}
+	
+	private void switchPanelSize() {
+		/*if(getOffsetWidth() == WIDTH_FULL && getOffsetHeight() == HEIGHT_FULL) {
+			setSize(WIDTH+"px", HEIGHT+"px");
+			workArea.setPixelSize(WIDTH, HEIGHT);
+		} else {
+			setSize(WIDTH_FULL+"px", HEIGHT_FULL+"px");
+			workArea.setPixelSize(WIDTH_FULL, HEIGHT_FULL);
+		}
+		root.refreshPositions(root.getMaxColumn()+1);*/
 	}
 }

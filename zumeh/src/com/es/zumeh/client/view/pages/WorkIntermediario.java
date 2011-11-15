@@ -17,12 +17,24 @@ public class WorkIntermediario implements EntryPoint{
 		// TODO Auto-generated method stub
 		WorkPage wp = new WorkPage();
 		RevisionPanel rp = new RevisionPanel(wp);
+		CommentPanel cp = new CommentPanel();
 		
 		workPanel.add(rp);
 		workPanel.add(wp);
 		
 		
 		RootPanel.get().add(workPanel, 10, 200);
+		RootPanel.get().add(cp, getScreenWidth()-390, 0);
 	}
+	
+	/*
+	 *  Natives
+	 */
+	public static native int getScreenWidth() /*-{ 
+		return $wnd.screen.width;
+	}-*/;
 
+	public static native int getScreenHeight() /*-{ 
+		return $wnd.screen.height;
+	}-*/;
 }

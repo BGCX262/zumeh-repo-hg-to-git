@@ -53,7 +53,7 @@ public class WorkNode extends Ellipse {
 	private WorkNode nodeChild2;
 	private DrawingArea workArea;
 	private Label description;
-	private NodeTO nodeTO;
+	//private NodeTO nodeTO;
 	private String nodeStatus = GREEN;
 	static private AbsolutePanel absolutePanel;
 	
@@ -70,12 +70,11 @@ public class WorkNode extends Ellipse {
 		WorkNode.absolutePanel = absolutePanel;
 		
 		setFillColor(GREEN);
+		setFillOpacity(0.8);
 		
 		sinkEvents(Event.ONCONTEXTMENU | Event.ONCLICK);
 		
 		createPopupMenu();
-		//createFullText();
-		//addHandle();
 		
 		this.description = new Label();
 		this.description.getElement().getStyle().setFontSize(15, Unit.PX);

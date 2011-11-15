@@ -2,12 +2,10 @@ package com.es.zumeh.client.view.pages;
 
 import java.util.LinkedList;
 
-import org.vaadin.gwtgraphics.client.DrawingArea;
-import org.vaadin.gwtgraphics.client.shape.Circle;
-
-import com.es.zumeh.client.model.to.NodeTO;
 import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.WorkTO;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -18,6 +16,7 @@ public class RevisionPanel extends AbsolutePanel {
 	final private String BACKGROUND_COLOR = "#00CCFF";
 	final private int WIDTH = getScreenWidth()-400;
 	final private int HEIGHT = getScreenHeight()-400;
+	final private String BUTTON_WIDTH = getButtonWidth();
 	final private String GO_HEAD_REVISION_TEXT = "HEAD";
 	final private String CREATE_REVISION_TEXT = "Create New Revision";
 	final private String DELETE_REVISION_TEXT = "Delete Revision";
@@ -29,47 +28,64 @@ public class RevisionPanel extends AbsolutePanel {
 	
 	private LinkedList<WorkTO> workRevisions = new LinkedList<WorkTO>();
 	private HorizontalPanel hPanel = new HorizontalPanel();
+	private WorkPanel root;
+	private CommentPanel commentPanel;
 	
-	//final DrawingArea revisionArea = new DrawingArea(WIDTH, HEIGHT);
-	
-	//private Circle goLeft;
-	//private Circle goRight;
-	//private Circle actualRevision;
-	private WorkPage root;
-	
-	public RevisionPanel(WorkPage root) {
+	public RevisionPanel(WorkPanel root, CommentPanel commentPanel) {
 		setHeight(40+"px");
 		setWidth(WIDTH+"px");
-		getElement().getStyle().setBackgroundColor(BACKGROUND_COLOR);
+		//getElement().getStyle().setBackgroundColor(BACKGROUND_COLOR);
 		this.root = root;
+		this.commentPanel = commentPanel;
 		
-		hPanel.setSpacing(6);
 		
-		final Button goHeadRevisionBtn = new Button(GO_HEAD_REVISION_TEXT);
-		goHeadRevisionBtn.addClickHandler(goHeadHandler);
-		hPanel.add(goHeadRevisionBtn);
+		//hPanel.setSpacing(1);
+		hPanel.setHeight(40+"px");
+		hPanel.setWidth(WIDTH+"px");
 		
-		final Button createRevisionBtn = new Button(CREATE_REVISION_TEXT);
-		createRevisionBtn.addClickHandler(createRevisionHandler);
-		hPanel.add(createRevisionBtn);
-		
-		final Button deleteRevisionBtn = new Button(DELETE_REVISION_TEXT);
-		deleteRevisionBtn.addClickHandler(deleteHandler);
-		hPanel.add(deleteRevisionBtn);
-		
-		final Button goLeftRevisionBtn = new Button(LEFT_REVISION_TEXT);
-		goLeftRevisionBtn.addClickHandler(goLeftRevision);
-		hPanel.add(goLeftRevisionBtn);
-		
-		final Button goRightRevisionBtn = new Button(RIGHT_REVISION_TEXT);
-		goRightRevisionBtn.addClickHandler(goRightRevision);
-		hPanel.add(goRightRevisionBtn);
-		
-		final Button saveRevisionBtn = new Button(SAVE_REVISION_TEXT);
-		saveRevisionBtn.addClickHandler(saveHandler);
-		hPanel.add(saveRevisionBtn);
+		hPanel.add(createButton(GO_HEAD_REVISION_TEXT, goHeadHandler));
+		hPanel.add(createButton(CREATE_REVISION_TEXT, createRevisionHandler));
+		hPanel.add(createButton(DELETE_REVISION_TEXT, deleteHandler));
+		hPanel.add(createButton(LEFT_REVISION_TEXT, goLeftRevision));
+		hPanel.add(createButton(RIGHT_REVISION_TEXT, goRightRevision));
+		hPanel.add(createButton(SAVE_REVISION_TEXT, saveHandler));
 		
 		add(hPanel, 0, 0);
+	}
+	
+	private String getButtonWidth() {
+		if(WIDTH%6 == 0) {
+			return (WIDTH/6)+"px";
+		} else if((WIDTH+1)%6 == 0) {
+			return ((WIDTH+1)/6)+"px";
+		} else if((WIDTH+2)%6 == 0) {
+			return ((WIDTH+2)/6)+"px";
+		} else if((WIDTH+3)%6 == 0) {
+			return ((WIDTH+3)/6)+"px";
+		} else if((WIDTH+4)%6 == 0) {
+			return ((WIDTH+4)/6)+"px";
+		} else if((WIDTH+5)%6 == 0) {
+			return ((WIDTH+5)/6)+"px";
+		} else if((WIDTH+6)%6 == 0) {
+			return ((WIDTH+6)/6)+"px";
+		} else {
+			return ((WIDTH/6)-1)+"px";
+		}
+	}
+	
+	private Button createButton(String btnContent, ClickHandler btnHandler) {
+		final Button tmpRevisionBtn = new Button(btnContent);
+		//tmpRevisionBtn.getElement().getStyle().setBorderColor("#000000");
+		//tmpRevisionBtn.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+		//tmpRevisionBtn.getElement().getStyle().setBorderWidth(1, Unit.PX);
+		tmpRevisionBtn.setWidth(BUTTON_WIDTH);
+		tmpRevisionBtn.setHeight("40px");
+		tmpRevisionBtn.addClickHandler(btnHandler);
+		return tmpRevisionBtn;
+	}
+	
+	private CommentPanel getCommentPanel() {
+		return this.commentPanel;
 	}
 	
 	private void goHeadRevision() {
@@ -95,7 +111,7 @@ public class RevisionPanel extends AbsolutePanel {
 	public RevisionTO getRevisionTO() {
 		RevisionTO tmpRevisionTO = new RevisionTO();
 		tmpRevisionTO.setWorkTOList(workRevisions);
-		
+		tmpRevisionTO.setCommentsTO(getCommentPanel().getCommentTO());
 		return tmpRevisionTO;
 	}
 	
@@ -103,7 +119,6 @@ public class RevisionPanel extends AbsolutePanel {
 	ClickHandler createRevisionHandler = new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			System.out.println("====================");
 			WorkTO tmpWorkTO = root.getWorkTO();
 			tmpWorkTO.setWorkId(workRevisions.size() + 1);
@@ -118,7 +133,6 @@ public class RevisionPanel extends AbsolutePanel {
 		
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			System.out.println("go Right Handler");
 			System.out.println("**************************");
 			goRightRevision();
@@ -138,7 +152,6 @@ public class RevisionPanel extends AbsolutePanel {
 		
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			System.out.println("go Left Handler");
 			System.out.println("**************************");
 			goLeftRevision();
@@ -155,7 +168,6 @@ public class RevisionPanel extends AbsolutePanel {
 		
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			System.out.println("go HEAD Handler");
 			System.out.println("**************************");
 			goHeadRevision();
@@ -171,7 +183,6 @@ public class RevisionPanel extends AbsolutePanel {
 		
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			System.out.println("Save Handler");
 			System.out.println("-------------------------");
 			System.out.println("Save Handler: " + root.getWorkById(3));
@@ -183,7 +194,6 @@ public class RevisionPanel extends AbsolutePanel {
 		
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			System.out.println("Delete Handler");
 			System.out.println("+++++++++++++++++++++++++");
 			

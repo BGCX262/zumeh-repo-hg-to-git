@@ -3,8 +3,8 @@ package com.es.zumeh.client.main;
 import com.es.zumeh.client.view.pages.FirstAccessPage;
 import com.es.zumeh.client.view.pages.LoginPage;
 import com.es.zumeh.client.view.pages.SearchPage;
-import com.es.zumeh.client.view.pages.WorkIntermediario;
-import com.es.zumeh.client.view.pages.WorkPage;
+import com.es.zumeh.client.view.pages.WorkWritePage;
+import com.es.zumeh.client.view.pages.WorkPanel;
 import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.google.gwt.core.client.EntryPoint;
 
@@ -23,10 +23,10 @@ public class Zumeh implements EntryPoint {
 //		SearchPage s = screenFactory.getSeacrhPage();
 //		s.onModuleLoad();
 		
-		LoginPage loginPage = screenFactory.getLoginPage();
-		loginPage.onModuleLoad();
+		//LoginPage loginPage = screenFactory.getLoginPage();
+		//loginPage.onModuleLoad();
 		
-		//WorkIntermediario wp = screenFactory.getWorkPage(null);
-		//wp.onModuleLoad();
+		WorkWritePage wp = screenFactory.getWorkPage(null);
+		wp.onModuleLoad();
 	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.es.zumeh.client.model.to.CommentTO;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -16,13 +18,12 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class CommentPanel extends ScrollPanel {
 	final private String BACKGROUND_COLOR = "#BBBBBB";
 	final private String COMMENT_BACKGROUND_COLOR = "#00FF00";
-	final private int WIDTH = 380;
+	final private int WIDTH = 390;
 	final private int HEIGHT = getScreenHeight() - 160;
 	
 	private ArrayList<CommentTO> comments = new ArrayList<CommentTO>();
@@ -30,46 +31,36 @@ public class CommentPanel extends ScrollPanel {
 
 	public CommentPanel() {
 		setSize(WIDTH+"px", HEIGHT+"px");
-		getElement().getStyle().setBackgroundColor(BACKGROUND_COLOR);
-		add(commentsPanel);
-		// ******* Test ********
-		addComment("Comment 1");
-		// 160 caracteres no maximo.
-		addComment("Comment 2");
-		addComment("Comment 3");
-		addComment("Comment 4");
-		addComment("Comment 5");
-		addComment("Comment 6");
-		addComment("Comment 7");
-		/*String t = "==============================+ "+
-		"==============================+ "+
-		"==============================+ "+
-		"==============================+ "+
-		"==============================+ ";
-		System.out.println("Tamanho: " + t.length());*/
-		addComment("==============================+ "+
-				"==============================+ "+
-				"==============================+ "+
-				"==============================+ "+
-				"==============================+ ");
-		// ******** End ********
+		//getElement().getStyle().setBackgroundColor(BACKGROUND_COLOR);
 		
+		
+		add(commentsPanel);
+		
+		/*addComment("String comment");
+		addComment("String comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2comment2 comment2 comment2 comment2 comment2 comment2 ");
+		addComment("String comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2comment2 comment2 comment2 comment2 comment2 comment2 ");
+		addComment("String comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2comment2 comment2 comment2 comment2 comment2 comment2 ");
+		addComment("String comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2comment2 comment2 comment2 comment2 comment2 comment2 ");
+		addComment("String comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2comment2 comment2 comment2 comment2 comment2 comment2 ");
+		addComment("String comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2 comment2comment2 comment2 comment2 comment2 comment2 comment2 ");*/
+		
+		refreshCommentPanel();
 		//setScrollPositio(getMaximumVerticalScrollPosition());
-		//scrollToTop();
+		scrollToBottom();
 	}
 	
 	private void addComment(String comment) {
 		CommentTO newComment = new CommentTO();
 		newComment.setComment(comment);
 		newComment.setCommentId(comments.size());
-		newComment.setOwer("Heitor");
+		newComment.setOwer("Sheldon"); // TODO it got to be actual user name
 		comments.add(newComment);
 		refreshCommentPanel();
 	}
 	
 	
 	private Image getCommentOwnerPicture() {
-		Image image = new Image("images/sheldon.jpg");
+		Image image = new Image("images/sheldon.jpg");// TODO it got to be actual user picture
 		image.setHeight(100+"px");
 		image.setWidth(80+"px");
 		return image;
@@ -79,9 +70,28 @@ public class CommentPanel extends ScrollPanel {
 		HorizontalPanel commentPanel = new HorizontalPanel();
 		commentPanel.setHeight(100+"px");
 		commentPanel.setWidth((WIDTH-15)+"px");
-		commentPanel.getElement().getStyle().setBackgroundColor(COMMENT_BACKGROUND_COLOR);
+		//commentPanel.getElement().getStyle().setBackgroundColor(COMMENT_BACKGROUND_COLOR);
 		commentPanel.setSpacing(10);
 		return commentPanel;
+	}
+	
+	private AbsolutePanel getTextPanel() {
+		AbsolutePanel textPanel = new AbsolutePanel();
+		//textPanel.getElement().getStyle().setBackgroundColor("#FF0000");
+		//textPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+		//textPanel.getElement().getStyle().setBorderColor("#000000");
+		//textPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+		textPanel.setHeight("80px");
+		textPanel.setWidth("250px");
+		return textPanel;
+	}
+	
+	public ArrayList<CommentTO> getCommentTO() {
+		return this.comments;
+	}
+	
+	public void setCommentTO(ArrayList<CommentTO> comments) {
+		this.comments = comments;
 	}
 	
 	public void refreshCommentPanel() {
@@ -92,28 +102,17 @@ public class CommentPanel extends ScrollPanel {
 			HorizontalPanel commentPanel = getCommentPanel();
 			VerticalPanel commentPanelText = new VerticalPanel();
 			CommentTO tmpComment = itComments.next();
-			
 			Image commentOwnerPicture = getCommentOwnerPicture();
-			commentPanel.add(commentOwnerPicture);
-			
-			
-			AbsolutePanel textPanel = new AbsolutePanel();
-			textPanel.getElement().getStyle().setBackgroundColor("#FF0000");
-			textPanel.setHeight("80px");
-			textPanel.setWidth("250px");
-			
-			//TextArea label2 = new TextArea();
-			//label2.setText("Teste");
+			Hyperlink hprlnkWork = new Hyperlink(tmpComment.getOwer(), false, "profile");
 			
 			Label label2 = new Label(tmpComment.getComment());
+			AbsolutePanel textPanel = getTextPanel();
+			
+			commentPanel.add(commentOwnerPicture);
 			textPanel.add(label2);
-			Hyperlink hprlnkWork = new Hyperlink(tmpComment.getOwer(), false, "profile");
 			hprlnkWork.addClickHandler(addCommenHandler);
-			
 			commentPanelText.add(hprlnkWork);
-			//commentPanelText.add(label2);
 			commentPanelText.add(textPanel);
-			
 			commentsPanel.add(commentPanel);
 			commentPanel.add(commentPanelText);
 		}

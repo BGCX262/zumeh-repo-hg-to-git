@@ -54,12 +54,6 @@ public class RevisionTO implements Serializable {
 		return this.commentsTOList;
 	}
 	
-	@Override
-	public String toString() {
-		return "Size: " + this.workTOList +
-				" RevisionId: " + this.revisionId;
-	}
-
 	public String getFullDescriptionText() {
 		if(this.fullDescriptionText == null) {
 			return "Full Description Text Default";
@@ -80,5 +74,11 @@ public class RevisionTO implements Serializable {
 	
 	public void setShortDescriptionText(String shortDescriptionText) {
 		this.shortDescriptionText = shortDescriptionText;
+	}
+	
+	@Override
+	public String toString() {
+		return "Size: " + this.workTOList +
+				" RevisionId: " + this.revisionId;
 	}
 }

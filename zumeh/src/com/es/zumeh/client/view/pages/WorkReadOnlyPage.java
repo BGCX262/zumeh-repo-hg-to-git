@@ -5,22 +5,22 @@ import com.es.zumeh.client.model.to.RevisionTO;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class WorkWritePage extends WorkPage {
+public class WorkReadOnlyPage extends WorkPage {
 	private VerticalPanel verticalMasterWorkDescription;
-	final private TextBox shortDescriptionArea = new TextBox();
-	final private TextArea fullDescriptionBox = new TextArea();
-	private WorkWritePanel wp = new WorkWritePanel(this);
+	private WorkReadOnlyPanel wp = new WorkReadOnlyPanel(this);
 	private CommentPanel cp = new CommentPanel();
-	private RevisionWritePanel rp = new RevisionWritePanel(wp, cp);
+	private RevisionReadOnlyPanel rp = new RevisionReadOnlyPanel(wp, cp);
+	final Label fullDescriptionLabel = new Label();
+	final Label shortDescriptionLabel = new Label();
 	
-	public WorkWritePage(ClientSessionManager clientSessionManger) {
+	public WorkReadOnlyPage(ClientSessionManager clientSessionManger) {
 		// TODO
 		verticalMasterWorkDescription = getMasterDescriptionPanel();
 	}
@@ -47,53 +47,56 @@ public class WorkWritePage extends WorkPage {
 	
 	public void loadRevisionTO(RevisionTO revisionTO) {
 		super.setRevisionTO(revisionTO);
-		fullDescriptionBox.setText(getRevisionTO().getFullDescriptionText());
-		shortDescriptionArea.setText(getRevisionTO().getShortDescriptionText());
+		System.out.println("Revision Final: " + super.getRevisionTO().getShortDescriptionText());
+		fullDescriptionLabel.setText(getRevisionTO().getFullDescriptionText());
+		shortDescriptionLabel.setText(getRevisionTO().getShortDescriptionText());
 		rp.setWorksFromTOList(getRevisionTO().getTOWorks());
 		wp.setWorkFromWorkTO(getRevisionTO().getWork(revisionTO.getTOWorks().size()));
 	}
 	
 	private VerticalPanel getMasterDescriptionPanel() {
 		VerticalPanel verticalMasterWorkDescription = new VerticalPanel();
-		Hyperlink hprlnkWork = new Hyperlink("Home", false, "home");
-		Hyperlink seePreviowsLink = new Hyperlink("Preview", false, "preview");
-		HorizontalPanel horizontalPanelLinks = new HorizontalPanel();
-		
 		verticalMasterWorkDescription.setHeight("200px");
 		verticalMasterWorkDescription.setWidth((getScreenWidth()-400) + "px");
 		
+		Hyperlink hprlnkWork = new Hyperlink("Home", false, "home");
+		Hyperlink editLink = new Hyperlink("Edit", false, "preview");
+		editLink.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				RootPanel.get().clear();
+				WorkWritePage w = new WorkWritePage(null);
+				rp.setFullDescription(getRevisionTO().getFullDescriptionText());
+				rp.setShortDescription(getRevisionTO().getShortDescriptionText());
+				w.loadRevisionTO(rp.getRevisionTO());
+				w.onModuleLoad();
+				System.out.println("Clicou Read");
+			}
+		});
+		
+		HorizontalPanel horizontalPanelLinks = new HorizontalPanel();
 		horizontalPanelLinks.setSpacing(5);
 		horizontalPanelLinks.add(hprlnkWork);
-		horizontalPanelLinks.add(seePreviowsLink);
+		horizontalPanelLinks.add(editLink);
 		
+		shortDescriptionLabel.setText(getRevisionTO().getShortDescriptionText());
+		shortDescriptionLabel.getElement().getStyle().setFontSize(25, Unit.PX);
 		
+		AbsolutePanel shortDescriptionArea = new AbsolutePanel();
 		shortDescriptionArea.setWidth((getScreenWidth()-400) + "px");
 		shortDescriptionArea.setHeight("30px");
-		shortDescriptionArea.setText(getRevisionTO().getShortDescriptionText());
-		shortDescriptionArea.getElement().getStyle().setFontSize(25, Unit.PX);
+		shortDescriptionArea.add(shortDescriptionLabel);
 		
-		fullDescriptionBox.setWidth((getScreenWidth()-400) + "px");
-		fullDescriptionBox.setHeight("120px");
-		fullDescriptionBox.setText(getRevisionTO().getFullDescriptionText());
+		fullDescriptionLabel.setText(getRevisionTO().getFullDescriptionText());
+		
+		AbsolutePanel fullDescriptionArea = new AbsolutePanel();
+		fullDescriptionArea.setWidth((getScreenWidth()-400) + "px");
+		fullDescriptionArea.setHeight("120px");
+		fullDescriptionArea.add(fullDescriptionLabel);
 		
 		verticalMasterWorkDescription.add(horizontalPanelLinks);
 		verticalMasterWorkDescription.add(shortDescriptionArea);
-		verticalMasterWorkDescription.add(fullDescriptionBox);
-		
-		seePreviowsLink.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				RootPanel.get().clear();
-				WorkReadOnlyPage w = new WorkReadOnlyPage(null);
-				rp.setFullDescription(fullDescriptionBox.getText());
-				rp.setShortDescription(shortDescriptionArea.getText());
-				
-				w.loadRevisionTO(rp.getRevisionTO());
-				w.onModuleLoad();
-				System.out.println("Clicou");
-			}
-		});
+		verticalMasterWorkDescription.add(fullDescriptionArea);
 		
 		return verticalMasterWorkDescription;
 	}

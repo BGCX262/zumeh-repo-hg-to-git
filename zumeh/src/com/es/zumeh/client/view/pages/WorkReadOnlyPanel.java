@@ -12,28 +12,27 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 
 import org.vaadin.gwtgraphics.client.DrawingArea;
 
-public class WorkPanel extends AbsolutePanel {
+public class WorkReadOnlyPanel extends AbsolutePanel {
 	private String BACKGROUND_COLOR = "#CCCCCC";
 	final private int WIDTH = getScreenWidth()-400;
 	final private int HEIGHT = getScreenHeight()-400;
 	final private int WIDTH_FULL = getScreenWidth();
 	final private int HEIGHT_FULL = getScreenHeight();
-	private WorkNode workaround = null; // Gambiarra pra o find. =P
+	private WorkReadOnlyNode workaround = null; // Gambiarra pra o find. =P
 	
 	final private DrawingArea workArea = new DrawingArea(WIDTH, HEIGHT);
 	private WorkPage workPage;
-	private WorkNode root;
+	private WorkReadOnlyNode root;
 	private boolean isFullSizePanel = false;
 	
-	public WorkPanel(WorkPage workPage) {
+	public WorkReadOnlyPanel(WorkPage workPage) {
 		setSize(WIDTH+"px", HEIGHT+"px");
-		//getElement().getStyle().setBackgroundColor(BACKGROUND_COLOR);
 		getElement().getStyle().setBorderColor("#000000");
 		getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 		getElement().getStyle().setBorderWidth(1, Unit.PX);
 		add(workArea);
 		this.workPage = workPage;
-		root =  new WorkNode(null, workArea, this);
+		root =  new WorkReadOnlyNode(null, workArea, this);
 		root.setDescription("Any Idea?");
 		System.out.println("RootId: " + root.getNodeId());
 		
@@ -58,7 +57,7 @@ public class WorkPanel extends AbsolutePanel {
 		super.onBrowserEvent(event);
 	}
 	
-	public WorkNode	getRootNode() {
+	public WorkReadOnlyNode getRootNode() {
 		return root;
 	}
 	
@@ -79,21 +78,21 @@ public class WorkPanel extends AbsolutePanel {
 	}
 	
 	public WorkTO getWorkTO() {
-		WorkNode root = getRootNode();
+		WorkReadOnlyNode root = getRootNode();
 		WorkTO workTO = new WorkTO();
 		doWorkTO(root, workTO);
 		return workTO;
 	}
 	
-	public WorkNode getWorkById(int nodeId) {
-		WorkNode root = getRootNode();
+	public WorkReadOnlyNode getWorkById(int nodeId) {
+		WorkReadOnlyNode root = getRootNode();
 		System.out.println("Get Work-> root: " + root.getShortDescription() + " NodeId: " + root.getNodeId());
 		this.workaround = null;
 		doGetWorkById(root, nodeId);
 		return this.workaround;
 	}
 	
-	private WorkNode doGetWorkById(WorkNode node, int nodeId) {
+	private WorkReadOnlyNode doGetWorkById(WorkReadOnlyNode node, int nodeId) {
 		System.out.println("Find Node: " + node);
 		if(node.getNodeId() == nodeId) {
 			System.out.println("Caiu: " + node);
@@ -119,7 +118,7 @@ public class WorkPanel extends AbsolutePanel {
 		System.out.println("NodeTO: " + rootNodeTO);
 		
 		add(workArea);
-		root =  new WorkNode(null, workArea, this);
+		root =  new WorkReadOnlyNode(null, workArea, this);
 		root.setShortDescription(rootNodeTO.getShortDescription());
 		root.setFullText(rootNodeTO.getFullText());
 		root.setStatus(rootNodeTO.getNodeStatus()); 
@@ -141,9 +140,9 @@ public class WorkPanel extends AbsolutePanel {
 		root.refreshPositions(root.getMaxColumn()+1);
 	}
 	
-	private void createNode(WorkNode parent, NodeTO leftChildTO, NodeTO rightChildTO) {
+	private void createNode(WorkReadOnlyNode parent, NodeTO leftChildTO, NodeTO rightChildTO) {
 		if(leftChildTO != null) {
-			WorkNode leftChild = new WorkNode(parent, workArea, this);
+			WorkReadOnlyNode leftChild = new WorkReadOnlyNode(parent, workArea, this);
 			leftChild.setShortDescription(leftChildTO.getShortDescription());
 			leftChild.setFullText(leftChildTO.getFullText());
 			leftChild.setStatus(leftChildTO.getNodeStatus()); 
@@ -154,7 +153,7 @@ public class WorkPanel extends AbsolutePanel {
 		}
 		
 		if(rightChildTO != null) {
-			WorkNode rightChild = new WorkNode(parent, workArea, this);
+			WorkReadOnlyNode rightChild = new WorkReadOnlyNode(parent, workArea, this);
 			rightChild.setShortDescription(rightChildTO.getShortDescription());
 			rightChild.setFullText(rightChildTO.getFullText());
 			rightChild.setStatus(rightChildTO.getNodeStatus());
@@ -170,7 +169,7 @@ public class WorkPanel extends AbsolutePanel {
 		}
 	}
 	
-	private WorkTO doWorkTO(WorkNode node, WorkTO workTO) {
+	private WorkTO doWorkTO(WorkReadOnlyNode node, WorkTO workTO) {
 		
 		if(node.getNodeChild1() != null) {
 			doWorkTO(node.getNodeChild1(), workTO);

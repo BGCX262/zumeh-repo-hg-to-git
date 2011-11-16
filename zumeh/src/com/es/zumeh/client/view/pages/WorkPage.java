@@ -6,10 +6,14 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public abstract class WorkPage implements EntryPoint {
 	final VerticalPanel verticalWorkPanel = new VerticalPanel();
+	private RevisionTO revisionTO = new RevisionTO();
 	
-	protected RevisionTO getRevisionTO() {
-		RevisionTO revisionTO = new RevisionTO();
-		return revisionTO;
+	public RevisionTO getRevisionTO() {
+		return this.revisionTO;
+	}
+	
+	public void setRevisionTO(RevisionTO revisionTO) {
+		this.revisionTO = revisionTO;
 	}
 	
 	abstract void refreshToWorkPanel();

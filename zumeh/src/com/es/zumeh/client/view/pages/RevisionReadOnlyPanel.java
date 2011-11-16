@@ -4,80 +4,62 @@ import java.util.LinkedList;
 
 import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.WorkTO;
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-public class RevisionPanel extends AbsolutePanel {
+public class RevisionReadOnlyPanel extends AbsolutePanel {
 	final private String BACKGROUND_COLOR = "#00CCFF";
 	final private int WIDTH = getScreenWidth()-400;
 	final private int HEIGHT = getScreenHeight()-400;
 	final private String BUTTON_WIDTH = getButtonWidth();
 	final private String GO_HEAD_REVISION_TEXT = "HEAD";
-	final private String CREATE_REVISION_TEXT = "Create New Revision";
-	final private String DELETE_REVISION_TEXT = "Delete Revision";
 	final private String LEFT_REVISION_TEXT = "<< Go Left Revision";
 	final private String RIGHT_REVISION_TEXT = "Go Right Revision >>";
-	final private String SAVE_REVISION_TEXT = "Save";
 	
 	private int actualRevision = 0;
 	
 	private LinkedList<WorkTO> workRevisions = new LinkedList<WorkTO>();
 	private HorizontalPanel hPanel = new HorizontalPanel();
-	private WorkPanel root;
+	private WorkReadOnlyPanel root;
+	private String fullTextDescription;
+	private String shortTextDescription;
 	private CommentPanel commentPanel;
 	
-	public RevisionPanel(WorkPanel root, CommentPanel commentPanel) {
+	public RevisionReadOnlyPanel(WorkReadOnlyPanel root, CommentPanel commentPanel) {
 		setHeight(40+"px");
 		setWidth(WIDTH+"px");
-		//getElement().getStyle().setBackgroundColor(BACKGROUND_COLOR);
 		this.root = root;
 		this.commentPanel = commentPanel;
 		
-		
-		//hPanel.setSpacing(1);
 		hPanel.setHeight(40+"px");
 		hPanel.setWidth(WIDTH+"px");
 		
 		hPanel.add(createButton(GO_HEAD_REVISION_TEXT, goHeadHandler));
-		hPanel.add(createButton(CREATE_REVISION_TEXT, createRevisionHandler));
-		hPanel.add(createButton(DELETE_REVISION_TEXT, deleteHandler));
 		hPanel.add(createButton(LEFT_REVISION_TEXT, goLeftRevision));
 		hPanel.add(createButton(RIGHT_REVISION_TEXT, goRightRevision));
-		hPanel.add(createButton(SAVE_REVISION_TEXT, saveHandler));
 		
 		add(hPanel, 0, 0);
 	}
 	
 	private String getButtonWidth() {
-		if(WIDTH%6 == 0) {
-			return (WIDTH/6)+"px";
-		} else if((WIDTH+1)%6 == 0) {
-			return ((WIDTH+1)/6)+"px";
-		} else if((WIDTH+2)%6 == 0) {
-			return ((WIDTH+2)/6)+"px";
-		} else if((WIDTH+3)%6 == 0) {
-			return ((WIDTH+3)/6)+"px";
-		} else if((WIDTH+4)%6 == 0) {
-			return ((WIDTH+4)/6)+"px";
-		} else if((WIDTH+5)%6 == 0) {
-			return ((WIDTH+5)/6)+"px";
-		} else if((WIDTH+6)%6 == 0) {
-			return ((WIDTH+6)/6)+"px";
+		if(WIDTH%3 == 0) {
+			return (WIDTH/3)+"px";
+		} else if((WIDTH+1)%3 == 0) {
+			return ((WIDTH+1)/3)+"px";
+		} else if((WIDTH+2)%3 == 0) {
+			return ((WIDTH+2)/3)+"px";
+		} else if((WIDTH+3)%3 == 0) {
+			return ((WIDTH+3)/3)+"px";
 		} else {
-			return ((WIDTH/6)-1)+"px";
+			return ((WIDTH/3)-1)+"px";
 		}
 	}
 	
 	private Button createButton(String btnContent, ClickHandler btnHandler) {
 		final Button tmpRevisionBtn = new Button(btnContent);
-		//tmpRevisionBtn.getElement().getStyle().setBorderColor("#000000");
-		//tmpRevisionBtn.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-		//tmpRevisionBtn.getElement().getStyle().setBorderWidth(1, Unit.PX);
 		tmpRevisionBtn.setWidth(BUTTON_WIDTH);
 		tmpRevisionBtn.setHeight("40px");
 		tmpRevisionBtn.addClickHandler(btnHandler);
@@ -110,24 +92,14 @@ public class RevisionPanel extends AbsolutePanel {
 	
 	public RevisionTO getRevisionTO() {
 		RevisionTO tmpRevisionTO = new RevisionTO();
+		tmpRevisionTO.setFullDescriptionText(this.fullTextDescription);
+		tmpRevisionTO.setShortDescriptionText(this.shortTextDescription);
 		tmpRevisionTO.setWorkTOList(workRevisions);
 		tmpRevisionTO.setCommentsTO(getCommentPanel().getCommentTO());
 		return tmpRevisionTO;
 	}
 	
 	// *********************** Handlers ***************************
-	ClickHandler createRevisionHandler = new ClickHandler() {
-		@Override
-		public void onClick(ClickEvent event) {
-			System.out.println("====================");
-			WorkTO tmpWorkTO = root.getWorkTO();
-			tmpWorkTO.setWorkId(workRevisions.size() + 1);
-			System.out.println(tmpWorkTO);
-			workRevisions.add(tmpWorkTO);
-			goHeadRevision();
-			System.out.println("====================");
-		}
-	};
 	
 	ClickHandler goRightRevision = new ClickHandler() {
 		
@@ -138,10 +110,6 @@ public class RevisionPanel extends AbsolutePanel {
 			goRightRevision();
 			root.clear();
 			root.getDrawingArea().clear();
-			
-			//System.out.println(workRevisions.get(1));
-			
-			//root.setWorkFromWorkTO(workRevisions.get(1));
 			System.out.println("Actual Revision: " + getActualRevision());
 			root.setWorkFromWorkTO(workRevisions.get(getActualRevision()));
 			System.out.println("**************************");
@@ -179,37 +147,6 @@ public class RevisionPanel extends AbsolutePanel {
 		}
 	};
 	
-	ClickHandler saveHandler = new ClickHandler() {
-		
-		@Override
-		public void onClick(ClickEvent event) {
-			System.out.println("Save Handler");
-			System.out.println("-------------------------");
-			System.out.println("Save Handler: " + root.getWorkById(3));
-			System.out.println("-------------------------");
-		}
-	};
-	
-	ClickHandler deleteHandler = new ClickHandler() {
-		
-		@Override
-		public void onClick(ClickEvent event) {
-			System.out.println("Delete Handler");
-			System.out.println("+++++++++++++++++++++++++");
-			
-			workRevisions.get(getActualRevision());
-			workRevisions.remove(getActualRevision());
-			
-			goHeadRevision();
-			root.clear();
-			root.getDrawingArea().clear();
-			System.out.println("Actual Revision: " + getActualRevision());
-			root.setWorkFromWorkTO(workRevisions.get(getActualRevision()));
-			
-			System.out.println("+++++++++++++++++++++++++");
-		}
-	};
-	
 	/*
 	 *  Natives
 	 */
@@ -220,4 +157,16 @@ public class RevisionPanel extends AbsolutePanel {
 	public static native int getScreenHeight() /*-{ 
 		return $wnd.screen.height;
 	}-*/;
+
+	public void setWorksFromTOList(LinkedList<WorkTO> toWorks) {
+		this.workRevisions = toWorks;
+	}
+
+	public void setFullDescription(String fullDescriptionText) {
+		this.fullTextDescription = fullDescriptionText;
+	}
+
+	public void setShortDescription(String shortDescriptionText) {
+		this.shortTextDescription = shortDescriptionText;
+	}
 }

@@ -5,8 +5,8 @@ import com.es.zumeh.client.view.pages.FirstAccessPage;
 import com.es.zumeh.client.view.pages.LoginPage;
 import com.es.zumeh.client.view.pages.ProfileReadOnlyPage;
 import com.es.zumeh.client.view.pages.SearchPage;
+import com.es.zumeh.client.view.pages.WorkReadOnlyPage;
 import com.es.zumeh.client.view.pages.WorkWritePage;
-import com.es.zumeh.client.view.pages.WorkPanel;
 
 public class ScreenFactory {
 	
@@ -14,7 +14,8 @@ public class ScreenFactory {
 	private LoginPage loginPage;
 	private FirstAccessPage pag;
 	private ProfileReadOnlyPage profileReadOnlyPage;
-	private WorkWritePage workPage;
+	private WorkWritePage workWritePage;
+	private WorkReadOnlyPage workReadOnlyPage;
 	private SearchPage search;
 	
 	private ScreenFactory() {}
@@ -52,8 +53,13 @@ public class ScreenFactory {
 	}
 	
 	public WorkWritePage getWorkPage(ClientSessionManager clientSessionManger) {
-		this.workPage = new WorkWritePage(clientSessionManger);
-		return this.workPage;
+		this.workWritePage = new WorkWritePage(clientSessionManger);
+		return this.workWritePage;
+	}
+	
+	public WorkReadOnlyPage getWorkReadOnlyPage(ClientSessionManager clientSessionManger) {
+		this.workReadOnlyPage = new WorkReadOnlyPage(clientSessionManger);
+		return this.workReadOnlyPage;
 	}
 	
 	public SearchPage getSeacrhPage() {

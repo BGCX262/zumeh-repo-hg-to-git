@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * And see that it works. =)
  * 
  */
-public class WorkNode extends Ellipse {
+public class WorkWriteNode extends Ellipse {
 	final static private int RADIUS_X = 80;
 	final static private int RADIUS_Y = 30;
 	final static private int COLUMN_SIZE = 220;
@@ -49,9 +49,9 @@ public class WorkNode extends Ellipse {
 	private int column = 0;
 	private int childs = 0;
 	private int nodeId = 0;
-	private WorkNode nodeParent;
-	private WorkNode nodeChild1;
-	private WorkNode nodeChild2;
+	private WorkWriteNode nodeParent;
+	private WorkWriteNode nodeChild1;
+	private WorkWriteNode nodeChild2;
 	private DrawingArea workArea;
 	private Label description;
 	//private NodeTO nodeTO;
@@ -63,12 +63,12 @@ public class WorkNode extends Ellipse {
 	private String descriptionText;
 	private String fullText;
 
-	public WorkNode(WorkNode nodeParent, DrawingArea workArea, AbsolutePanel absolutePanel) {
+	public WorkWriteNode(WorkWriteNode nodeParent, DrawingArea workArea, AbsolutePanel absolutePanel) {
 		super(10, 10, RADIUS_X, RADIUS_Y);
 		configNode(nodeParent, workArea);
 		this.nodeParent = nodeParent;
 		this.workArea = workArea;
-		WorkNode.absolutePanel = absolutePanel;
+		WorkWriteNode.absolutePanel = absolutePanel;
 		
 		setFillColor(GREEN);
 		setFillOpacity(0.8);
@@ -128,17 +128,17 @@ public class WorkNode extends Ellipse {
 	}
 	
 	public void addChildNode(String description) {
-		WorkNode newWorkNode = new WorkNode(this, this.workArea, absolutePanel);
+		WorkWriteNode newWorkNode = new WorkWriteNode(this, this.workArea, absolutePanel);
 		newWorkNode.setDescription(description);
 		//addChild(newWorkNode); FIXME Uncomment this.
 		createConnection(newWorkNode);
 	}
 	
-	public void setChildNode1(WorkNode newChild) {
+	public void setChildNode1(WorkWriteNode newChild) {
 		this.nodeChild1 = newChild;
 	}
 	
-	public void setChildNode2(WorkNode newChild) {
+	public void setChildNode2(WorkWriteNode newChild) {
 		this.nodeChild2 = newChild;
 	}
 	
@@ -169,7 +169,7 @@ public class WorkNode extends Ellipse {
 		refreshPositions(1+getMaxColumn());
 	}
 	
-	private void addChild(WorkNode node) {
+	private void addChild(WorkWriteNode node) {
 		if(this.nodeChild1 == null) {
 			this.nodeChild1 = node;
 			this.childs++;
@@ -183,7 +183,7 @@ public class WorkNode extends Ellipse {
 		return this.childs;
 	}
 	
-	public WorkNode getNodeParent() {
+	public WorkWriteNode getNodeParent() {
 		return this.nodeParent;
 	}
 	
@@ -192,16 +192,16 @@ public class WorkNode extends Ellipse {
 	}
 	
 	public void refreshPositions(int column) {
-		WorkNode node = getRoot();
+		WorkWriteNode node = getRoot();
 		clearConnections();
 		node.doRefresh(column);
 	}
 	
-	public WorkNode getNodeChild1() {
+	public WorkWriteNode getNodeChild1() {
 		return this.nodeChild1;
 	}
 	
-	public WorkNode getNodeChild2() {
+	public WorkWriteNode getNodeChild2() {
 		return this.nodeChild2;
 	}
 	
@@ -223,14 +223,14 @@ public class WorkNode extends Ellipse {
 	}
 	
 	public int getMaxColumn() {
-		WorkNode node = getRoot();
+		WorkWriteNode node = getRoot();
 		return doPath(node);
 	}
 	
 	/* 
 	 * private methods. 
 	 */
-	private int doPath(WorkNode node) {
+	private int doPath(WorkWriteNode node) {
 		if(node == null) {
 			return 0;
 		}
@@ -242,7 +242,7 @@ public class WorkNode extends Ellipse {
 	}
 	
 	private void setNodeId() {
-		WorkNode node = getRoot();
+		WorkWriteNode node = getRoot();
 		this.nodeId = doWorkSize(node);
 	}
 	
@@ -250,7 +250,7 @@ public class WorkNode extends Ellipse {
 		this.nodeId = nodeId;
 	}
 	
-	private int doWorkSize(WorkNode node) {
+	private int doWorkSize(WorkWriteNode node) {
 		if(node == null) {
 			return 0;
 		}
@@ -309,7 +309,7 @@ public class WorkNode extends Ellipse {
 		// ================= End of Dialog Box ===================
 	}
 	
-	private void configNode(WorkNode parent, DrawingArea workArea) {
+	private void configNode(WorkWriteNode parent, DrawingArea workArea) {
 		setX(parent);
 		setY(parent, workArea);
 		//setAutoY(getMaxColumn()+1);
@@ -324,7 +324,7 @@ public class WorkNode extends Ellipse {
 		}
 	}
 	
-	private void setY(WorkNode parent, DrawingArea workArea) {
+	private void setY(WorkWriteNode parent, DrawingArea workArea) {
 		if(parent == null) {
 			super.setY(workArea.getHeight()/2);
 		} else {
@@ -336,7 +336,7 @@ public class WorkNode extends Ellipse {
 		}
 	}
 	
-	private void setX(WorkNode parent) {
+	private void setX(WorkWriteNode parent) {
 		if(parent == null) {
 			super.setX(ROOT_COLUMN_SIZE);
 		} else {
@@ -358,7 +358,7 @@ public class WorkNode extends Ellipse {
 		} 
 	}
 	
-	private void createConnection(WorkNode child) {
+	private void createConnection(WorkWriteNode child) {
 		if(child != null ) {
 			int parentX = this.getX() + this.getRadiusX();
 			int parentY = this.getY();
@@ -386,7 +386,7 @@ public class WorkNode extends Ellipse {
 		}
 	}
 	
-	private WorkNode getRoot() {
+	private WorkWriteNode getRoot() {
 		if(this.nodeParent == null){
 			return this;
 		} else {

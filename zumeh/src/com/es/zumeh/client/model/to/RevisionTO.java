@@ -9,7 +9,6 @@ public class RevisionTO implements Serializable {
 	
 	private static final long serialVersionUID = 8424271182195040573L;
 	private LinkedList<WorkTO> workTOList = new LinkedList<WorkTO>();
-	private ArrayList<CommentTO> commentsTOList = new ArrayList<CommentTO>();
 	private int revisionId = 0;
 	private String fullDescriptionText;
 	private String shortDescriptionText;
@@ -44,14 +43,6 @@ public class RevisionTO implements Serializable {
 	
 	public int getRevisionId() {
 		return this.revisionId;
-	}
-	
-	public void setCommentsTO(ArrayList<CommentTO> commentsTOList) {
-		this.commentsTOList = commentsTOList;
-	}
-	
-	public ArrayList<CommentTO> getCommentsTO() {
-		return this.commentsTOList;
 	}
 	
 	public String getFullDescriptionText() {

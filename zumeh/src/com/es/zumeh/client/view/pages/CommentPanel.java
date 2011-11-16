@@ -28,11 +28,12 @@ public class CommentPanel extends ScrollPanel {
 	
 	private ArrayList<CommentTO> comments = new ArrayList<CommentTO>();
 	private VerticalPanel commentsPanel = new VerticalPanel();
+	private WorkPage workPage;
 
-	public CommentPanel() {
+	public CommentPanel(WorkPage workPage) {
 		setSize(WIDTH+"px", HEIGHT+"px");
 		//getElement().getStyle().setBackgroundColor(BACKGROUND_COLOR);
-		
+		this.workPage = workPage;
 		
 		add(commentsPanel);
 		
@@ -54,6 +55,7 @@ public class CommentPanel extends ScrollPanel {
 		newComment.setComment(comment);
 		newComment.setCommentId(comments.size());
 		newComment.setOwer("Sheldon"); // TODO it got to be actual user name
+		newComment.setRevisionId(this.workPage.getRevisionTO().getRevisionId());
 		comments.add(newComment);
 		refreshCommentPanel();
 	}

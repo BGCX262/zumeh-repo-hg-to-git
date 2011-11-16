@@ -24,11 +24,11 @@ public class Zumeh implements EntryPoint {
 //		SearchPage s = screenFactory.getSeacrhPage();
 //		s.onModuleLoad();
 		
-		//LoginPage loginPage = screenFactory.getLoginPage();
-		//loginPage.onModuleLoad();
+		LoginPage loginPage = screenFactory.getLoginPage();
+		loginPage.onModuleLoad();
 		
-		WorkWritePage wp = screenFactory.getWorkPage(null);
-		wp.onModuleLoad();
+		//WorkWritePage wp = screenFactory.getWorkPage(null);
+		//wp.onModuleLoad();
 		
 		//WorkReadOnlyPage wrop = screenFactory.getWorkReadOnlyPage(null);
 		//wrop.onModuleLoad();

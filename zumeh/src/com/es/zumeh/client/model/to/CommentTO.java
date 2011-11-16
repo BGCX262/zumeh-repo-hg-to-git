@@ -5,10 +5,18 @@ import java.io.Serializable;
 public class CommentTO implements Serializable {
 	
 	private static final long serialVersionUID = -5497792772421045048L;
-	
 	private String comment;
 	private int commentId;
+	private int revisionId;
 	private String owner;
+	
+	public void setRevisionId(int revisionId) {
+		this.revisionId = revisionId;
+	}
+	
+	public int getRevisionId() {
+		return this.revisionId;
+	}
 	
 	public void setComment(String comment) {
 		this.comment = comment;

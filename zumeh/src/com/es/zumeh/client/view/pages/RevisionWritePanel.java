@@ -120,7 +120,6 @@ public class RevisionWritePanel extends AbsolutePanel {
 	public RevisionTO getRevisionTO() {
 		RevisionTO tmpRevisionTO = new RevisionTO();
 		tmpRevisionTO.setWorkTOList(workRevisions);
-		tmpRevisionTO.setCommentsTO(getCommentPanel().getCommentTO());
 		tmpRevisionTO.setFullDescriptionText(this.fullTextDescription);
 		tmpRevisionTO.setShortDescriptionText(this.shortTextDescription);
 		return tmpRevisionTO;

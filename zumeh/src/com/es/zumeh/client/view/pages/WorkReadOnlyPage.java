@@ -1,6 +1,9 @@
 package com.es.zumeh.client.view.pages;
 
+import java.util.ArrayList;
+
 import com.es.zumeh.client.control.ClientSessionManager;
+import com.es.zumeh.client.model.to.CommentTO;
 import com.es.zumeh.client.model.to.RevisionTO;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,7 +18,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class WorkReadOnlyPage extends WorkPage {
 	private VerticalPanel verticalMasterWorkDescription;
 	private WorkReadOnlyPanel wp = new WorkReadOnlyPanel(this);
-	private CommentPanel cp = new CommentPanel();
+	private CommentPanel cp = new CommentPanel(this);
 	private RevisionReadOnlyPanel rp = new RevisionReadOnlyPanel(wp, cp);
 	final Label fullDescriptionLabel = new Label();
 	final Label shortDescriptionLabel = new Label();
@@ -54,6 +57,12 @@ public class WorkReadOnlyPage extends WorkPage {
 		wp.setWorkFromWorkTO(getRevisionTO().getWork(revisionTO.getTOWorks().size()));
 	}
 	
+	public void loadCommentTO(ArrayList<CommentTO> comments) {
+		super.setCommentsTO(comments);
+		cp.setCommentTO(comments);
+		cp.refreshCommentPanel();
+	}
+	
 	private VerticalPanel getMasterDescriptionPanel() {
 		VerticalPanel verticalMasterWorkDescription = new VerticalPanel();
 		verticalMasterWorkDescription.setHeight("200px");
@@ -69,6 +78,7 @@ public class WorkReadOnlyPage extends WorkPage {
 				rp.setFullDescription(getRevisionTO().getFullDescriptionText());
 				rp.setShortDescription(getRevisionTO().getShortDescriptionText());
 				w.loadRevisionTO(rp.getRevisionTO());
+				w.loadCommentTO(cp.getCommentTO());
 				w.onModuleLoad();
 				System.out.println("Clicou Read");
 			}

@@ -1,6 +1,9 @@
 package com.es.zumeh.client.view.pages;
 
+import java.util.ArrayList;
+
 import com.es.zumeh.client.control.ClientSessionManager;
+import com.es.zumeh.client.model.to.CommentTO;
 import com.es.zumeh.client.model.to.RevisionTO;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -17,7 +20,7 @@ public class WorkWritePage extends WorkPage {
 	final private TextBox shortDescriptionArea = new TextBox();
 	final private TextArea fullDescriptionBox = new TextArea();
 	private WorkWritePanel wp = new WorkWritePanel(this);
-	private CommentPanel cp = new CommentPanel();
+	private CommentPanel cp = new CommentPanel(this);
 	private RevisionWritePanel rp = new RevisionWritePanel(wp, cp);
 	
 	public WorkWritePage(ClientSessionManager clientSessionManger) {
@@ -53,6 +56,12 @@ public class WorkWritePage extends WorkPage {
 		wp.setWorkFromWorkTO(getRevisionTO().getWork(revisionTO.getTOWorks().size()));
 	}
 	
+	public void loadCommentTO(ArrayList<CommentTO> comments) {
+		super.setCommentsTO(comments);
+		cp.setCommentTO(comments);
+		cp.refreshCommentPanel();
+	}
+	
 	private VerticalPanel getMasterDescriptionPanel() {
 		VerticalPanel verticalMasterWorkDescription = new VerticalPanel();
 		Hyperlink hprlnkWork = new Hyperlink("Home", false, "home");
@@ -65,7 +74,6 @@ public class WorkWritePage extends WorkPage {
 		horizontalPanelLinks.setSpacing(5);
 		horizontalPanelLinks.add(hprlnkWork);
 		horizontalPanelLinks.add(seePreviowsLink);
-		
 		
 		shortDescriptionArea.setWidth((getScreenWidth()-400) + "px");
 		shortDescriptionArea.setHeight("30px");
@@ -90,6 +98,7 @@ public class WorkWritePage extends WorkPage {
 				rp.setShortDescription(shortDescriptionArea.getText());
 				
 				w.loadRevisionTO(rp.getRevisionTO());
+				w.loadCommentTO(cp.getCommentTO());
 				w.onModuleLoad();
 				System.out.println("Clicou");
 			}

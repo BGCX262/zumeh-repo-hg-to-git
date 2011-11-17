@@ -124,7 +124,7 @@ public class LoginPage extends Page implements EntryPoint {
 		Label lblUsername = new Label("Username:");
 		absolutePanel.add(lblUsername, 423, 245);
 		
-		Label lblNewLabel = new Label("e.g. pat@example.com ");
+		Label lblNewLabel = new Label("e.g. peterTosh ");
 		absolutePanel.add(lblNewLabel, 504, 267);
 		
 		

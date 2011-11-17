@@ -5,8 +5,8 @@ import com.es.zumeh.client.view.pages.FirstAccessPage;
 import com.es.zumeh.client.view.pages.LoginPage;
 import com.es.zumeh.client.view.pages.ProfileReadOnlyPage;
 import com.es.zumeh.client.view.pages.SearchPage;
-import com.es.zumeh.client.view.pages.WorkReadOnlyPage;
-import com.es.zumeh.client.view.pages.WorkWritePage;
+import com.es.zumeh.client.view.pages.work.WorkReadOnlyPage;
+import com.es.zumeh.client.view.pages.work.WorkWritePage;
 
 public class ScreenFactory {
 	

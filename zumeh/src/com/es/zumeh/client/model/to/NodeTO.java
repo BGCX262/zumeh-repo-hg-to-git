@@ -5,66 +5,61 @@ import java.io.Serializable;
 public class NodeTO implements Serializable {
 	
 	private static final long serialVersionUID = 4982682828203530566L;
-	private int nodeId;
-	private int leftChildNodeId;
-	private int rightChildNodeId;
-	private String shortDescription;
-	private String fullText;
+	
+	private Long id; //XXX Pode ser que use depois
+	private Long leftChildNodeId;
+    private Long rightChildNodeId;
+	private String shortNodeDescription;
+	private String fullNodeText;
 	private String nodeStatus;
 	
-	public NodeTO() {}
+
 	
-	public void setNodeId(int nodeId) {
-		this.nodeId = nodeId;
+	public String getShortNodeDescription() {
+		return shortNodeDescription;
+	}
+
+	public void setShortNodeDescription(String shortDescription) {
+		this.shortNodeDescription = shortDescription;
+	}
+
+	public String getFullNodeText() {
+		return fullNodeText;
 	}
 	
-	public void setLeftChildNodeId(int leftChildNodeId) {
-		this.leftChildNodeId = leftChildNodeId;
+	public void setFullNodeText(String fullText) {
+		this.fullNodeText = fullText;
 	}
-	
-	public void setRightChildNodeId(int rightChildNodeId) {
-		this.rightChildNodeId = rightChildNodeId;
+
+	public String getNodeStatus() {
+		return nodeStatus;
 	}
-	
-	public void setShortDescription(String shortDescription) {
-		this.shortDescription = shortDescription;
-	}
-	
-	public void setFullText(String fullText) {
-		this.fullText = fullText;
-	}
-	
+
 	public void setNodeStatus(String nodeStatus) {
 		this.nodeStatus = nodeStatus;
 	}
-	
-	public int getNodeId() {
-		return this.nodeId;
+
+	public Long getRightChildNodeId() {
+		return rightChildNodeId;
 	}
-	
-	public int getLeftChildNodeId() {
-		return this.leftChildNodeId;
+
+	public void setRightChildNodeId(Long rightChildNodeId) {
+		this.rightChildNodeId = rightChildNodeId;
 	}
-	
-	public int getRightChildNodeId() {
-		return this.rightChildNodeId;
+
+	public Long getLeftChildNodeId() {
+		return leftChildNodeId;
 	}
-	
-	public String getShortDescription() {
-		return this.shortDescription;
+
+	public void setLeftChildNodeId(Long leftChildNodeId) {
+		this.leftChildNodeId = leftChildNodeId;
 	}
-	
-	public String getFullText() {
-		return this.fullText;
+
+	public Long getId() {
+		return id;
 	}
-	
-	public String getNodeStatus() {
-		return this.nodeStatus;
-	}
-	
-	@Override
-	public String toString() {
-		return "Description: " + this.shortDescription +
-				" NodeId: " + this.nodeId;
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

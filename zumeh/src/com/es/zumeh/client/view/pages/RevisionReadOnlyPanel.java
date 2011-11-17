@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.WorkTO;
+import com.es.zumeh.client.view.pages.work.WorkReadOnlyPanel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;

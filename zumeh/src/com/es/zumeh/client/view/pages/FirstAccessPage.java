@@ -148,7 +148,8 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		Image image_2 = new Image("images/sheldon.jpg");
 		absolutePanel_3.add(image_2, 599, 7);
 		image_2.setSize("121px", "164px");
-		Label lblWelcome = new Label("Welcome,  you're in your first access in Zumeh's site. We need to collect some informations about you to complete your account.");
+		Label lblWelcome = new Label("Welcome,  you're in your first access in Zumeh's site." +
+				" We need to collect some informations about you to complete your account.");
 		absolutePanel_3.add(lblWelcome, 10, 7);
 		lblWelcome.setSize("583px", "41px");
 		

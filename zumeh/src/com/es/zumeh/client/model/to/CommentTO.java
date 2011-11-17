@@ -5,24 +5,25 @@ import java.io.Serializable;
 public class CommentTO implements Serializable {
 	
 	private static final long serialVersionUID = -5497792772421045048L;
-	private String comment;
-	private int commentId;
-	private int revisionId;
+	
+	private String commentText;
+	private Long commentId;
+	private Long revisionId;
 	private String owner;
 	
-	public void setRevisionId(int revisionId) {
+	public void setRevisionId(Long revisionId) {
 		this.revisionId = revisionId;
 	}
 	
-	public int getRevisionId() {
+	public Long getRevisionId() {
 		return this.revisionId;
 	}
 	
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setCommentText(String comment) {
+		this.commentText = comment;
 	}
 	
-	public void setCommentId(int commentId) {
+	public void setCommentId(Long commentId) {
 		this.commentId = commentId;
 	}
 	
@@ -30,11 +31,11 @@ public class CommentTO implements Serializable {
 		this.owner = owner;
 	}
 	
-	public String getComment() {
-		return this.comment;
+	public String getCommentText() {
+		return this.commentText;
 	}
 	
-	public int getCommentId() {
+	public Long getCommentId() {
 		return this.commentId;
 	}
 	
@@ -44,6 +45,6 @@ public class CommentTO implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Comment: " + this.comment + " CommentId: " + this.commentId;
+		return "Comment: " + this.commentText + " CommentId: " + this.commentId;
 	}
 }

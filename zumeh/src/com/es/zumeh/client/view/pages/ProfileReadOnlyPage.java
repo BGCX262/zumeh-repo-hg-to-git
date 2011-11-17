@@ -1,5 +1,12 @@
 package com.es.zumeh.client.view.pages;
 
+import gwtupload.client.IUploadStatus.Status;
+import gwtupload.client.IUploader;
+import gwtupload.client.IUploader.UploadedInfo;
+import gwtupload.client.MultiUploader;
+import gwtupload.client.PreloadedImage;
+import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
+
 import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.to.UserTO;
 import com.google.gwt.core.client.EntryPoint;
@@ -13,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -33,11 +41,15 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 	
 	private ClientSessionManager clientSessionManger;
 	
-	private RootPanel rootPanel = RootPanel.get("nameFieldContainer");
+	//private RootPanel rootPanel = RootPanel.get("nameFieldContainer");
 	
 	private AbsolutePanel absolutePanel;
 	
 	private boolean isVisitor;
+	
+	FlowPanel panelImages;
+	
+	RootPanel rootPanel = RootPanel.get("nameFieldContainer");
 
 	public ProfileReadOnlyPage(ClientSessionManager clienteSessionManger) {
 		setClientSessionManger(clienteSessionManger);
@@ -53,8 +65,16 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		
 		final Label errorLabel = new Label();
 		
+		final MultiUploader defaultUploader = new MultiUploader();
+		
+		panelImages = new FlowPanel();
+		
+		defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+		
 		rootPanel.setSize("640", "480");
+		
 		RootPanel.get("errorLabelContainer").add(errorLabel);
+		
 		rootPanel.setStyleName("body");
 		
 		AbsolutePanel absoluteRootPanel = createAbsolutePanel();
@@ -95,7 +115,36 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		loadHomeButton(absoluteRootPanel);
 		
 		loadSignOutHyperLink();
+		
+		
 	}
+	
+	// Load the image in the document and in the case of success attach it to the viewer
+	  private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
+	    public void onFinish(IUploader uploader) {
+	      if (uploader.getStatus() == Status.SUCCESS) {
+
+	        new PreloadedImage(uploader.fileUrl(), showImage);
+	        
+	        // The server sends useful information to the client by default
+	        UploadedInfo info = uploader.getServerInfo();
+	        System.out.println("File name " + info.name);
+	        System.out.println("File content-type " + info.ctype);
+	        System.out.println("File size " + info.size);
+
+	        // You can send any customized message and parse it 
+	        System.out.println("Server message " + info.message);
+	      }
+	    }
+	  };
+	  
+	  // Attach an image to the pictures viewer
+	  private OnLoadPreloadedImageHandler showImage = new OnLoadPreloadedImageHandler() {
+	    public void onLoad(PreloadedImage image) {
+	      image.setWidth("75px");
+	      panelImages.add(image);
+	    }
+	  };
 
 	private AbsolutePanel createAbsolutePanel() {
 		AbsolutePanel absoluteRootPanel = new AbsolutePanel();
@@ -145,33 +194,33 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		return imageAbsolutePanel;
 	}
 	
-	private Widget createAboutUsLink() {
-		
-	    final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
-	    simplePopup.ensureDebugId("cwBasicPopup-simplePopup");
-	    simplePopup.setWidth("150px");
-	    simplePopup.setWidget(new HTML("Algumas coisas sobre o nosso projeto"));
-	    
-	    Anchor link = new Anchor("About Us");
-	    link.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-	            Widget source = (Widget) event.getSource();
-	            int left = source.getAbsoluteLeft() + 10;
-	            int top = source.getAbsoluteTop() - 100;
-	            simplePopup.setPopupPosition(left, top);
-	            
-	            simplePopup.show();
-				
-			}
-		});
-	    VerticalPanel vPanel = new VerticalPanel();
-	    vPanel.setSpacing(5);
-	    vPanel.add(link);
-
-	    return vPanel;
-	}
+//	private Widget createAboutUsLink() {
+//		
+//	    final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
+//	    simplePopup.ensureDebugId("cwBasicPopup-simplePopup");
+//	    simplePopup.setWidth("150px");
+//	    simplePopup.setWidget(new HTML("Algumas coisas sobre o nosso projeto"));
+//	    
+//	    Anchor link = new Anchor("About Us");
+//	    link.addClickHandler(new ClickHandler() {
+//			
+//			@Override
+//			public void onClick(ClickEvent event) {
+//	            Widget source = (Widget) event.getSource();
+//	            int left = source.getAbsoluteLeft() + 10;
+//	            int top = source.getAbsoluteTop() - 100;
+//	            simplePopup.setPopupPosition(left, top);
+//	            
+//	            simplePopup.show();
+//				
+//			}
+//		});
+//	    VerticalPanel vPanel = new VerticalPanel();
+//	    vPanel.setSpacing(5);
+//	    vPanel.add(link);
+//
+//	    return vPanel;
+//	}
 
 	private AbsolutePanel createAbsolutePanel2(AbsolutePanel absoluteRootPanel) {
 		AbsolutePanel absolutePanel_2 = new AbsolutePanel();
@@ -247,8 +296,16 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		Label lblLocation = new Label("Location: " + user.getLocation());
 		descriptionAbsolutePanel.add(lblLocation, 10, 117);
 		
-		Label birthLabel = new Label("Birthday: " + user.getBirthday());
-		descriptionAbsolutePanel.add(birthLabel, 10, 137);
+		if (isValidBirthday(user.getBirthday())) {
+		
+			Label birthLabel = new Label("Birthday: " + user.getBirthday());
+			descriptionAbsolutePanel.add(birthLabel, 10, 137);
+		}
+	}
+	
+	private boolean isValidBirthday(String birthday) {
+		return (birthday != null &&
+				!birthday.equals(""));
 	}
 
 	private void loadInterestedAreasLabel(AbsolutePanel descriptionAbsolutePanel) {

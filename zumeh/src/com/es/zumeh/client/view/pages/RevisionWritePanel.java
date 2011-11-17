@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.WorkTO;
+import com.es.zumeh.client.view.pages.work.WorkWritePanel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -52,7 +53,7 @@ public class RevisionWritePanel extends AbsolutePanel {
 		add(hPanel, 0, 0);
 		
 		WorkTO tmpWorkTO = root.getWorkTO();
-		tmpWorkTO.setWorkId(workRevisions.size() + 1);
+		tmpWorkTO.setWorkId(workRevisions.size() + 1L);
 		workRevisions.add(tmpWorkTO);
 		goHeadRevision();
 	}
@@ -131,7 +132,7 @@ public class RevisionWritePanel extends AbsolutePanel {
 		public void onClick(ClickEvent event) {
 			System.out.println("====================");
 			WorkTO tmpWorkTO = root.getWorkTO();
-			tmpWorkTO.setWorkId(workRevisions.size() + 1);
+			tmpWorkTO.setWorkId(workRevisions.size() + 1L);
 			System.out.println(tmpWorkTO);
 			workRevisions.add(tmpWorkTO);
 			goHeadRevision();
@@ -195,7 +196,7 @@ public class RevisionWritePanel extends AbsolutePanel {
 		public void onClick(ClickEvent event) {
 			System.out.println("Save Handler");
 			System.out.println("-------------------------");
-			System.out.println("Save Handler: " + root.getWorkById(3));
+			System.out.println("Save Handler: " + root.getWorkById(3L));
 			System.out.println("-------------------------");
 		}
 	};

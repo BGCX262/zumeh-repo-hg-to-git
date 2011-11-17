@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.es.zumeh.client.model.to.CommentTO;
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
+import com.es.zumeh.client.view.pages.work.WorkPage;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -52,10 +51,10 @@ public class CommentPanel extends ScrollPanel {
 	
 	private void addComment(String comment) {
 		CommentTO newComment = new CommentTO();
-		newComment.setComment(comment);
-		newComment.setCommentId(comments.size());
+		newComment.setCommentText(comment);
+		newComment.setCommentId((long) comments.size());
 		newComment.setOwer("Sheldon"); // TODO it got to be actual user name
-		newComment.setRevisionId(this.workPage.getRevisionTO().getRevisionId());
+		newComment.setRevisionId((long) this.workPage.getRevisionTO().getRevisionId()); //TIRAR ISSO AQUI
 		comments.add(newComment);
 		refreshCommentPanel();
 	}
@@ -107,7 +106,7 @@ public class CommentPanel extends ScrollPanel {
 			Image commentOwnerPicture = getCommentOwnerPicture();
 			Hyperlink hprlnkWork = new Hyperlink(tmpComment.getOwer(), false, "profile");
 			
-			Label label2 = new Label(tmpComment.getComment());
+			Label label2 = new Label(tmpComment.getCommentText());
 			AbsolutePanel textPanel = getTextPanel();
 			
 			commentPanel.add(commentOwnerPicture);

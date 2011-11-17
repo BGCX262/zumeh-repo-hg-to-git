@@ -23,59 +23,68 @@ import java.util.logging.Logger;
 
 /**
  * Assorted utility methods.
+ * 
  * @author Will Norris
  * @author Jenny Murphy
  */
 public class ConfigHelper {
-  private static final Logger log = Logger.getLogger(ConfigHelper.class.getName());
-  private static final String CONFIG_PROPERTIES = "config.properties";
-  public static final Properties config = getConfig();
+	private static final Logger log = Logger.getLogger(ConfigHelper.class
+			.getName());
+	private static final String CONFIG_PROPERTIES = "config.properties";
+	public static final Properties config = getConfig();
 
-  // OAuth client ID
-  public static String CLIENT_ID = ConfigHelper.getProperty("oauth_client_id");
+	// OAuth client ID
+	public static String CLIENT_ID = ConfigHelper
+			.getProperty("oauth_client_id");
 
-  // OAuth client secret
-  public static String CLIENT_SECRET = ConfigHelper.getProperty("oauth_client_secret");
+	// OAuth client secret
+	public static String CLIENT_SECRET = ConfigHelper
+			.getProperty("oauth_client_secret");
 
-  // OAuth client secret
-  public static String GOOGLE_API_KEY = ConfigHelper.getProperty("google_api_key");
+	// OAuth client secret
+	public static String GOOGLE_API_KEY = ConfigHelper
+			.getProperty("google_api_key");
 
-  // Space separated list of OAuth scopes
-  public static String SCOPES = ConfigHelper.getProperty("oauth_scopes");
+	// Space separated list of OAuth scopes
+	public static String SCOPES = ConfigHelper.getProperty("oauth_scopes");
 
-  // OAuth redirect URI
-  public static String REDIRECT_URI = ConfigHelper.getProperty("oauth_redirect_uri");
+	// OAuth redirect URI
+	public static String REDIRECT_URI = ConfigHelper
+			.getProperty("oauth_redirect_uri");
 
+	/**
+	 * Load the configuration file for this application.
+	 * 
+	 * @return application configuration properties
+	 */
+	private static Properties getConfig() {
+		Properties config = new Properties();
+		try {
+			InputStream input = new FileInputStream(new File(CONFIG_PROPERTIES));
+			config.load(input);
+		} catch (IOException e) {
+			throw new RuntimeException("Unable to load config file: "
+					+ CONFIG_PROPERTIES);
+		}
+		return config;
+	}
 
-  /**
-   * Load the configuration file for this application.
-   *
-   * @return application configuration properties
-   */
-  private static Properties getConfig() {
-    Properties config = new Properties();
-    try {
-      InputStream input = new FileInputStream(new File(CONFIG_PROPERTIES));
-      config.load(input);
-    } catch (IOException e) {
-      throw new RuntimeException("Unable to load config file: " + CONFIG_PROPERTIES);
-    }
-    return config;
-  }
-
-  /**
-   * A simple static helper method that fetches a configuration
-   *
-   * @param key The name of the property for which you would like the configured
-   *            value
-   * @return A String representation of the configured property value
-   * @throws RuntimeException if request property can not be found
-   */
-  public static String getProperty(String key) {
-    if (!config.containsKey(key) || config.getProperty(key).trim().isEmpty()) {
-      log.severe("Could not find property " + key);
-      throw new RuntimeException("Could not find property " + key);
-    }
-    return config.getProperty(key).trim();
-  }
+	/**
+	 * A simple static helper method that fetches a configuration
+	 * 
+	 * @param key
+	 *            The name of the property for which you would like the
+	 *            configured value
+	 * @return A String representation of the configured property value
+	 * @throws RuntimeException
+	 *             if request property can not be found
+	 */
+	public static String getProperty(String key) {
+		if (!config.containsKey(key)
+				|| config.getProperty(key).trim().isEmpty()) {
+			log.severe("Could not find property " + key);
+			throw new RuntimeException("Could not find property " + key);
+		}
+		return config.getProperty(key).trim();
+	}
 }

@@ -1,17 +1,16 @@
 package com.es.zumeh.client.model.to;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 public class RevisionTO implements Serializable {
 	
 	private static final long serialVersionUID = 8424271182195040573L;
+	
 	private LinkedList<WorkTO> workTOList = new LinkedList<WorkTO>();
-	private int revisionId = 0;
-	private String fullDescriptionText;
-	private String shortDescriptionText;
+	private Long revisionId = 0L;
+	private String fullDescriptionRevisionText;
+	private String shortDescriptionRevisionText;
 	
 	public RevisionTO(){}
 	
@@ -37,34 +36,34 @@ public class RevisionTO implements Serializable {
 		return this.workTOList;
 	}
 	
-	public void setRevisionId(int revisionId) {
+	public void setRevisionId(Long revisionId) {
 		this.revisionId = revisionId;
 	}
 	
-	public int getRevisionId() {
+	public Long getRevisionId() {
 		return this.revisionId;
 	}
 	
 	public String getFullDescriptionText() {
-		if(this.fullDescriptionText == null) {
+		if(this.fullDescriptionRevisionText == null) {
 			return "Full Description Text Default";
 		}
-		return this.fullDescriptionText;
+		return this.fullDescriptionRevisionText;
 	}
 	
 	public void setFullDescriptionText(String fullDescriptionText) {
-		this.fullDescriptionText = fullDescriptionText;
+		this.fullDescriptionRevisionText = fullDescriptionText;
 	}
 	
 	public String getShortDescriptionText() {
-		if(this.shortDescriptionText == null) {
+		if(this.shortDescriptionRevisionText == null) {
 			return "Short Description Text Default";
 		}
-		return this.shortDescriptionText;
+		return this.shortDescriptionRevisionText;
 	}
 	
 	public void setShortDescriptionText(String shortDescriptionText) {
-		this.shortDescriptionText = shortDescriptionText;
+		this.shortDescriptionRevisionText = shortDescriptionText;
 	}
 	
 	@Override

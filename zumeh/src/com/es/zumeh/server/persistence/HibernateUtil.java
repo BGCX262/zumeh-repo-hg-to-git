@@ -24,6 +24,7 @@ public class HibernateUtil {
 			sessionFactory = configuration.configure(confXMLPath).buildSessionFactory();
 		} catch (Throwable ex) {
 			//logger.error(ex);
+			System.out.println("QUEBRANDO AQUI NO SETUP");
 			throw new ExceptionInInitializerError(ex);
 			//ex.printStackTrace();
 		}

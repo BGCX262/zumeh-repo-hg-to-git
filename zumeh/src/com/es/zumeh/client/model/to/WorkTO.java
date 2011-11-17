@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class WorkTO implements Serializable {
 	
 	private static final long serialVersionUID = 5271216718431571860L;
-	private int workId = 0;
+	private Long workId = 0L;
 	private ArrayList<NodeTO> nodeTOList = new ArrayList<NodeTO>();
 	
 	public void addNodeTO(NodeTO newNodeTO) {
@@ -17,20 +17,20 @@ public class WorkTO implements Serializable {
 		return this.nodeTOList;
 	}
 	
-	public NodeTO getNodeTOByNodeId(int nodeId) {
+	public NodeTO getNodeTOByNodeId(Long i) {
 		for(NodeTO tmpNodeTO : nodeTOList) {
-			if(tmpNodeTO.getNodeId() == nodeId) {
+			if(tmpNodeTO.getId() == i) {
 				return tmpNodeTO;
 			}
 		}
 		return null;
 	}
 	
-	public void setWorkId(int workId) {
+	public void setWorkId(Long workId) {
 		this.workId = workId;
 	}
 	
-	public int getWorkId() {
+	public Long getWorkId() {
 		return this.workId;
 	}
 	

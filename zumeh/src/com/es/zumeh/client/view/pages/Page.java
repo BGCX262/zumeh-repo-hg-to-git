@@ -3,12 +3,16 @@ package com.es.zumeh.client.view.pages;
 import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.facade.ZumehService;
 import com.es.zumeh.client.facade.ZumehServiceAsync;
+import com.es.zumeh.client.view.pages.work.WorkWritePage;
 import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Page extends Widget{
@@ -17,7 +21,8 @@ public class Page extends Widget{
 	protected final int WIDTH = getScreenWidth() - 400;
 	protected final int HEIGHT = getScreenHeight() - 400;
 	
-	RootPanel rootPanel = RootPanel.get("nameFieldContainer");
+	
+	protected RootPanel rootPanel = RootPanel.get("nameFieldContainer");
 	
 	public void loadSignOutHyperLink() {
 		Anchor signOutLink = new Anchor("sign out");
@@ -67,6 +72,34 @@ public class Page extends Widget{
 		rootPanel.clear();
 		WorkWritePage workPage = ScreenFactory.getInstance().getWorkPage(clientSessionManger);
 		workPage.onModuleLoad();
+	}
+	
+	public Widget createAboutUsLink() {
+
+		final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
+		simplePopup.ensureDebugId("cwBasicPopup-simplePopup");
+		simplePopup.setWidth("150px");
+		simplePopup.setWidget(new HTML("Algumas coisas sobre o nosso projeto"));
+
+		Anchor link = new Anchor("About Us");
+		link.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				Widget source = (Widget) event.getSource();
+				int left = source.getAbsoluteLeft() + 10;
+				int top = source.getAbsoluteTop() - 100;
+				simplePopup.setPopupPosition(left, top);
+
+				simplePopup.show();
+
+			}
+		});
+		VerticalPanel vPanel = new VerticalPanel();
+		vPanel.setSpacing(5);
+		vPanel.add(link);
+
+		return vPanel;
 	}
 	
 	/*

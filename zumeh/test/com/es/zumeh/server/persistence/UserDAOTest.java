@@ -2,19 +2,18 @@ package com.es.zumeh.server.persistence;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.util.List;
 
 import junit.framework.Assert;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 
 import com.es.zumeh.client.model.Password;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.server.model.DAOManager;
 import com.es.zumeh.server.model.persistence.User;
+import com.google.gwt.user.client.ui.Image;
 
 public class UserDAOTest {
 	
@@ -28,10 +27,10 @@ public class UserDAOTest {
 		daoManager = new DAOManager();
 	}
 	
-	@After
-	public void deleteAllFiles() {
-		daoManager.deleteAllUsers();
-	}
+//	@After
+//	public void deleteAllFiles() {
+//		daoManager.deleteAllUsers();
+//	}
 	
 	
 	
@@ -60,16 +59,26 @@ public class UserDAOTest {
 	}
 	
 	@Test
+	public void test_recovery_all_users() {
+		
+		UserTO[] users = daoManager.getUserDAO().getAllUsers();
+		
+		for (UserTO user : users) { 
+			System.out.println("\n" + user.getName() + " ----> " + user.getEmail());
+		}
+	}
+	
+	@Test
 	public void test_verify_user_by_attibutes() throws Exception {
 		addUser();
 		
-		User user = daoManager.getUser("teste");
+		User user = daoManager.getUser("abigaiul");
 		boolean checkPass = setPassword(user);
 		
-		Assert.assertEquals("teste", user.getLogin());
+		Assert.assertEquals("abigaiul", user.getLogin());
 		Assert.assertEquals("Pesqueira", user.getLocation());
 		Assert.assertEquals("27/12/1987", user.getBirthday());
-		Assert.assertEquals("tiagooleite@gmail.com", user.getEmail());
+		Assert.assertEquals("qualasasas@gmail.com", user.getEmail());
 		Assert.assertEquals("M", user.getGender());
 		Assert.assertEquals("qualquer area", user.getInterestedArea());
 		Assert.assertEquals("PESAO DA SILVA", user.getName());
@@ -100,10 +109,10 @@ public class UserDAOTest {
 
 	private boolean addUser() {
 		UserTO user = new UserTO();
-		user.setLogin("teste");
-		user.setPassword("leite2");
+		user.setLogin("tiaghsl");
+		user.setPassword("tiago");
 		user.setBirthday("27/12/1987");
-		user.setEmail("tiagooleite@gmail.com");
+		user.setEmail("sabadoqualquere@gmail.com");
 		user.setWhoAreYou("um cara MUITO DOIDO QUE GOSTA" +
 				" DE INSERIR COISAS MUITO GRANDES");
 		user.setGender("M");
@@ -150,6 +159,12 @@ public class UserDAOTest {
 		result = daoManager.addUser(user);
 		return result;
 	}
+	
+//	public static void main(String[] args) {
+//		Image im = new Image();
+//		im.g
+//		
+//	}
 	
 
 }

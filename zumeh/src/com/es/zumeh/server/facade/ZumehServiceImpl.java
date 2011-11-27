@@ -3,6 +3,7 @@ package com.es.zumeh.server.facade;
 import java.util.HashMap;
 
 import com.es.zumeh.client.facade.ZumehService;
+import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.server.model.GoogleUserInfo;
 import com.es.zumeh.server.model.SessionManager;
@@ -122,5 +123,21 @@ public class ZumehServiceImpl extends RemoteServiceServlet implements ZumehServi
 	public UserTO verifyUser(UserTO user) {
 		return getSessionManager().getDaoManager().verifyUserTO(user);
 		
+	}
+
+	@Override
+	public boolean addRevision(RevisionTO revisionTO) {
+		SessionManager.getInstance().getDaoManager().addRevision(revisionTO);
+		return false;
+	}
+
+	@Override
+	public RevisionTO[] getAllRevisionsByOwner(String ownerEmail) {
+		return SessionManager.getInstance().getDaoManager().getRevisionsByOwner(ownerEmail);
+	}
+
+	@Override
+	public boolean deleteRevision(RevisionTO revisionTO) {
+		return sessionManager.getDaoManager().deleteRevision(revisionTO);
 	}
 }

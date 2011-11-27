@@ -3,10 +3,12 @@ package com.es.zumeh.client.view.pages;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.to.CommentTO;
 import com.es.zumeh.client.view.pages.work.WorkPage;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -28,11 +30,13 @@ public class CommentPanel extends ScrollPanel {
 	private ArrayList<CommentTO> comments = new ArrayList<CommentTO>();
 	private VerticalPanel commentsPanel = new VerticalPanel();
 	private WorkPage workPage;
+	private ClientSessionManager clientSessionManger;
 
-	public CommentPanel(WorkPage workPage) {
+	public CommentPanel(WorkPage workPage, ClientSessionManager clientSessionManger) {
 		setSize(WIDTH+"px", HEIGHT+"px");
 		//getElement().getStyle().setBackgroundColor(BACKGROUND_COLOR);
 		this.workPage = workPage;
+		this.clientSessionManger = clientSessionManger;
 		
 		add(commentsPanel);
 		
@@ -53,10 +57,27 @@ public class CommentPanel extends ScrollPanel {
 		CommentTO newComment = new CommentTO();
 		newComment.setCommentText(comment);
 		newComment.setCommentId((long) comments.size());
-		newComment.setOwer("Sheldon"); // TODO it got to be actual user name
-		newComment.setRevisionId((long) this.workPage.getRevisionTO().getRevisionId()); //TIRAR ISSO AQUI
+		newComment.setOwner(clientSessionManger.getUserOwner().getName()); // TODO it got to be actual user name
+		newComment.setRevisionId((Long) this.workPage.getRevisionTO().getRevisionId()); //TIRAR ISSO AQUI
 		comments.add(newComment);
 		refreshCommentPanel();
+		
+		workPage.getRevisionTO().setComments(comments);
+		
+		workPage.zumehService.addRevision(workPage.getRevisionTO(), new AsyncCallback<Boolean>() {
+			
+			@Override
+			public void onSuccess(Boolean result) {
+				System.out.println("SALVOU O COMMENT ======> " + result);
+				
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	
@@ -78,10 +99,6 @@ public class CommentPanel extends ScrollPanel {
 	
 	private AbsolutePanel getTextPanel() {
 		AbsolutePanel textPanel = new AbsolutePanel();
-		//textPanel.getElement().getStyle().setBackgroundColor("#FF0000");
-		//textPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-		//textPanel.getElement().getStyle().setBorderColor("#000000");
-		//textPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 		textPanel.setHeight("80px");
 		textPanel.setWidth("250px");
 		return textPanel;
@@ -104,7 +121,7 @@ public class CommentPanel extends ScrollPanel {
 			VerticalPanel commentPanelText = new VerticalPanel();
 			CommentTO tmpComment = itComments.next();
 			Image commentOwnerPicture = getCommentOwnerPicture();
-			Hyperlink hprlnkWork = new Hyperlink(tmpComment.getOwer(), false, "profile");
+			Hyperlink hprlnkWork = new Hyperlink(tmpComment.getOwner(), false, "profile");
 			
 			Label label2 = new Label(tmpComment.getCommentText());
 			AbsolutePanel textPanel = getTextPanel();

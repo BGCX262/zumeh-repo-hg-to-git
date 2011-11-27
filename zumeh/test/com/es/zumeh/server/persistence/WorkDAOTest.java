@@ -1,11 +1,12 @@
 package com.es.zumeh.server.persistence;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.es.zumeh.client.model.to.NodeTO;
+import com.es.zumeh.client.model.to.WorkTO;
 import com.es.zumeh.server.model.DAOManager;
 import com.es.zumeh.server.model.persistence.Work;
 
@@ -17,6 +18,7 @@ public class WorkDAOTest {
 	@Before
 	public void setUp() {
 		daoManager = new DAOManager();
+		
 	}
 	
 	@Test
@@ -33,14 +35,22 @@ public class WorkDAOTest {
 
 	private void createWork() {
 		work = new Work();
-		ArrayList<NodeTO> nodeTOList = new ArrayList<NodeTO>();
-		NodeTO no = new NodeTO();
-		no.setFullNodeText("Coisas aqui no full");
-		no.setId(2L);
-		no.setNodeStatus("Status");
-		no.setShortNodeDescription("short");
-		nodeTOList.add(no);
-		work.setNodeTOList(nodeTOList );
+		LinkedList<NodeTO> nodeTOList = new LinkedList<NodeTO>();
+		NodeTO node = new NodeTO();
+	    node.setId(2L);
+		node.setNodeStatus("status");
+		node.setShortNodeDescription("desc");
+//		LinkedList<NodeTO> nodeTOList = new LinkedList<NodeTO>();
+		
+		nodeTOList.add(node);
+//		
+//		NodeTO no = new NodeTO();
+//		no.setFullNodeText("Coisas aqui no full");
+//		no.setNodeStatus("Status");
+//		no.setShortNodeDescription("short");
+//		nodeTOList.add(no);
+//		
+		work.setNodes(nodeTOList);
 	}
 
 }

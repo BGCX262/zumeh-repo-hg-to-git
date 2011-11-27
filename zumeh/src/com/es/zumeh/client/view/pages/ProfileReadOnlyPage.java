@@ -8,6 +8,7 @@ import gwtupload.client.PreloadedImage;
 import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
 
 import com.es.zumeh.client.control.ClientSessionManager;
+import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.UserTO;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
@@ -19,7 +20,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -39,7 +39,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ProfileReadOnlyPage extends Page implements EntryPoint {
 	
-	private ClientSessionManager clientSessionManger;
+	private ClientSessionManager clientSessionManager;
 	
 	//private RootPanel rootPanel = RootPanel.get("nameFieldContainer");
 	
@@ -79,6 +79,8 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		
 		AbsolutePanel absoluteRootPanel = createAbsolutePanel();
 		
+		loadCreateRevisionButton(absoluteRootPanel);
+		
 		AbsolutePanel imageAbsolutePanel = createImageAbsolutePanel(absoluteRootPanel);
 		
 		loadImage(imageAbsolutePanel);
@@ -103,10 +105,10 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		AbsolutePanel absolutePanel_3 = createAbsolutePanel3(absolutePanel_1);
 		
 		loadHyperlinkWorker1(absolutePanel_3);
-		
-		loadHyperlinkWorker2(absolutePanel_3);
-		
-		loadHyperlinkWorker3(absolutePanel_3);
+//		
+//		loadHyperlinkWorker2(absolutePanel_3);
+//		
+//		loadHyperlinkWorker3(absolutePanel_3);
 		
 		AbsolutePanel absolutePanel_2 = createAbsolutePanel2(absoluteRootPanel);
 		
@@ -117,6 +119,22 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		loadSignOutHyperLink();
 		
 		
+	}
+
+	private void loadCreateRevisionButton(AbsolutePanel absoluteRootPanel) {
+		PushButton pushButtonCreateRevision = new PushButton("Create Revision");
+		absoluteRootPanel.add(pushButtonCreateRevision, 183, 11);
+		
+		pushButtonCreateRevision.addClickHandler(pushButtonClickHandler());
+	}
+
+	private ClickHandler pushButtonClickHandler() {
+		return new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				loadWorkPage(clientSessionManager, new RevisionTO());
+			}
+		};
 	}
 	
 	// Load the image in the document and in the case of success attach it to the viewer
@@ -239,17 +257,63 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		absolutePanel_3.add(hprlnkWorker_1, 0, 34);
 	}
 
-	private void loadHyperlinkWorker1(AbsolutePanel absolutePanel_3) {
-		Anchor workerx = new Anchor("Worker 1");
-		absolutePanel_3.add(workerx, 0, 10);
+	private void loadHyperlinkWorker1(AbsolutePanel absolutePanel_3) { //TODO TO AQUI
 		
-		workerx.addClickHandler(new ClickHandler() {
+		VerticalPanel verticalPanelWorkLinks = new VerticalPanel();
+		absolutePanel_3.add(verticalPanelWorkLinks);
+		verticalPanelWorkLinks.setWidth("158px");
+		
+		if (isVisitor) {
+			zumehService.getAllRevisionsByOwner(clientSessionManager.
+					getUserFriend().getEmail(),
+					createGetRevisionsAsyncCallback(verticalPanelWorkLinks));
+		} else {
+		
+			zumehService.getAllRevisionsByOwner(clientSessionManager.
+					getUserOwner().getEmail(),
+					createGetRevisionsAsyncCallback(verticalPanelWorkLinks));
+		}
+	}
+
+	private AsyncCallback<RevisionTO[]> createGetRevisionsAsyncCallback(
+			final VerticalPanel verticalPanelWorkLinks) {
+		return new AsyncCallback<RevisionTO[]>() {
 			
 			@Override
-			public void onClick(ClickEvent event) {
-				loadWorkPage(clientSessionManger);
+			public void onSuccess(RevisionTO[] result) {
+				for (int i = 0; i < result.length; i++) {
+					createAnchor(result[i], verticalPanelWorkLinks);
+				}
 			}
-		});
+			
+			private void createAnchor(RevisionTO revisionTO,
+					VerticalPanel verticalPanelWorkLinks) {
+				Anchor anchor = new Anchor(revisionTO.getShortDescriptionText());
+				verticalPanelWorkLinks.setSpacing(10);
+				verticalPanelWorkLinks.add(anchor);
+				
+				anchor.addClickHandler(createAnchorClickHandler(revisionTO));
+			}
+
+			private ClickHandler createAnchorClickHandler(final RevisionTO revisionTO) {
+				return new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						if (isVisitor) {
+							loadWorkReadOnlyPage(clientSessionManager, revisionTO);
+						} else {
+							loadWorkPage(clientSessionManager, revisionTO);
+						}
+					}
+				};
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				//TODO ADD logg
+			}
+		};
 	}
 
 	private AbsolutePanel createAbsolutePanel3(AbsolutePanel absolutePanel_1) {
@@ -435,8 +499,8 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 			contactLink.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
 					boolean isVisitor = true;
-					clientSessionManger.setUserFriend(actualUser);
-					loadFriendsProfile(clientSessionManger, isVisitor);
+					clientSessionManager.setUserFriend(actualUser);
+					loadFriendsProfile(clientSessionManager, isVisitor);
 				}
 			});
 		}
@@ -452,11 +516,11 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 	}
 
 	public ClientSessionManager getClientSessionManger() {
-		return clientSessionManger;
+		return clientSessionManager;
 	}
 
 	public void setClientSessionManger(ClientSessionManager clientSessionManger) {
-		this.clientSessionManger = clientSessionManger;
+		this.clientSessionManager = clientSessionManger;
 	}
 	
 	public AbsolutePanel getAbsolutePanel() {

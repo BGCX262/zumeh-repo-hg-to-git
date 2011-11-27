@@ -1,18 +1,24 @@
 package com.es.zumeh.client.model.to;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class RevisionTO implements Serializable {
 	
 	private static final long serialVersionUID = 8424271182195040573L;
 	
-	private LinkedList<WorkTO> workTOList = new LinkedList<WorkTO>();
+	private LinkedList<WorkTO> workTOList;
 	private Long revisionId = 0L;
 	private String fullDescriptionRevisionText;
 	private String shortDescriptionRevisionText;
+	private ArrayList<CommentTO> comments;
+	private String revisonOwner;
 	
-	public RevisionTO(){}
+	public RevisionTO(){
+		workTOList = new LinkedList<WorkTO>();
+		comments = new ArrayList<CommentTO>();
+	}
 	
 	public void addWork(WorkTO workTO) {
 		this.workTOList.add(workTO);
@@ -28,11 +34,11 @@ public class RevisionTO implements Serializable {
 		return null;
 	}
 	
-	public void setWorkTOList(LinkedList<WorkTO> workTOList) {
+	public void setWorks(LinkedList<WorkTO> workTOList) {
 		this.workTOList = workTOList;
 	}
 	
-	public LinkedList<WorkTO> getTOWorks() {
+	public LinkedList<WorkTO> getWorks() {
 		return this.workTOList;
 	}
 	
@@ -70,5 +76,25 @@ public class RevisionTO implements Serializable {
 	public String toString() {
 		return "Size: " + this.workTOList +
 				" RevisionId: " + this.revisionId;
+	}
+
+	public ArrayList<CommentTO> getComments() {
+		return comments;
+	}
+
+	public void setComments(ArrayList<CommentTO> comments) {
+		this.comments = comments;
+	}
+
+	public String getRevisonOwner() {
+		return revisonOwner;
+	}
+
+	public void setRevisionOwner(String revisonOwner) {
+		this.revisonOwner = revisonOwner;
+	}
+
+	public void addCommentTO(CommentTO newComment) {
+		this.comments.add(newComment);
 	}
 }

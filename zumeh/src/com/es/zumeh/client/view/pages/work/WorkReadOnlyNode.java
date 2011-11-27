@@ -52,7 +52,8 @@ public class WorkReadOnlyNode extends Ellipse {
 	private String fullText;
 	private String nodeStatus;
 
-	public WorkReadOnlyNode(WorkReadOnlyNode nodeParent, DrawingArea workArea, AbsolutePanel absolutePanel) {
+	public WorkReadOnlyNode(WorkReadOnlyNode nodeParent,
+			DrawingArea workArea, AbsolutePanel absolutePanel) {
 		super(10, 10, RADIUS_X, RADIUS_Y);
 		configNode(nodeParent, workArea);
 		this.nodeParent = nodeParent;

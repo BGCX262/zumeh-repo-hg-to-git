@@ -1,6 +1,7 @@
 package com.es.zumeh.server.model;
 
 import com.es.zumeh.client.model.to.NodeTO;
+import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.server.model.persistence.Comment;
 import com.es.zumeh.server.model.persistence.Node;
@@ -30,7 +31,8 @@ public class DAOManager {
 		userDAO = new UserDAO();
 		nodeDAO = new NodeDAO();
 		revisionDAO = new RevisionDAO();
-		setWorkDAO(new WorkDAO());
+		workDAO = new WorkDAO();
+		//setWorkDAO(new WorkDAO());
 		setCommentDAO(new CommentDAO());
 		
 	}
@@ -48,6 +50,20 @@ public class DAOManager {
 		}
 		
 		return addUser; 
+	}
+	
+	public RevisionTO[] getRevisionsByOwner(String owner) {
+		RevisionTO[] allRevisionsByOwner = {};
+		try {
+			allRevisionsByOwner = getRevisionDAO().getAllRevisionsTOByOwner(owner);
+		} catch (Exception e) {
+			e.printStackTrace();
+			HibernateUtil.rollbackAndCloseSession();
+		} finally {
+			HibernateUtil.closeSession();
+		}
+		
+		return allRevisionsByOwner; 
 	}
 	
 	public void addNodeTO(NodeTO node) {
@@ -86,9 +102,9 @@ public class DAOManager {
 		
 	}
 	
-	public void addRevision(Revision revision) {
+	public void addRevision(RevisionTO revisionTO) {
 		try {
-			revisionDAO.save(revision);
+			getRevisionDAO().saveRevision(revisionTO);
 		} catch (Exception e) {
 			e.printStackTrace();
 			HibernateUtil.rollbackAndCloseSession();
@@ -178,6 +194,18 @@ public class DAOManager {
 
 	public void setWorkDAO(WorkDAO workDAO) {
 		this.workDAO = workDAO;
+	}
+
+	public boolean deleteRevision(RevisionTO revision) {
+		try {
+			return getRevisionDAO().delete(revision.getRevisionId());
+		} catch (Exception e) {
+			e.printStackTrace();
+			HibernateUtil.rollbackAndCloseSession();
+		} finally {
+			HibernateUtil.closeSession();
+		}
+		return false;
 	}
 
 

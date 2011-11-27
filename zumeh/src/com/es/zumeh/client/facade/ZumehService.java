@@ -2,6 +2,7 @@ package com.es.zumeh.client.facade;
 
 import java.util.HashMap;
 
+import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.UserTO;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -11,9 +12,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("zumeh")
 public interface ZumehService extends RemoteService {
-	@Deprecated
-	String greetServer(String name) throws IllegalArgumentException;
-	
 	String getUserName(String token) throws IllegalArgumentException;
 	String getUserEmail(String token) throws IllegalArgumentException;
 	void openSession(String token) throws IllegalArgumentException;
@@ -30,4 +28,10 @@ public interface ZumehService extends RemoteService {
 	UserTO[] getUserList();
 
 	UserTO verifyUser(UserTO user);
+
+	boolean addRevision(RevisionTO revisionTO);
+
+	RevisionTO[] getAllRevisionsByOwner(String email);
+
+	boolean deleteRevision(RevisionTO revisionTO);
 }

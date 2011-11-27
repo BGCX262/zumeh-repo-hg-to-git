@@ -1,19 +1,19 @@
 package com.es.zumeh.client.model.to;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class WorkTO implements Serializable {
 	
 	private static final long serialVersionUID = 5271216718431571860L;
 	private Long workId = 0L;
-	private ArrayList<NodeTO> nodeTOList = new ArrayList<NodeTO>();
+	private LinkedList<NodeTO> nodeTOList = new LinkedList<NodeTO>();
 	
 	public void addNodeTO(NodeTO newNodeTO) {
 		this.nodeTOList.add(newNodeTO);
 	}
 	
-	public ArrayList<NodeTO> getTONodes() {
+	public LinkedList<NodeTO> getNodes() {
 		return this.nodeTOList;
 	}
 	

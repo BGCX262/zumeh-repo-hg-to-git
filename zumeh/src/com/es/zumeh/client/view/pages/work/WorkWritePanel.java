@@ -1,7 +1,10 @@
 package com.es.zumeh.client.view.pages.work;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
+import org.vaadin.gwtgraphics.client.DrawingArea;
+
+import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.to.NodeTO;
 import com.es.zumeh.client.model.to.WorkTO;
 import com.google.gwt.dom.client.Style.BorderStyle;
@@ -9,8 +12,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-
-import org.vaadin.gwtgraphics.client.DrawingArea;
 
 public class WorkWritePanel extends AbsolutePanel {
 	private String BACKGROUND_COLOR = "#CCCCCC";
@@ -112,7 +113,8 @@ public class WorkWritePanel extends AbsolutePanel {
 	}
 	
 	public void setWorkFromWorkTO(WorkTO workTO) {
-		ArrayList<NodeTO> tmpWorkTO = workTO.getTONodes();
+		System.out.println("WORK TO: " + workTO);
+		LinkedList<NodeTO> tmpWorkTO = workTO.getNodes();
 		NodeTO rootNodeTO = workTO.getNodeTOByNodeId(1L);
 		
 		System.out.println("WorkTO: " + workTO);

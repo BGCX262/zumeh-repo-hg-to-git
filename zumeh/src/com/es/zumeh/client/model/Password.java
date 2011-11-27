@@ -155,13 +155,4 @@ public class Password {
 		return password;
 	}
 	
-	public static void main(String[] args) throws Exception {
-		Password pass = new Password();
-		pass.setPassword("tiago11");
-		
-		System.out.println(pass.encrypt("tiago"));
-		System.out.println(pass.encrypt("tiago11"));
-		
-		System.out.println(pass.checkPasswords("tiago11"));
-	}
 }

@@ -31,7 +31,7 @@ public class CommentDAOTest {
 	private void createComment() {
 		comment = new Comment();
 		comment.setCommentText("Texto do comentario");
-		comment.setOwer("Tiago Leite");
+		comment.setOwner("Tiago Leite");
 		comment.setRevisionId(2L);
 	}
 

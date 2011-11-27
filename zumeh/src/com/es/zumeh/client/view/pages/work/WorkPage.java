@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import com.es.zumeh.client.model.to.CommentTO;
 import com.es.zumeh.client.model.to.RevisionTO;
+import com.es.zumeh.client.view.pages.Page;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public abstract class WorkPage implements EntryPoint {
+public abstract class WorkPage extends Page implements EntryPoint {
+	
 	final VerticalPanel verticalWorkPanel = new VerticalPanel();
 	private RevisionTO revisionTO = new RevisionTO();
 	private ArrayList<CommentTO> commentsTO = new ArrayList<CommentTO>();

@@ -44,11 +44,11 @@ public class Comment implements Serializable {
 	}
 
 	@Column(nullable = false)
-	public String getOwer() {
+	public String getOwner() {
 		return this.owner;
 	}
 
-	public void setOwer(String owner) {
+	public void setOwner(String owner) {
 		this.owner = owner;
 	}
 	

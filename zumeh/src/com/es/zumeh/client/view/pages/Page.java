@@ -3,6 +3,8 @@ package com.es.zumeh.client.view.pages;
 import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.facade.ZumehService;
 import com.es.zumeh.client.facade.ZumehServiceAsync;
+import com.es.zumeh.client.model.to.RevisionTO;
+import com.es.zumeh.client.view.pages.work.WorkReadOnlyPage;
 import com.es.zumeh.client.view.pages.work.WorkWritePage;
 import com.es.zumeh.client.view.screenfactory.ScreenFactory;
 import com.google.gwt.core.client.GWT;
@@ -18,6 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class Page extends Widget{
 	
 	public final ZumehServiceAsync zumehService = GWT.create(ZumehService.class);
+	
 	protected final int WIDTH = getScreenWidth() - 400;
 	protected final int HEIGHT = getScreenHeight() - 400;
 	
@@ -68,10 +71,18 @@ public class Page extends Widget{
 		pagTest.onModuleLoad();
 	}
 	
-	public void loadWorkPage(ClientSessionManager clientSessionManger) {
+	public void loadWorkPage(ClientSessionManager clientSessionManger, RevisionTO revisionTO) {
 		rootPanel.clear();
-		WorkWritePage workPage = ScreenFactory.getInstance().getWorkPage(clientSessionManger);
+		WorkWritePage workPage = ScreenFactory.getInstance().
+				getWorkPage(clientSessionManger, revisionTO);
 		workPage.onModuleLoad();
+	}
+	
+	public void loadWorkReadOnlyPage(ClientSessionManager clientSessionManger, RevisionTO revisionTO) {
+		rootPanel.clear();
+		WorkReadOnlyPage workReadOnlyPage = ScreenFactory.getInstance().
+				getWorkReadOnlyPage(clientSessionManger, revisionTO);
+		workReadOnlyPage.onModuleLoad();
 	}
 	
 	public Widget createAboutUsLink() {
@@ -100,6 +111,10 @@ public class Page extends Widget{
 		vPanel.add(link);
 
 		return vPanel;
+	}
+	
+	public ZumehServiceAsync getZumehServiceAsync() {
+		return this.zumehService;
 	}
 	
 	/*

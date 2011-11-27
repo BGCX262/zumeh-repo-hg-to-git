@@ -2,11 +2,15 @@ package com.es.zumeh.client.view.pages;
 
 import java.util.LinkedList;
 
+import com.es.zumeh.client.control.ClientSessionManager;
+import com.es.zumeh.client.facade.ZumehServiceAsync;
 import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.WorkTO;
+import com.es.zumeh.client.view.pages.work.WorkWritePage;
 import com.es.zumeh.client.view.pages.work.WorkWritePanel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -31,13 +35,20 @@ public class RevisionWritePanel extends AbsolutePanel {
 	private String fullTextDescription;
 	private String shortTextDescription;
 	private CommentPanel commentPanel;
+	private ZumehServiceAsync zumehService;
+	private ClientSessionManager clientSessionManger;
+	private WorkWritePage workWritePage;
 	
-	public RevisionWritePanel(WorkWritePanel root, CommentPanel commentPanel) {
+	public RevisionWritePanel(WorkWritePanel root, CommentPanel commentPanel,
+			ZumehServiceAsync zumehServiceAsync, ClientSessionManager clientSessionManger,
+			WorkWritePage workWritePage) {
 		setHeight(40+"px");
 		setWidth(WIDTH+"px");
+		this.zumehService = zumehServiceAsync;
 		this.root = root;
 		this.commentPanel = commentPanel;
-		
+		this.clientSessionManger = clientSessionManger;
+		this.workWritePage = workWritePage;
 		
 		//hPanel.setSpacing(1);
 		hPanel.setHeight(40+"px");
@@ -120,9 +131,11 @@ public class RevisionWritePanel extends AbsolutePanel {
 	
 	public RevisionTO getRevisionTO() {
 		RevisionTO tmpRevisionTO = new RevisionTO();
-		tmpRevisionTO.setWorkTOList(workRevisions);
-		tmpRevisionTO.setFullDescriptionText(this.fullTextDescription);
-		tmpRevisionTO.setShortDescriptionText(this.shortTextDescription);
+		tmpRevisionTO.setWorks(workRevisions);
+		tmpRevisionTO.setRevisionOwner(clientSessionManger.getUserOwner().getEmail());
+		tmpRevisionTO.setFullDescriptionText(workWritePage.getTextFullDescription());
+		tmpRevisionTO.setShortDescriptionText(workWritePage.getTextShortDescription());
+		tmpRevisionTO.setRevisionId(workWritePage.getRevisionTO().getRevisionId());
 		return tmpRevisionTO;
 	}
 	
@@ -190,14 +203,31 @@ public class RevisionWritePanel extends AbsolutePanel {
 		}
 	};
 	
-	ClickHandler saveHandler = new ClickHandler() {
+	ClickHandler saveHandler = new ClickHandler() { //TODO here
 		
 		@Override
 		public void onClick(ClickEvent event) {
+			RevisionTO revisionTO = getRevisionTO();
+			
+			zumehService.addRevision(revisionTO, createSaveRevisionAsyncCallback());
 			System.out.println("Save Handler");
 			System.out.println("-------------------------");
 			System.out.println("Save Handler: " + root.getWorkById(3L));
 			System.out.println("-------------------------");
+		}
+
+		private AsyncCallback<Boolean> createSaveRevisionAsyncCallback() { 
+			return new AsyncCallback<Boolean>() {
+				
+				@Override
+				public void onSuccess(Boolean result) {
+					System.out.println("tiago debug revision " + result);//XXX DEBUG
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+				}
+			};
 		}
 	};
 	

@@ -95,7 +95,7 @@ public class RevisionReadOnlyPanel extends AbsolutePanel {
 		RevisionTO tmpRevisionTO = new RevisionTO();
 		tmpRevisionTO.setFullDescriptionText(this.fullTextDescription);
 		tmpRevisionTO.setShortDescriptionText(this.shortTextDescription);
-		tmpRevisionTO.setWorkTOList(workRevisions);
+		tmpRevisionTO.setWorks(workRevisions);
 		return tmpRevisionTO;
 	}
 	

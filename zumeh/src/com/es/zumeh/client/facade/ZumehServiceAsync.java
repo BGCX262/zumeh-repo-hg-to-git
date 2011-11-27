@@ -2,6 +2,7 @@ package com.es.zumeh.client.facade;
 
 import java.util.HashMap;
 
+import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.UserTO;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -10,8 +11,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface ZumehServiceAsync {
 	
-	@Deprecated
-	void greetServer(String input, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void getUserName(String token, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void getUserEmail(String token, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void openSession(String token, AsyncCallback<Void> callback) throws IllegalArgumentException;
@@ -26,4 +25,7 @@ public interface ZumehServiceAsync {
 	
 	void addUser(UserTO newUser, AsyncCallback<Boolean> w);
 	void verifyUser(UserTO user, AsyncCallback<UserTO> callback);
+	void addRevision(RevisionTO revisionTO, AsyncCallback<Boolean> result);
+	void getAllRevisionsByOwner(String email, AsyncCallback<RevisionTO[]> revisions);
+	void deleteRevision(RevisionTO revisionTO, AsyncCallback<Boolean> result);
 }

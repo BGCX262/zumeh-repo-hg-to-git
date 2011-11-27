@@ -1,9 +1,9 @@
 package com.es.zumeh.server.model.persistence;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +13,7 @@ import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.es.zumeh.client.model.to.CommentTO;
 import com.es.zumeh.client.model.to.WorkTO;
 
 
@@ -27,6 +28,8 @@ public class Revision implements Serializable {
 	private Long revisionId;
 	private String fullDescriptionRevisionText;
 	private String shortDescriptionRevisionText;
+	private ArrayList<CommentTO> comments;
+	private String revisionOwner;
 	
 	
 	@Id
@@ -40,12 +43,12 @@ public class Revision implements Serializable {
 		this.revisionId = revisionId;
 	}
 	
-	@CollectionTable
-	public LinkedList<WorkTO> getTOWorks() {
+	@Lob
+	public LinkedList<WorkTO> getWorks() {
 		return this.workTOList;
 	}
 	
-	public void setTOWorks(LinkedList<WorkTO> workTOList) {
+	public void setWorks(LinkedList<WorkTO> workTOList) {
 		this.workTOList = workTOList;
 	}
 
@@ -58,6 +61,15 @@ public class Revision implements Serializable {
 		this.fullDescriptionRevisionText = fullDescriptionText;
 	}
 	
+	@Lob
+	public ArrayList<CommentTO> getComments() {
+		return this.comments;
+	}
+	
+	public void setComments(ArrayList<CommentTO> comments) {
+		this.comments = comments;
+	}
+	
 	@Column(nullable=false, length = 200)
 	public String getShortDescriptionText() {
 		return this.shortDescriptionRevisionText;
@@ -65,6 +77,15 @@ public class Revision implements Serializable {
 	
 	public void setShortDescriptionText(String shortDescriptionText) {
 		this.shortDescriptionRevisionText = shortDescriptionText;
+	}
+
+	@Column(nullable = false, length = 200)
+	public String getRevisionOwner() {
+		return revisionOwner;
+	}
+
+	public void setRevisionOwner(String revisionOwner) {
+		this.revisionOwner = revisionOwner;
 	}
 
 }

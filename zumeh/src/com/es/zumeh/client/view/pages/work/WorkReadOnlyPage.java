@@ -18,15 +18,21 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class WorkReadOnlyPage extends WorkPage {
+	
 	private VerticalPanel verticalMasterWorkDescription;
-	private WorkReadOnlyPanel wp = new WorkReadOnlyPanel(this);
-	private CommentPanel cp = new CommentPanel(this);
-	private RevisionReadOnlyPanel rp = new RevisionReadOnlyPanel(wp, cp);
+	private WorkReadOnlyPanel workerReadOnlyPage = new WorkReadOnlyPanel(this);
+	private ClientSessionManager clientSessionManger;
+	private CommentPanel commentPanel;
+	private RevisionReadOnlyPanel revisionReadeOnlyPage = new RevisionReadOnlyPanel(workerReadOnlyPage, commentPanel);
 	final Label fullDescriptionLabel = new Label();
 	final Label shortDescriptionLabel = new Label();
+	private RevisionTO revisionTO;
 	
-	public WorkReadOnlyPage(ClientSessionManager clientSessionManger) {
-		// TODO
+	
+	public WorkReadOnlyPage(ClientSessionManager clientSessionManger, RevisionTO revision) {
+		this.setClientSessionManger(clientSessionManger);
+		this.revisionTO = revision;
+		commentPanel = new CommentPanel(this, clientSessionManger);
 		verticalMasterWorkDescription = getMasterDescriptionPanel();
 	}
 	
@@ -37,17 +43,17 @@ public class WorkReadOnlyPage extends WorkPage {
 	
 	public void refreshToWorkPanel() {
 		RootPanel.get().clear();
-		RootPanel.get().add(wp, 0 , 0);
+		RootPanel.get().add(workerReadOnlyPage, 0 , 0);
 	}
 	
 	public void refreshAllComponents() {
 		RootPanel.get().clear();
-		verticalWorkPanel.add(rp);
-		verticalWorkPanel.add(wp);
+		verticalWorkPanel.add(revisionReadeOnlyPage);
+		verticalWorkPanel.add(workerReadOnlyPage);
 		
 		RootPanel.get().add(verticalMasterWorkDescription, 0, 0);
 		RootPanel.get().add(verticalWorkPanel, 0, 200);
-		RootPanel.get().add(cp, getScreenWidth()-390, 0);
+		RootPanel.get().add(commentPanel, getScreenWidth()-390, 0);
 	}
 	
 	public void loadRevisionTO(RevisionTO revisionTO) {
@@ -55,14 +61,14 @@ public class WorkReadOnlyPage extends WorkPage {
 		System.out.println("Revision Final: " + super.getRevisionTO().getShortDescriptionText());
 		fullDescriptionLabel.setText(getRevisionTO().getFullDescriptionText());
 		shortDescriptionLabel.setText(getRevisionTO().getShortDescriptionText());
-		rp.setWorksFromTOList(getRevisionTO().getTOWorks());
-		wp.setWorkFromWorkTO(getRevisionTO().getWork(revisionTO.getTOWorks().size()));
+		revisionReadeOnlyPage.setWorksFromTOList(getRevisionTO().getWorks());
+		workerReadOnlyPage.setWorkFromWorkTO(getRevisionTO().getWork(revisionTO.getWorks().size()));
 	}
 	
 	public void loadCommentTO(ArrayList<CommentTO> comments) {
 		super.setCommentsTO(comments);
-		cp.setCommentTO(comments);
-		cp.refreshCommentPanel();
+		commentPanel.setCommentTO(comments);
+		commentPanel.refreshCommentPanel();
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -73,16 +79,16 @@ public class WorkReadOnlyPage extends WorkPage {
 		
 		Hyperlink hprlnkWork = new Hyperlink("Home", false, "home");
 		Hyperlink editLink = new Hyperlink("Edit", false, "preview");
-		editLink.addClickHandler(new ClickHandler() {
+		editLink.addClickHandler(new ClickHandler() { //FIXME ADD ANCHOR
 			@Override
 			public void onClick(ClickEvent event) {
 				RootPanel.get().clear();
-				WorkWritePage w = new WorkWritePage(null);
-				rp.setFullDescription(getRevisionTO().getFullDescriptionText());
-				rp.setShortDescription(getRevisionTO().getShortDescriptionText());
-				w.loadRevisionTO(rp.getRevisionTO());
-				w.loadCommentTO(cp.getCommentTO());
-				w.onModuleLoad();
+				WorkWritePage workWritePage = new WorkWritePage(getClientSessionManger(), getRevisionTO());
+				revisionReadeOnlyPage.setFullDescription(getRevisionTO().getFullDescriptionText());
+				revisionReadeOnlyPage.setShortDescription(getRevisionTO().getShortDescriptionText());
+				//workWritePage.loadRevisionTO(revisionReadeOnlyPage.getRevisionTO());
+				workWritePage.loadCommentTO(commentPanel.getCommentTO());
+				workWritePage.onModuleLoad();
 				System.out.println("Clicou Read");
 			}
 		});
@@ -112,5 +118,13 @@ public class WorkReadOnlyPage extends WorkPage {
 		verticalMasterWorkDescription.add(fullDescriptionArea);
 		
 		return verticalMasterWorkDescription;
+	}
+
+	public ClientSessionManager getClientSessionManger() {
+		return clientSessionManger;
+	}
+
+	public void setClientSessionManger(ClientSessionManager clientSessionManger) {
+		this.clientSessionManger = clientSessionManger;
 	}
 }

@@ -27,7 +27,7 @@ public class CommentTO implements Serializable {
 		this.commentId = commentId;
 	}
 	
-	public void setOwer(String owner) {
+	public void setOwner(String owner) {
 		this.owner = owner;
 	}
 	
@@ -39,7 +39,7 @@ public class CommentTO implements Serializable {
 		return this.commentId;
 	}
 	
-	public String getOwer() {
+	public String getOwner() {
 		return this.owner;
 	}
 	

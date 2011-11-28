@@ -79,7 +79,6 @@ public class SendMail {
 
 		} catch (Exception e) {
 			System.out.println(">> Erro: Completar Mensagem");
-			e.printStackTrace();
 		}
 		
 		//Objeto encarregado de enviar os dados para o email
@@ -99,7 +98,6 @@ public class SendMail {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(">> Erro: Envio Mensagem");
-			e.printStackTrace();
 		}
 
 	}

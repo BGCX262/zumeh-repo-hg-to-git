@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.es.zumeh.server.model.persistence.User;
-import com.es.zumeh.server.persistence.ZumehDAOFactory;
-import com.es.zumeh.server.persistence.ZumehDAOFactoryImpl;
 import com.es.zumeh.server.util.SendMail;
 import com.google.gdata.client.GoogleService;
 import com.google.gdata.data.BaseFeed;
@@ -19,7 +17,6 @@ public class SessionManager {
 	
 	private static SessionManager thisInstance;
 	private HashMap<String, User> openedSessions;
-	private ZumehDAOFactory factory;
 	private DAOManager daoManager;
 	private SendMail sendEmail;
 	
@@ -27,7 +24,6 @@ public class SessionManager {
 	private SessionManager() {
 		daoManager = new DAOManager();
 		openedSessions = new HashMap<String, User>();
-		factory = ZumehDAOFactoryImpl.sharedSessionFactory();
 		sendEmail = new SendMail();
 	}
 	

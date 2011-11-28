@@ -2,6 +2,8 @@ package com.es.zumeh.client.view.pages;
 
 import java.util.HashMap;
 
+import sun.security.action.GetLongAction;
+
 import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.Password;
 import com.es.zumeh.client.model.to.UserTO;
@@ -54,8 +56,8 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	private String userLocation;
 	private String email;
 	private String whoAreYou;
-	private String fullName;
-	private String login;
+	private static String fullName;
+	private static String login;
 	private String password;
 	private String imagePath;
 
@@ -73,12 +75,7 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	private static final String[] LOCATIONS = { "Select...", "Campina Grande",
 			"Pesqueira", "Fortaleza", "Joao Pessoa", "Recife" };
 
-	private static final String MESSAGE = "Welcome to Zumeh\nThanks for use Zumeh app!"
-			+ "\n\nMore details HERE{Link} ";
-
 	private static final String ZUMEH_USER = "zumeh.app@gmail.com";
-	
-	private boolean emailAlreadyExists = false;
 	
 	private static final String UPLOAD_ACTION_URL = GWT.getModuleBaseURL()
 	+ "upload";
@@ -553,7 +550,6 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	}
 
 	private boolean isAlldataCompleted() {
-		System.out.println("EXISTE? " + emailAlreadyExists);
 		return email != null && login != null && password != null
 				&& fullName != null && !userLocation.equals("Select...");
 	}
@@ -603,6 +599,9 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	}
 
 	private void sendMail(AsyncCallback<Void> em) {
+		final String MESSAGE = "Welcome to Zumeh Mr. " + fullName + "\nThanks for use Zumeh app!"
+				+ "\nYour login is: " + login +
+				"\n\nMore details HERE{http://code.google.com/p/zumeh-repo/} ";
 		zumehService.sendEmail(ZUMEH_USER, email, "Welcome to Zumeh",
 				MESSAGE, em);
 	}

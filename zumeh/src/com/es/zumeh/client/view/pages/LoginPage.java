@@ -106,13 +106,34 @@ public class LoginPage extends Page implements EntryPoint {
 		nlnlblNewInlinelabel.setSize("233px", "18px");
 		
 		Button btnCreateNewAccount = new Button("Create New Account");
-		absolutePanel.add(btnCreateNewAccount, 47, 399);
+		btnCreateNewAccount.setText("SignUp");
+		absolutePanel.add(btnCreateNewAccount, 38, 309);
 		btnCreateNewAccount.setStyleName("botaoTeste");
 		btnCreateNewAccount.addClickHandler(clickHandler());
 		btnCreateNewAccount.setSize("164px", "32px");
 		Image image = new Image("images/bode2.png");
 		absolutePanel.add(image, 14, 10);
-		image.setSize("245px", "131px");
+		image.setSize("245px", "160px");
+		
+		Image image_1 = new Image("images/zumeh.jpg");
+		absolutePanel.add(image_1, 423, 10);
+		image_1.setSize("233px", "100px");
+		
+		Image image_2 = new Image("images/palavras.png");
+		absolutePanel.add(image_2, 423, 117);
+		image_2.setSize("234px", "74px");
+		
+		Image image_3 = new Image("images/seguro-de-saude-universitario.jpg");
+		absolutePanel.add(image_3, 733, 79);
+		image_3.setSize("123px", "126px");
+		
+		Image image_4 = new Image("images/2642795.jpg");
+		absolutePanel.add(image_4, 920, 147);
+		image_4.setSize("186px", "119px");
+		
+		Image image_5 = new Image("images/aluno-livro-estudando-distraido.jpg");
+		absolutePanel.add(image_5, 771, 286);
+		image_5.setSize("117px", "100px");
 		return absolutePanel;
 	}
 
@@ -190,7 +211,7 @@ public class LoginPage extends Page implements EntryPoint {
 	private void signInButton(AbsolutePanel absolutePanel) {
 		Button signInButton = new Button("Sign in");
 		signInButton.setStyleName("botaoTeste");
-		absolutePanel.add(signInButton, 530, 406);
+		absolutePanel.add(signInButton, 593, 348);
 		signInButton.setSize("66px", "25px");
 
 		signInButton.addClickHandler(new ClickHandler() {

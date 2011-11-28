@@ -34,7 +34,7 @@ public class Page extends Widget{
 		signOutLink.addClickHandler(createClickHandlerForSignOutLink());
 	}
 
-	private ClickHandler createClickHandlerForSignOutLink() { //FIXME ADD IMAGE
+	private ClickHandler createClickHandlerForSignOutLink() {
 		return new ClickHandler() {
 			@Override
 			public void onClick(final ClickEvent event) {

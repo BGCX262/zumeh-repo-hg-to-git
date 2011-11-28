@@ -161,7 +161,7 @@ public class FirstAccessPage extends Page implements EntryPoint {
 
 	private AbsolutePanel createAbsolutePanel3(AbsolutePanel absolutePanel) {
 		AbsolutePanel absolutePanel_3 = new AbsolutePanel();
-		absolutePanel_3.setStyleName("body");
+		absolutePanel_3.setStyleName("teste");
 		absolutePanel.add(absolutePanel_3, 0, 0);
 		absolutePanel_3.setSize("771px", "553px");
 		Image image_2 = new Image("images/sheldon.jpg");
@@ -216,6 +216,10 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		btnCancel.setStyleName("botaoTeste");
 		btnCancel.setText("Cancel");
 		btnCancel.setSize("56px", "24px");
+		
+		Image image = new Image("images/welcome-7554.jpg");
+		absolutePanel_3.add(image, 381, 442);
+		image.setSize("256px", "100px");
 
 		btnCancel.addClickHandler(cancelClickHandler());
 		btnSave.addClickHandler(new ClickHandler() {
@@ -224,6 +228,9 @@ public class FirstAccessPage extends Page implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				if (isAlldataCompleted()) {
 					verifyIfEmailExists(email);
+				} else {
+					Window.alert("Some informations is incomplete." +
+							"\nMaybe this email is already in use!");
 				}
 			}
 		});
@@ -262,9 +269,6 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	}
 
 	private void loadLabelsFromPanel1(AbsolutePanel absolutePanel) {
-		Label lblDescriptionAboutThis = new Label(
-				"Description about this project");
-		absolutePanel.add(lblDescriptionAboutThis, 415, 431);
 	}
 
 	private void loadLabelsFromPanel4(AbsolutePanel absolutePanel_4) {
@@ -560,7 +564,7 @@ public class FirstAccessPage extends Page implements EntryPoint {
 				
 				@Override
 				public void onSuccess(UserTO result) {
-					if (result == null) {
+					if (result == null && isAlldataCompleted()) {
 						AsyncCallback<Boolean> assyncCallback = createAsyncCallbackForUser();
 
 						AsyncCallback<Void> emailCallback = createAsyncCallbackForEmail();
@@ -570,7 +574,7 @@ public class FirstAccessPage extends Page implements EntryPoint {
 
 						ClientSessionManager clientSessionManager = createClientSessionManager(newUser);
 						
-						//sendMail(emailCallback);
+						sendMail(emailCallback);
 
 						Window.alert("Your informations was saved with success.");
 
@@ -613,9 +617,6 @@ public class FirstAccessPage extends Page implements EntryPoint {
 
 			@Override
 			public void onSuccess(Boolean result) {
-				System.out
-						.println("DEBUG1: On succes do createAsyncCallbackForUser");
-				System.out.println(result);
 			}
 		};
 		return w;

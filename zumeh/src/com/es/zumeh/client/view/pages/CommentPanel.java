@@ -122,6 +122,7 @@ public class CommentPanel extends ScrollPanel {
 			VerticalPanel commentPanelText = new VerticalPanel();
 			CommentTO tmpComment = itComments.next();
 			Image commentOwnerPicture = getCommentOwnerPicture(tmpComment.getEmail());
+			
 			Anchor profileAnchor = new Anchor(tmpComment.getOwner());
 			profileAnchor.addClickHandler(createProfileHandler(tmpComment.getEmail())); //TODO HERE
 			
@@ -161,10 +162,26 @@ public class CommentPanel extends ScrollPanel {
 						if (clientSessionManger.getUserOwner().
 								getEmail().equals(result.getEmail())) {
 							workPage.loadProfilePage(clientSessionManger);
+							loadUsers();
 						} else {
 							clientSessionManger.setUserFriend(result);
+							loadUsers();
 							workPage.loadFriendsProfile(clientSessionManger, true);
 						}
+					}
+					private void loadUsers() {
+						workPage.getZumehServiceAsync().getUserList(new AsyncCallback<UserTO[]>() {
+							
+							@Override
+							public void onSuccess(UserTO[] result) {
+								
+							}
+							
+							@Override
+							public void onFailure(Throwable caught) {
+								
+							}
+						});
 					}
 					@Override
 					public void onFailure(Throwable caught) {

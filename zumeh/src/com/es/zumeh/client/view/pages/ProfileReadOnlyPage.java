@@ -1,12 +1,5 @@
 package com.es.zumeh.client.view.pages;
 
-import gwtupload.client.IUploadStatus.Status;
-import gwtupload.client.IUploader;
-import gwtupload.client.IUploader.UploadedInfo;
-import gwtupload.client.MultiUploader;
-import gwtupload.client.PreloadedImage;
-import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
-
 import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.UserTO;
@@ -24,12 +17,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.TextArea;
@@ -40,8 +33,6 @@ import com.google.gwt.user.client.ui.Widget;
 public class ProfileReadOnlyPage extends Page implements EntryPoint {
 	
 	private ClientSessionManager clientSessionManager;
-	
-	//private RootPanel rootPanel = RootPanel.get("nameFieldContainer");
 	
 	private AbsolutePanel absolutePanel;
 	
@@ -65,11 +56,7 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		
 		final Label errorLabel = new Label();
 		
-		final MultiUploader defaultUploader = new MultiUploader();
-		
 		panelImages = new FlowPanel();
-		
-		defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
 		
 		rootPanel.setSize("640", "480");
 		
@@ -98,17 +85,13 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		
 		loadInterestedAreasLabel(descriptionAbsolutePanel);
 		
-		setAbsolutePanel(createAbsolutePanel(absoluteRootPanel));
+		setAbsolutePanel(createAbsolutePanel(absoluteRootPanel)); //COMENTAR
 		
-		AbsolutePanel absolutePanel_1 = createAbsolutePanel1(absoluteRootPanel);
+		ScrollPanel scrollPanel = createScrollPanel(absoluteRootPanel);
 		
-		AbsolutePanel absolutePanel_3 = createAbsolutePanel3(absolutePanel_1);
+		VerticalPanel verticalPanelForLinks = createVerticalPanelForLinks(scrollPanel);
 		
-		loadHyperlinkWorker1(absolutePanel_3);
-//		
-//		loadHyperlinkWorker2(absolutePanel_3);
-//		
-//		loadHyperlinkWorker3(absolutePanel_3);
+		loadHyperlinkWorker1(verticalPanelForLinks);
 		
 		AbsolutePanel absolutePanel_2 = createAbsolutePanel2(absoluteRootPanel);
 		
@@ -117,15 +100,25 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		loadHomeButton(absoluteRootPanel);
 		
 		loadSignOutHyperLink();
-		
-		
+	}
+
+	private VerticalPanel createVerticalPanelForLinks(
+			ScrollPanel scrollPanel) {
+		VerticalPanel vertPanel = new VerticalPanel();
+		vertPanel.setStyleName("profileBackGround-works");
+		scrollPanel.add(vertPanel);
+		vertPanel.setWidth("435px");
+		//vertPanel.setSize("435px", "261px");
+		return vertPanel;
 	}
 
 	private void loadCreateRevisionButton(AbsolutePanel absoluteRootPanel) {
-		PushButton pushButtonCreateRevision = new PushButton("Create Revision");
-		absoluteRootPanel.add(pushButtonCreateRevision, 183, 11);
+		if(!isVisitor) {
+			PushButton pushButtonCreateRevision = new PushButton("Create Revision");
+			absoluteRootPanel.add(pushButtonCreateRevision, 183, 11);
+			pushButtonCreateRevision.addClickHandler(pushButtonClickHandler());
+		}
 		
-		pushButtonCreateRevision.addClickHandler(pushButtonClickHandler());
 	}
 
 	private ClickHandler pushButtonClickHandler() {
@@ -137,38 +130,15 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		};
 	}
 	
-	// Load the image in the document and in the case of success attach it to the viewer
-	  private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
-	    public void onFinish(IUploader uploader) {
-	      if (uploader.getStatus() == Status.SUCCESS) {
-
-	        new PreloadedImage(uploader.fileUrl(), showImage);
-	        
-	        // The server sends useful information to the client by default
-	        UploadedInfo info = uploader.getServerInfo();
-	        System.out.println("File name " + info.name);
-	        System.out.println("File content-type " + info.ctype);
-	        System.out.println("File size " + info.size);
-
-	        // You can send any customized message and parse it 
-	        System.out.println("Server message " + info.message);
-	      }
-	    }
-	  };
-	  
-	  // Attach an image to the pictures viewer
-	  private OnLoadPreloadedImageHandler showImage = new OnLoadPreloadedImageHandler() {
-	    public void onLoad(PreloadedImage image) {
-	      image.setWidth("75px");
-	      panelImages.add(image);
-	    }
-	  };
-
 	private AbsolutePanel createAbsolutePanel() {
 		AbsolutePanel absoluteRootPanel = new AbsolutePanel();
 		absoluteRootPanel.setStyleName("profileBackGround");
 		rootPanel.add(absoluteRootPanel, -26, 0);
 		absoluteRootPanel.setSize("978px", "660px");
+		
+		Image image = new Image("images/my_works.png");
+		absoluteRootPanel.add(image, 269, 217);
+		image.setSize("435px", "100px");
 		return absoluteRootPanel;
 	}
 
@@ -193,7 +163,7 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 			public void onSuccess(UserTO[] result) {
 				loadStackLayoutPanel(getAbsolutePanel(), result);
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Add log
@@ -212,33 +182,6 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		return imageAbsolutePanel;
 	}
 	
-//	private Widget createAboutUsLink() {
-//		
-//	    final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
-//	    simplePopup.ensureDebugId("cwBasicPopup-simplePopup");
-//	    simplePopup.setWidth("150px");
-//	    simplePopup.setWidget(new HTML("Algumas coisas sobre o nosso projeto"));
-//	    
-//	    Anchor link = new Anchor("About Us");
-//	    link.addClickHandler(new ClickHandler() {
-//			
-//			@Override
-//			public void onClick(ClickEvent event) {
-//	            Widget source = (Widget) event.getSource();
-//	            int left = source.getAbsoluteLeft() + 10;
-//	            int top = source.getAbsoluteTop() - 100;
-//	            simplePopup.setPopupPosition(left, top);
-//	            
-//	            simplePopup.show();
-//				
-//			}
-//		});
-//	    VerticalPanel vPanel = new VerticalPanel();
-//	    vPanel.setSpacing(5);
-//	    vPanel.add(link);
-//
-//	    return vPanel;
-//	}
 
 	private AbsolutePanel createAbsolutePanel2(AbsolutePanel absoluteRootPanel) {
 		AbsolutePanel absolutePanel_2 = new AbsolutePanel();
@@ -247,31 +190,17 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		return absolutePanel_2;
 	}
 
-	private void loadHyperlinkWorker3(AbsolutePanel absolutePanel_3) {
-		Hyperlink hprlnkWork = new Hyperlink("Work 3", false, "newHistoryToken");
-		absolutePanel_3.add(hprlnkWork, 0, 58);
-	}
-
-	private void loadHyperlinkWorker2(AbsolutePanel absolutePanel_3) {
-		Hyperlink hprlnkWorker_1 = new Hyperlink("Work 2", false, "newHistoryToken");
-		absolutePanel_3.add(hprlnkWorker_1, 0, 34);
-	}
-
-	private void loadHyperlinkWorker1(AbsolutePanel absolutePanel_3) { //TODO TO AQUI
-		
-		VerticalPanel verticalPanelWorkLinks = new VerticalPanel();
-		absolutePanel_3.add(verticalPanelWorkLinks);
-		verticalPanelWorkLinks.setWidth("158px");
-		
+	private void loadHyperlinkWorker1(VerticalPanel verticalPanel) {
+		verticalPanel.setSpacing(10);
 		if (isVisitor) {
 			zumehService.getAllRevisionsByOwner(clientSessionManager.
 					getUserFriend().getEmail(),
-					createGetRevisionsAsyncCallback(verticalPanelWorkLinks));
+					createGetRevisionsAsyncCallback(verticalPanel));
 		} else {
 		
 			zumehService.getAllRevisionsByOwner(clientSessionManager.
 					getUserOwner().getEmail(),
-					createGetRevisionsAsyncCallback(verticalPanelWorkLinks));
+					createGetRevisionsAsyncCallback(verticalPanel));
 		}
 	}
 
@@ -289,7 +218,6 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 			private void createAnchor(RevisionTO revisionTO,
 					VerticalPanel verticalPanelWorkLinks) {
 				Anchor anchor = new Anchor(revisionTO.getShortDescriptionText());
-				verticalPanelWorkLinks.setSpacing(10);
 				verticalPanelWorkLinks.add(anchor);
 				
 				anchor.addClickHandler(createAnchorClickHandler(revisionTO));
@@ -316,19 +244,12 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		};
 	}
 
-	private AbsolutePanel createAbsolutePanel3(AbsolutePanel absolutePanel_1) {
-		AbsolutePanel absolutePanel_3 = new AbsolutePanel();
-		absolutePanel_1.add(absolutePanel_3, 115, 35);
-		absolutePanel_3.setSize("100px", "158px");
-		return absolutePanel_3;
-	}
-
-	private AbsolutePanel createAbsolutePanel1(AbsolutePanel absoluteRootPanel) {
-		AbsolutePanel absolutePanel_1 = new AbsolutePanel();
-		absolutePanel_1.setStyleName("profileBackGround-works");
-		absoluteRootPanel.add(absolutePanel_1, 269, 236);
-		absolutePanel_1.setSize("435px", "261px");
-		return absolutePanel_1;
+	private ScrollPanel createScrollPanel(AbsolutePanel absoluteRootPanel) { //TODO MEXI AQUI
+		ScrollPanel scrollPanel1 = new ScrollPanel();
+		scrollPanel1.setStyleName("profileBackGround-works");
+		absoluteRootPanel.add(scrollPanel1, 269, 336);
+		scrollPanel1.setSize("435px", "261px");
+		return scrollPanel1;
 	}
 
 	private AbsolutePanel createAbsolutePanel(AbsolutePanel absoluteRootPanel) {
@@ -390,10 +311,22 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 	}
 
 	private void loadImage(AbsolutePanel imageAbsolutePanel) {
-		Image image = new Image("images/sheldon.jpg");
+		
+		if(isVisitor) {
+			getImage(imageAbsolutePanel, clientSessionManager.
+					getUserFriend().getEmail());
+		} else {
+			getImage(imageAbsolutePanel, clientSessionManager.
+					getUserOwner().getEmail());
+		}
+	}
+
+	private void getImage(AbsolutePanel imageAbsolutePanel, String path) {
+		Image image = new Image("http://127.0.0.1:8888/zumeh/upload?imagePath=" + path);
 		imageAbsolutePanel.add(image, 0, 0);
 		image.setStyleName("imageProfileBoard");
 		image.setSize("121px", "164px");
+		image.setVisible(true);
 	}
 
 	private void whoAreYouText(AbsolutePanel descriptionAbsolutePanel) {
@@ -442,7 +375,7 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 		completeStackLayoutPanel(stackLayoutPanel, result);
 		
 	}
-
+	
 	private void completeStackLayoutPanel(StackLayoutPanel stackLayoutPanel, UserTO[] result) {
 		 Widget contactsHeader = createHeaderWidget();
 		 stackLayoutPanel.add(createContactsItem(result), contactsHeader, 4);
@@ -463,13 +396,19 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 	private Widget createContactsItem(final UserTO[] result) {
 		HorizontalPanel contactPopupContainer = new HorizontalPanel();
 		contactPopupContainer.setSpacing(5);
+		
 		final HTML contactInfo = new HTML();
 		contactPopupContainer.add(contactInfo);
+		
 		final PopupPanel contactPopup = new PopupPanel(true, false);
 		contactPopup.setWidget(contactPopupContainer);
 
 		VerticalPanel contactsPanel = new VerticalPanel();
 		contactsPanel.setSpacing(4);
+		
+		ScrollPanel scrollPanel = new ScrollPanel();
+		scrollPanel.add(contactsPanel);
+		
 		for (int i = 0; i < result.length; i++) {
 			final UserTO actualUser = result[i];
 			final String contactName = result[i].getName();
@@ -504,7 +443,8 @@ public class ProfileReadOnlyPage extends Page implements EntryPoint {
 				}
 			});
 		}
-		return new SimplePanel(contactsPanel);
+		
+		return scrollPanel;
 	}
 
 	public boolean isVisitor() {

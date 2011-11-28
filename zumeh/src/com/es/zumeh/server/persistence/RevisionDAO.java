@@ -30,10 +30,23 @@ public class RevisionDAO implements ObjectDAO<Revision> {
 		HibernateUtil.commitTransaction();
 	}
 	
-	public boolean saveRevision(RevisionTO revisionTO) {
+	public Long saveRevision(RevisionTO revisionTO) {
 		Revision revision = convertRevisionTO(revisionTO);
 		save(revision);
-		return true; //XXX verify later
+		return compareObjects(revisionTO);
+	}
+	
+	
+
+	private Long compareObjects(RevisionTO revisionTO) {
+		Revision[] revisions = getAllRevisionsByOwner(revisionTO.getRevisonOwner());
+		for (int i = 0; i < revisions.length; i++) {
+			RevisionTO revisionTOtemp = convertTO2Revision(revisions[i]);
+			if (revisionTOtemp.compare(revisionTO)) {
+				return revisionTOtemp.getRevisionId();
+			}
+		}
+		return 0L;
 	}
 
 	private Revision convertRevisionTO(RevisionTO revisionTO) {

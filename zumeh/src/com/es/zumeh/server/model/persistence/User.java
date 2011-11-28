@@ -28,7 +28,7 @@ public class User implements Serializable {
 	private String interestedArea;
 	private String gender;
 	private String location;
-	//private byte[] image;
+	private String imageLocation;
 
 	
 	@Id
@@ -124,14 +124,13 @@ public class User implements Serializable {
 		this.location = location;
 	}
 
-//	@Lob
-//	@Column(nullable=false, columnDefinition="mediumblob")
-//	public byte[] getImage() {
-//		return image;
-//	}
-//
-//	public void setImage(byte[] image) {
-//		this.image = image;
-//	}
+	@Column(length = 255)
+	public String getImageLocation() {
+		return imageLocation;
+	}
+
+	public void setImageLocation(String imageLocation) {
+		this.imageLocation = imageLocation;
+	}
 
 }

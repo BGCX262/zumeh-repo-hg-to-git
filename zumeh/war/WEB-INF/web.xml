@@ -17,6 +17,17 @@
 		<servlet-name>zumehServlet</servlet-name>
 		<url-pattern>/zumeh/zumeh</url-pattern>
 	</servlet-mapping>
+	
+	 <!-- Servlet de envio de Arquivo. -->
+	<servlet>
+		<servlet-name>uploadServlet</servlet-name>
+		<servlet-class>com.es.zumeh.server.facade.FileUploadServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>uploadServlet</servlet-name>
+		<url-pattern>/zumeh/upload</url-pattern>
+	</servlet-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>

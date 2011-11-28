@@ -97,4 +97,13 @@ public class RevisionTO implements Serializable {
 	public void addCommentTO(CommentTO newComment) {
 		this.comments.add(newComment);
 	}
+
+	
+	public boolean compare(RevisionTO revisionTO) {
+		return (getRevisonOwner().equals(revisionTO.getRevisonOwner()) 
+				&& getFullDescriptionText().equalsIgnoreCase(
+						revisionTO.getFullDescriptionText())
+				&& getShortDescriptionText().equals(
+						revisionTO.getShortDescriptionText()));
+	}
 }

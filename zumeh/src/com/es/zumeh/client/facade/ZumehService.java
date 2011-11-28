@@ -29,9 +29,11 @@ public interface ZumehService extends RemoteService {
 
 	UserTO verifyUser(UserTO user);
 
-	boolean addRevision(RevisionTO revisionTO);
+	Long addRevision(RevisionTO revisionTO);
 
 	RevisionTO[] getAllRevisionsByOwner(String email);
 
 	boolean deleteRevision(RevisionTO revisionTO);
+	
+	UserTO getUserByEmail(String email);
 }

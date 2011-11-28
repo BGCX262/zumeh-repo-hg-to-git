@@ -121,23 +121,26 @@ public class ZumehServiceImpl extends RemoteServiceServlet implements ZumehServi
 	
 	@Override
 	public UserTO verifyUser(UserTO user) {
-		return getSessionManager().getDaoManager().verifyUserTO(user);
-		
+		return sessionManager.getDaoManager().verifyUserTO(user);
 	}
 
 	@Override
-	public boolean addRevision(RevisionTO revisionTO) {
-		SessionManager.getInstance().getDaoManager().addRevision(revisionTO);
-		return false;
+	public Long addRevision(RevisionTO revisionTO) {
+		return sessionManager.getDaoManager().addRevision(revisionTO);
 	}
 
 	@Override
 	public RevisionTO[] getAllRevisionsByOwner(String ownerEmail) {
-		return SessionManager.getInstance().getDaoManager().getRevisionsByOwner(ownerEmail);
+		return sessionManager.getDaoManager().getRevisionsByOwner(ownerEmail);
 	}
 
 	@Override
 	public boolean deleteRevision(RevisionTO revisionTO) {
 		return sessionManager.getDaoManager().deleteRevision(revisionTO);
+	}
+
+	@Override
+	public UserTO getUserByEmail(String email) {
+		return sessionManager.getDaoManager().getUserByEmail(email);
 	}
 }

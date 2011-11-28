@@ -192,14 +192,19 @@ public class LoginPage extends Page implements EntryPoint {
 		signInButton.setStyleName("botaoTeste");
 		absolutePanel.add(signInButton, 530, 406);
 		signInButton.setSize("66px", "25px");
-		
+
 		signInButton.addClickHandler(new ClickHandler() {
-            
+
 			@Override
 			public void onClick(ClickEvent event) {
 				callChecker();
 			}
-    });
+		});
+	}
+	
+	private void callChecker() {
+		AsyncCallback<UserTO> signInCall = signInCallback();
+		zumehService.verifyUser(userTO, signInCall);
 	}
 
 
@@ -240,10 +245,7 @@ public class LoginPage extends Page implements EntryPoint {
 		
 	}
 	
-	private void callChecker() {
-		AsyncCallback<UserTO> signInCall = signInCallback();
-		zumehService.verifyUser(userTO, signInCall);
-	}
+
 
 
 	private void textBoxLogin(AbsolutePanel absolutePanel) {

@@ -17,7 +17,7 @@ public class UserTO implements Serializable {
 	private String interestedArea;
 	private String gender;
 	private String location;
-	private byte[] image;
+	private String imageLocation;
 
 	public UserTO() {}
 
@@ -100,13 +100,12 @@ public class UserTO implements Serializable {
 		this.location = location;
 	}
 
-	public byte[] getImage() {
-		return image;
+	public String getImageLocation() {
+		return imageLocation;
 	}
 
-	public void setImage(byte[] image) {
-		this.image = image;
+	public void setImageLocation(String imagePath) {
+		this.imageLocation = imagePath;
 	}
-
 
 }

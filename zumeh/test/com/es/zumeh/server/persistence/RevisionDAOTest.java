@@ -41,7 +41,7 @@ public class RevisionDAOTest {
 
 	private void addRevision() {
 		createRevision(); //FIXME
-		daoManager.addRevision(revision);
+		//daoManager.addRevision(revision);
 	}
 
 	private void createRevision() {

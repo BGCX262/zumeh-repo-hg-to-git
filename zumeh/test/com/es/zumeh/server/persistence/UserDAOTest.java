@@ -2,7 +2,6 @@ package com.es.zumeh.server.persistence;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.List;
 
 import junit.framework.Assert;
 
@@ -13,7 +12,6 @@ import com.es.zumeh.client.model.Password;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.server.model.DAOManager;
 import com.es.zumeh.server.model.persistence.User;
-import com.google.gwt.user.client.ui.Image;
 
 public class UserDAOTest {
 	
@@ -148,7 +146,7 @@ public class UserDAOTest {
 			FileInputStream fileInputStream = new FileInputStream(file);
 			// convert file into array of bytes
 			fileInputStream.read(bFile);
-			user.setImage(bFile);
+			//user.setImage(bFile);
 			fileInputStream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -160,11 +158,4 @@ public class UserDAOTest {
 		return result;
 	}
 	
-//	public static void main(String[] args) {
-//		Image im = new Image();
-//		im.g
-//		
-//	}
-	
-
 }

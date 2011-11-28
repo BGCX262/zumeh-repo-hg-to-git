@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import org.vaadin.gwtgraphics.client.DrawingArea;
 
-import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.to.NodeTO;
 import com.es.zumeh.client.model.to.WorkTO;
 import com.google.gwt.dom.client.Style.BorderStyle;
@@ -113,6 +112,7 @@ public class WorkWritePanel extends AbsolutePanel {
 	}
 	
 	public void setWorkFromWorkTO(WorkTO workTO) {
+		this.clear();
 		System.out.println("WORK TO: " + workTO);
 		LinkedList<NodeTO> tmpWorkTO = workTO.getNodes();
 		NodeTO rootNodeTO = workTO.getNodeTOByNodeId(1L);
@@ -127,7 +127,7 @@ public class WorkWritePanel extends AbsolutePanel {
 		root.setStatus(rootNodeTO.getNodeStatus()); 
 		root.setNodeId(rootNodeTO.getId());
 		
-		for (long i = 1; i < tmpWorkTO.size(); i++) {
+		for (Long i = 1L; i < tmpWorkTO.size(); i++) {
 			Long leftChildId = workTO.getNodeTOByNodeId(i).getLeftChildNodeId();
 			Long rightChildId = workTO.getNodeTOByNodeId(i).getRightChildNodeId();
 			

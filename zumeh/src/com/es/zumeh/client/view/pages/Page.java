@@ -90,7 +90,10 @@ public class Page extends Widget{
 		final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
 		simplePopup.ensureDebugId("cwBasicPopup-simplePopup");
 		simplePopup.setWidth("150px");
-		simplePopup.setWidget(new HTML("Algumas coisas sobre o nosso projeto"));
+		simplePopup.setWidget(new HTML("This project was developed" +
+				" by students from Federal University of Campina Grande" +
+				"for try to resolve some communications problems" +
+				" that some students have to share what they are working."));
 
 		Anchor link = new Anchor("About Us");
 		link.addClickHandler(new ClickHandler() {

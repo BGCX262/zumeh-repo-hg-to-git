@@ -5,34 +5,39 @@ import java.util.ArrayList;
 import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.to.CommentTO;
 import com.es.zumeh.client.model.to.RevisionTO;
+import com.es.zumeh.client.model.to.WorkTO;
 import com.es.zumeh.client.view.pages.CommentPanel;
 import com.es.zumeh.client.view.pages.RevisionReadOnlyPanel;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class WorkReadOnlyPage extends WorkPage {
 	
 	private VerticalPanel verticalMasterWorkDescription;
-	private WorkReadOnlyPanel workerReadOnlyPage = new WorkReadOnlyPanel(this);
-	private ClientSessionManager clientSessionManger;
+	final private TextBox shortDescriptionArea = new TextBox();
+	final private TextArea fullDescriptionBox = new TextArea();
+	private WorkReadOnlyPanel workerWritePanel;
+	private ClientSessionManager clientSessionManager;
 	private CommentPanel commentPanel;
-	private RevisionReadOnlyPanel revisionReadeOnlyPage = new RevisionReadOnlyPanel(workerReadOnlyPage, commentPanel);
-	final Label fullDescriptionLabel = new Label();
-	final Label shortDescriptionLabel = new Label();
-	private RevisionTO revisionTO;
+	private RevisionReadOnlyPanel revisionWritePanel;
+
 	
-	
-	public WorkReadOnlyPage(ClientSessionManager clientSessionManger, RevisionTO revision) {
-		this.setClientSessionManger(clientSessionManger);
-		this.revisionTO = revision;
+	public WorkReadOnlyPage(ClientSessionManager clientSessionManger,
+			RevisionTO revisionTO) {
+		this.setClientSessionManager(clientSessionManger);
+		super.setRevisionTO(revisionTO);
+		workerWritePanel = new WorkReadOnlyPanel(this);
 		commentPanel = new CommentPanel(this, clientSessionManger);
+		revisionWritePanel = new RevisionReadOnlyPanel(workerWritePanel,
+				commentPanel, getZumehServiceAsync(), clientSessionManger, this);
 		verticalMasterWorkDescription = getMasterDescriptionPanel();
 	}
 	
@@ -42,27 +47,34 @@ public class WorkReadOnlyPage extends WorkPage {
 	}
 	
 	public void refreshToWorkPanel() {
-		RootPanel.get().clear();
-		RootPanel.get().add(workerReadOnlyPage, 0 , 0);
+		rootPanel.clear();
+		rootPanel.add(workerWritePanel, 0 , 0);
 	}
 	
 	public void refreshAllComponents() {
-		RootPanel.get().clear();
-		verticalWorkPanel.add(revisionReadeOnlyPage);
-		verticalWorkPanel.add(workerReadOnlyPage);
+		rootPanel.clear();
+		verticalWorkPanel.add(revisionWritePanel);
+		verticalWorkPanel.add(workerWritePanel);
 		
-		RootPanel.get().add(verticalMasterWorkDescription, 0, 0);
-		RootPanel.get().add(verticalWorkPanel, 0, 200);
-		RootPanel.get().add(commentPanel, getScreenWidth()-390, 0);
+		rootPanel.add(verticalMasterWorkDescription, 0, 0);
+		rootPanel.add(verticalWorkPanel, 0, 200);
+		rootPanel.add(commentPanel, getScreenWidth()-390, 0);
 	}
 	
-	public void loadRevisionTO(RevisionTO revisionTO) {
-		super.setRevisionTO(revisionTO);
-		System.out.println("Revision Final: " + super.getRevisionTO().getShortDescriptionText());
-		fullDescriptionLabel.setText(getRevisionTO().getFullDescriptionText());
-		shortDescriptionLabel.setText(getRevisionTO().getShortDescriptionText());
-		revisionReadeOnlyPage.setWorksFromTOList(getRevisionTO().getWorks());
-		workerReadOnlyPage.setWorkFromWorkTO(getRevisionTO().getWork(revisionTO.getWorks().size()));
+	public void loadRevisionTO() {
+		fullDescriptionBox.setText(super.getRevisionTO().getFullDescriptionText());
+		shortDescriptionArea.setText(super.getRevisionTO().getShortDescriptionText());
+		fullDescriptionBox.setReadOnly(true);
+		shortDescriptionArea.setReadOnly(true);
+		
+		revisionWritePanel.setWorksFromTOList(super.getRevisionTO().getWorks()); //Aqui
+		int worksSize = super.getRevisionTO().getWorks().size();
+		WorkTO workTO = super.getRevisionTO().getWork(worksSize);
+		if (workTO != null) {
+			workerWritePanel.setWorkFromWorkTO(workTO);
+		}
+		loadCommentTO(super.getRevisionTO().getComments());
+		
 	}
 	
 	public void loadCommentTO(ArrayList<CommentTO> comments) {
@@ -71,60 +83,99 @@ public class WorkReadOnlyPage extends WorkPage {
 		commentPanel.refreshCommentPanel();
 	}
 	
-	@SuppressWarnings("deprecation")
 	private VerticalPanel getMasterDescriptionPanel() {
+		loadRevisionTO();
 		VerticalPanel verticalMasterWorkDescription = new VerticalPanel();
+		
+		HorizontalPanel horizontalPanelLinks = new HorizontalPanel();
+		loadHomeAnchor(horizontalPanelLinks);
+		//loadDeleteWorkAnchor(horizontalPanelLinks);
+		
 		verticalMasterWorkDescription.setHeight("200px");
 		verticalMasterWorkDescription.setWidth((getScreenWidth()-400) + "px");
 		
-		Hyperlink hprlnkWork = new Hyperlink("Home", false, "home");
-		Hyperlink editLink = new Hyperlink("Edit", false, "preview");
-		editLink.addClickHandler(new ClickHandler() { //FIXME ADD ANCHOR
-			@Override
-			public void onClick(ClickEvent event) {
-				RootPanel.get().clear();
-				WorkWritePage workWritePage = new WorkWritePage(getClientSessionManger(), getRevisionTO());
-				revisionReadeOnlyPage.setFullDescription(getRevisionTO().getFullDescriptionText());
-				revisionReadeOnlyPage.setShortDescription(getRevisionTO().getShortDescriptionText());
-				//workWritePage.loadRevisionTO(revisionReadeOnlyPage.getRevisionTO());
-				workWritePage.loadCommentTO(commentPanel.getCommentTO());
-				workWritePage.onModuleLoad();
-				System.out.println("Clicou Read");
-			}
-		});
-		
-		HorizontalPanel horizontalPanelLinks = new HorizontalPanel();
 		horizontalPanelLinks.setSpacing(5);
-		horizontalPanelLinks.add(hprlnkWork);
-		horizontalPanelLinks.add(editLink);
 		
-		shortDescriptionLabel.setText(getRevisionTO().getShortDescriptionText());
-		shortDescriptionLabel.getElement().getStyle().setFontSize(25, Unit.PX);
-		
-		AbsolutePanel shortDescriptionArea = new AbsolutePanel();
 		shortDescriptionArea.setWidth((getScreenWidth()-400) + "px");
 		shortDescriptionArea.setHeight("30px");
-		shortDescriptionArea.add(shortDescriptionLabel);
+		//shortDescriptionArea.setText(getRevisionTO().getShortDescriptionText());
+		shortDescriptionArea.getElement().getStyle().setFontSize(25, Unit.PX);
 		
-		fullDescriptionLabel.setText(getRevisionTO().getFullDescriptionText());
-		
-		AbsolutePanel fullDescriptionArea = new AbsolutePanel();
-		fullDescriptionArea.setWidth((getScreenWidth()-400) + "px");
-		fullDescriptionArea.setHeight("120px");
-		fullDescriptionArea.add(fullDescriptionLabel);
+		fullDescriptionBox.setWidth((getScreenWidth()-400) + "px");
+		fullDescriptionBox.setHeight("120px");
+		//fullDescriptionBox.setText(getRevisionTO().getFullDescriptionText());
 		
 		verticalMasterWorkDescription.add(horizontalPanelLinks);
 		verticalMasterWorkDescription.add(shortDescriptionArea);
-		verticalMasterWorkDescription.add(fullDescriptionArea);
+		verticalMasterWorkDescription.add(fullDescriptionBox);
 		
 		return verticalMasterWorkDescription;
 	}
 
-	public ClientSessionManager getClientSessionManger() {
-		return clientSessionManger;
+	private void loadDeleteWorkAnchor(HorizontalPanel horizontalPanelLinks) {
+		Anchor deleteAnchor = new Anchor("Delete work");
+		deleteAnchor.addClickHandler(createDeleteAnchorClickHandler());
+		horizontalPanelLinks.add(deleteAnchor);
+		
 	}
 
-	public void setClientSessionManger(ClientSessionManager clientSessionManger) {
-		this.clientSessionManger = clientSessionManger;
+	private ClickHandler createDeleteAnchorClickHandler() {
+		return new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				zumehService.deleteRevision(getRevisionTO(),
+						createDeleteRevisionCallback());
+			}
+
+			private AsyncCallback<Boolean> createDeleteRevisionCallback() {
+				return new AsyncCallback<Boolean>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Add log
+						
+					}
+
+					@Override
+					public void onSuccess(Boolean result) {
+						Window.alert("Work deleted with success!");
+						//TODO ADD LOG
+						loadProfilePage(clientSessionManager);
+					}
+				};
+			}
+		};
+	}
+
+	private void loadHomeAnchor(HorizontalPanel horizontalPanelLinks) {
+		Anchor homeAnchorPage = new Anchor("Home");
+		homeAnchorPage.addClickHandler(createHomePageAncorClickHandler());
+		horizontalPanelLinks.add(homeAnchorPage);
+	}
+
+	private ClickHandler createHomePageAncorClickHandler() {
+		return new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				loadProfilePage(clientSessionManager);
+			}
+		};
+	}
+
+	public ClientSessionManager getClientSessionManager() {
+		return clientSessionManager;
+	}
+
+	public void setClientSessionManager(ClientSessionManager clientSessionManager) {
+		this.clientSessionManager = clientSessionManager;
+	}
+
+	public String getTextFullDescription() {
+		return fullDescriptionBox.getText();
+	}
+	
+	public String getTextShortDescription() {
+		return shortDescriptionArea.getText();
 	}
 }

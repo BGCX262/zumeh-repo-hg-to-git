@@ -5,16 +5,17 @@ import java.util.Iterator;
 
 import com.es.zumeh.client.control.ClientSessionManager;
 import com.es.zumeh.client.model.to.CommentTO;
+import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.client.view.pages.work.WorkPage;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -58,18 +59,18 @@ public class CommentPanel extends ScrollPanel {
 		newComment.setCommentText(comment);
 		newComment.setCommentId((long) comments.size());
 		newComment.setOwner(clientSessionManger.getUserOwner().getName()); // TODO it got to be actual user name
+		newComment.setEmail(clientSessionManger.getUserOwner().getEmail());
 		newComment.setRevisionId((Long) this.workPage.getRevisionTO().getRevisionId()); //TIRAR ISSO AQUI
 		comments.add(newComment);
 		refreshCommentPanel();
 		
 		workPage.getRevisionTO().setComments(comments);
 		
-		workPage.zumehService.addRevision(workPage.getRevisionTO(), new AsyncCallback<Boolean>() {
+		workPage.zumehService.addRevision(workPage.getRevisionTO(), new AsyncCallback<Long>() {
 			
 			@Override
-			public void onSuccess(Boolean result) {
-				System.out.println("SALVOU O COMMENT ======> " + result);
-				
+			public void onSuccess(Long result) {
+				workPage.getRevisionTO().setRevisionId(result);
 			}
 			
 			@Override
@@ -81,8 +82,8 @@ public class CommentPanel extends ScrollPanel {
 	}
 	
 	
-	private Image getCommentOwnerPicture() {
-		Image image = new Image("images/sheldon.jpg");// TODO it got to be actual user picture
+	private Image getCommentOwnerPicture(String email) {
+		Image image = new Image("http://127.0.0.1:8888/zumeh/upload?imagePath=" + email);// TODO it got to be actual user picture
 		image.setHeight(100+"px");
 		image.setWidth(80+"px");
 		return image;
@@ -120,16 +121,16 @@ public class CommentPanel extends ScrollPanel {
 			HorizontalPanel commentPanel = getCommentPanel();
 			VerticalPanel commentPanelText = new VerticalPanel();
 			CommentTO tmpComment = itComments.next();
-			Image commentOwnerPicture = getCommentOwnerPicture();
-			Hyperlink hprlnkWork = new Hyperlink(tmpComment.getOwner(), false, "profile");
+			Image commentOwnerPicture = getCommentOwnerPicture(tmpComment.getEmail());
+			Anchor profileAnchor = new Anchor(tmpComment.getOwner());
+			profileAnchor.addClickHandler(createProfileHandler(tmpComment.getEmail())); //TODO HERE
 			
 			Label label2 = new Label(tmpComment.getCommentText());
 			AbsolutePanel textPanel = getTextPanel();
 			
 			commentPanel.add(commentOwnerPicture);
 			textPanel.add(label2);
-			hprlnkWork.addClickHandler(addCommenHandler);
-			commentPanelText.add(hprlnkWork);
+			commentPanelText.add(profileAnchor);
 			commentPanelText.add(textPanel);
 			commentsPanel.add(commentPanel);
 			commentPanel.add(commentPanelText);
@@ -143,6 +144,37 @@ public class CommentPanel extends ScrollPanel {
 		scrollToBottom();
 	}
 	
+	private ClickHandler createProfileHandler(final String email) {
+		return new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				workPage.getZumehServiceAsync().getUserByEmail(
+						email, createGetUserByEmailCallback());
+			}
+
+			private AsyncCallback<UserTO> createGetUserByEmailCallback() {
+				return new AsyncCallback<UserTO>() {
+					
+					@Override
+					public void onSuccess(UserTO result) {
+						if (clientSessionManger.getUserOwner().
+								getEmail().equals(result.getEmail())) {
+							workPage.loadProfilePage(clientSessionManger);
+						} else {
+							clientSessionManger.setUserFriend(result);
+							workPage.loadFriendsProfile(clientSessionManger, true);
+						}
+					}
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+					}
+				};
+			}
+		};
+	}
+
 	ClickHandler addCommenHandler = new ClickHandler() {
 		
 		@Override

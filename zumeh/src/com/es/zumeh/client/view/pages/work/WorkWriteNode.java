@@ -55,7 +55,7 @@ public class WorkWriteNode extends Ellipse {
 	private DrawingArea workArea;
 	private Label description;
 	//private NodeTO nodeTO;
-	private String nodeStatus = GREEN;
+	private String nodeStatus = YELLOW;
 	static private AbsolutePanel absolutePanel;
 	
 	final private PopupPanel popupPanel = new PopupPanel(true);
@@ -70,7 +70,7 @@ public class WorkWriteNode extends Ellipse {
 		this.workArea = workArea;
 		WorkWriteNode.absolutePanel = absolutePanel;
 		
-		setFillColor(GREEN);
+		setFillColor(YELLOW);
 		setFillOpacity(0.8);
 		
 		sinkEvents(Event.ONCONTEXTMENU | Event.ONCLICK);
@@ -444,9 +444,9 @@ public class WorkWriteNode extends Ellipse {
 		// REMEBER This should be broken into methods.
 		/* Node Status */
 		MenuBar popupSubMenuStatusBar = new MenuBar(true);
-		MenuItem greenStatusItem = new MenuItem("Green", true, editNodeStatusGreenCommand);
-		MenuItem yellowStatusItem = new MenuItem("Yellow", true, editNodeStatusYellowCommand);
-		MenuItem redStatusItem = new MenuItem("Red", true, editNodeStatusRedCommand);
+		MenuItem greenStatusItem = new MenuItem("Resolved", true, editNodeStatusGreenCommand);
+		MenuItem yellowStatusItem = new MenuItem("Open", true, editNodeStatusYellowCommand);
+		MenuItem redStatusItem = new MenuItem("Closed", true, editNodeStatusRedCommand);
 		popupSubMenuStatusBar.addItem(greenStatusItem);
 		popupSubMenuStatusBar.addItem(yellowStatusItem);
 		popupSubMenuStatusBar.addItem(redStatusItem);

@@ -8,6 +8,7 @@ import com.es.zumeh.client.model.to.RevisionTO;
 import com.es.zumeh.client.model.to.WorkTO;
 import com.es.zumeh.client.view.pages.work.WorkWritePage;
 import com.es.zumeh.client.view.pages.work.WorkWritePanel;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -49,6 +50,7 @@ public class RevisionWritePanel extends AbsolutePanel {
 		this.commentPanel = commentPanel;
 		this.clientSessionManger = clientSessionManger;
 		this.workWritePage = workWritePage;
+		getElement().getStyle().setPosition(Position.RELATIVE);
 		
 		//hPanel.setSpacing(1);
 		hPanel.setHeight(40+"px");
@@ -216,12 +218,13 @@ public class RevisionWritePanel extends AbsolutePanel {
 			System.out.println("-------------------------");
 		}
 
-		private AsyncCallback<Boolean> createSaveRevisionAsyncCallback() { 
-			return new AsyncCallback<Boolean>() {
-				
+		private AsyncCallback<Long> createSaveRevisionAsyncCallback() { 
+			return new AsyncCallback<Long>() {
 				@Override
-				public void onSuccess(Boolean result) {
-					System.out.println("tiago debug revision " + result);//XXX DEBUG
+				public void onSuccess(Long result) {
+					System.out.println("REVISION_ID = " + result);
+					workWritePage.getRevisionTO().setRevisionId(result);
+					getRevisionTO().setRevisionId(result);
 				}
 				
 				@Override
@@ -264,5 +267,6 @@ public class RevisionWritePanel extends AbsolutePanel {
 
 	public void setWorksFromTOList(LinkedList<WorkTO> toWorks) {
 		this.workRevisions = toWorks;
+		goHeadRevision();
 	}
 }

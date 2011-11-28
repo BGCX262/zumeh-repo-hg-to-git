@@ -10,6 +10,7 @@ public class CommentTO implements Serializable {
 	private Long commentId;
 	private Long revisionId;
 	private String owner;
+	private String email;
 	
 	public void setRevisionId(Long revisionId) {
 		this.revisionId = revisionId;
@@ -46,5 +47,13 @@ public class CommentTO implements Serializable {
 	@Override
 	public String toString() {
 		return "Comment: " + this.commentText + " CommentId: " + this.commentId;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

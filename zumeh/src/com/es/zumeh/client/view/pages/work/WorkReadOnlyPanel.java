@@ -111,6 +111,7 @@ public class WorkReadOnlyPanel extends AbsolutePanel {
 	}
 	
 	public void setWorkFromWorkTO(WorkTO workTO) {
+		this.clear();
 		LinkedList<NodeTO> tmpWorkTO = workTO.getNodes();
 		NodeTO rootNodeTO = workTO.getNodeTOByNodeId(1L);
 		
@@ -124,9 +125,12 @@ public class WorkReadOnlyPanel extends AbsolutePanel {
 		root.setStatus(rootNodeTO.getNodeStatus()); 
 		root.setNodeId(rootNodeTO.getId());
 		
-		for (long i = 1; i < tmpWorkTO.size(); i++) {
-			long leftChildId = workTO.getNodeTOByNodeId(i).getLeftChildNodeId();
-			long rightChildId = workTO.getNodeTOByNodeId(i).getRightChildNodeId();
+		for (Long i = 1L; i < tmpWorkTO.size(); i++) {
+			NodeTO tmp = workTO.getNodeTOByNodeId(i);
+			System.out.println("NOodeTO tmp: " + tmp);
+			
+			Long leftChildId = tmp.getLeftChildNodeId();
+			Long rightChildId = tmp.getRightChildNodeId();
 			
 			NodeTO leftChild = workTO.getNodeTOByNodeId(leftChildId);
 			NodeTO rightChild = workTO.getNodeTOByNodeId(rightChildId);

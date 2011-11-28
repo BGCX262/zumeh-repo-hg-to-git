@@ -25,7 +25,8 @@ public interface ZumehServiceAsync {
 	
 	void addUser(UserTO newUser, AsyncCallback<Boolean> w);
 	void verifyUser(UserTO user, AsyncCallback<UserTO> callback);
-	void addRevision(RevisionTO revisionTO, AsyncCallback<Boolean> result);
+	void addRevision(RevisionTO revisionTO, AsyncCallback<Long> revisionId);
 	void getAllRevisionsByOwner(String email, AsyncCallback<RevisionTO[]> revisions);
 	void deleteRevision(RevisionTO revisionTO, AsyncCallback<Boolean> result);
+	void getUserByEmail(String email, AsyncCallback<UserTO> user);
 }

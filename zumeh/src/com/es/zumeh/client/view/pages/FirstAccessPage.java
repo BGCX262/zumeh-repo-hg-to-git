@@ -7,6 +7,7 @@ import com.es.zumeh.client.model.Password;
 import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.shared.util.Validate;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -22,6 +23,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FileUpload;
+import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -33,6 +38,7 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class FirstAccessPage extends Page implements EntryPoint {
 
@@ -51,8 +57,7 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	private String fullName;
 	private String login;
 	private String password;
-	private byte[] image;
-	
+	private String imagePath;
 
 	MultiWordSuggestOracle oracle = getSuggestOracle();
 
@@ -72,6 +77,13 @@ public class FirstAccessPage extends Page implements EntryPoint {
 			+ "\n\nMore details HERE{Link} ";
 
 	private static final String ZUMEH_USER = "zumeh.app@gmail.com";
+	
+	private boolean emailAlreadyExists = false;
+	
+	private static final String UPLOAD_ACTION_URL = GWT.getModuleBaseURL()
+	+ "upload";
+	
+	private final FormPanel form = new FormPanel();
 
 	public FirstAccessPage(String token) {
 		this.token = token;
@@ -93,6 +105,13 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		AbsolutePanel absolutePanel = createAbsolutePanel();
 
 		AbsolutePanel absolutePanel_3 = createAbsolutePanel3(absolutePanel);
+		
+		absolutePanel_3.add(createImagePanel(), 336, 54);
+		
+		// Create a FileUpload widget.
+		FileUpload upload = new FileUpload();
+		upload.setSize("229px", "96px");
+		upload.setName("uploadFormElement");
 
 		whoAreYouTextArea(absolutePanel);
 
@@ -148,163 +167,86 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		Image image_2 = new Image("images/sheldon.jpg");
 		absolutePanel_3.add(image_2, 599, 7);
 		image_2.setSize("121px", "164px");
-		Label lblWelcome = new Label("Welcome,  you're in your first access in Zumeh's site." +
-				" We need to collect some informations about you to complete your account.");
+		Label lblWelcome = new Label(
+				"Welcome,  you're in your first access in Zumeh's site."
+						+ " We need to collect some informations about you to complete your account.");
 		absolutePanel_3.add(lblWelcome, 10, 7);
 		lblWelcome.setSize("583px", "41px");
-		
-				Label lblNewLabel = new Label("Interest areas:");
-				absolutePanel_3.add(lblNewLabel, 29, 377);
-				
-						final SuggestBox suggestBox = new SuggestBox(oracle);
-						absolutePanel_3.add(suggestBox, 121, 411);
-						suggestBox.addSelectionHandler(new SelectionHandler<Suggestion>() {
-							public void onSelection(SelectionEvent<Suggestion> event) {
-								setInterestAreas(suggestBox.getValue());
-							}
-						});
-						suggestBox.ensureDebugId("cwSuggestBox");
-						suggestBox.setSize("141px", "17px");
-						whoAreYouTextArea = new TextArea();
-						absolutePanel_3.add(whoAreYouTextArea, 293, 196);
-						whoAreYouTextArea.setText("Who are you?");
-						whoAreYouTextArea.setSize("425px", "158px");
-						
-								final SuggestBox suggestBox_1 = new SuggestBox(oracle);
-								absolutePanel_3.add(suggestBox_1, 121, 442);
-								suggestBox_1.addSelectionHandler(new SelectionHandler<Suggestion>() {
-									public void onSelection(SelectionEvent<Suggestion> event) {
-										setInterestAreas(suggestBox_1.getValue());
-									}
-								});
-								suggestBox_1.setSize("141px", "17px");
-								
-										final SuggestBox suggestBox_2 = new SuggestBox(oracle);
-										absolutePanel_3.add(suggestBox_2, 121, 380);
-										suggestBox_2.addSelectionHandler(new SelectionHandler<Suggestion>() {
-											public void onSelection(SelectionEvent<Suggestion> event) {
-												setInterestAreas(suggestBox_2.getValue());
-											}
-										});
-										suggestBox_2.setSize("141px", "17px");
-										Button btnSave = new Button("Save");
-										absolutePanel_3.add(btnSave, 475, 387);
-										btnSave.setStyleName("botaoTeste");
-										btnSave.setSize("56px", "24px");
-										Button btnCancel = new Button("Cancel");
-										absolutePanel_3.add(btnCancel, 555, 387);
-										btnCancel.setStyleName("botaoTeste");
-										btnCancel.setText("Cancel");
-										btnCancel.setSize("56px", "24px"); // FIXME ajeitar aqui!
-										
-												btnCancel.addClickHandler(cancelClickHandler());
-										btnSave.addClickHandler(new ClickHandler() {
 
-											@Override
-											public void onClick(ClickEvent event) {
-												if (isAlldataCompleted()) {
+		Label lblNewLabel = new Label("Interest areas:");
+		absolutePanel_3.add(lblNewLabel, 29, 377);
 
-													AsyncCallback<Boolean> assyncCallback = createAsyncCallbackForUser();
+		final SuggestBox suggestBox = new SuggestBox(oracle);
+		absolutePanel_3.add(suggestBox, 121, 411);
+		suggestBox.addSelectionHandler(new SelectionHandler<Suggestion>() {
+			public void onSelection(SelectionEvent<Suggestion> event) {
+				setInterestAreas(suggestBox.getValue());
+			}
+		});
+		suggestBox.ensureDebugId("cwSuggestBox");
+		suggestBox.setSize("141px", "17px");
+		whoAreYouTextArea = new TextArea();
+		absolutePanel_3.add(whoAreYouTextArea, 293, 196);
+		whoAreYouTextArea.setText("Who are you?");
+		whoAreYouTextArea.setSize("425px", "158px");
 
-													AsyncCallback<Void> emailCallback = createAsyncCallbackForEmail();
+		final SuggestBox suggestBox_1 = new SuggestBox(oracle);
+		absolutePanel_3.add(suggestBox_1, 121, 442);
+		suggestBox_1.addSelectionHandler(new SelectionHandler<Suggestion>() {
+			public void onSelection(SelectionEvent<Suggestion> event) {
+				setInterestAreas(suggestBox_1.getValue());
+			}
+		});
+		suggestBox_1.setSize("141px", "17px");
 
-													UserTO newUser = createUser();
-													zumehService.addUser(newUser, assyncCallback);
+		final SuggestBox suggestBox_2 = new SuggestBox(oracle);
+		absolutePanel_3.add(suggestBox_2, 121, 380);
+		suggestBox_2.addSelectionHandler(new SelectionHandler<Suggestion>() {
+			public void onSelection(SelectionEvent<Suggestion> event) {
+				setInterestAreas(suggestBox_2.getValue());
+			}
+		});
+		suggestBox_2.setSize("141px", "17px");
+		Button btnSave = new Button("Save");
+		absolutePanel_3.add(btnSave, 475, 387);
+		btnSave.setStyleName("botaoTeste");
+		btnSave.setSize("56px", "24px");
+		Button btnCancel = new Button("Cancel");
+		absolutePanel_3.add(btnCancel, 555, 387);
+		btnCancel.setStyleName("botaoTeste");
+		btnCancel.setText("Cancel");
+		btnCancel.setSize("56px", "24px");
 
-													ClientSessionManager clientSessionManager = createClientSessionManager(newUser);
-													
-													//sendMail(emailCallback);
+		btnCancel.addClickHandler(cancelClickHandler());
+		btnSave.addClickHandler(new ClickHandler() {
 
-													Window.alert("Your informations was saved with success.");
+			@Override
+			public void onClick(ClickEvent event) {
+				if (isAlldataCompleted()) {
+					verifyIfEmailExists(email);
+				}
+			}
+		});
+		whoAreYouTextArea.addFocusHandler(new FocusHandler() {
 
-													loadProfilePage(clientSessionManager);
+			int counter = 0;
 
-												} else {
-													Window.alert("Some informations is incomplete.");
-												}
-											}
+			@Override
+			public void onFocus(FocusEvent event) {
+				if (counter == 0) {
+					whoAreYouTextArea.setText("");
+					counter++;
+				}
+			}
+		});
 
-											private ClientSessionManager createClientSessionManager(UserTO newUser) {
-												ClientSessionManager clientSessionManager = new ClientSessionManager();
-												clientSessionManager.setUserOwner(newUser);
-												return clientSessionManager;
-											}
+		whoAreYouTextArea.addChangeHandler(new ChangeHandler() {
 
-											private void sendMail(AsyncCallback<Void> em) {
-												zumehService.sendEmail(ZUMEH_USER, email, "Welcome to Zumeh",
-														MESSAGE, em);
-											}
-
-											private AsyncCallback<Boolean> createAsyncCallbackForUser() {
-												AsyncCallback<Boolean> w = new AsyncCallback<Boolean>() {
-
-													@Override
-													public void onFailure(Throwable caught) {
-														caught.printStackTrace();
-													}
-
-													@Override
-													public void onSuccess(Boolean result) {
-														System.out
-																.println("DEBUG1: On succes do createAsyncCallbackForUser");
-														System.out.println(result);
-													}
-												};
-												return w;
-											}
-
-											private AsyncCallback<Void> createAsyncCallbackForEmail() {
-												AsyncCallback<Void> em = new AsyncCallback<Void>() {
-
-													@Override
-													public void onFailure(Throwable caught) {
-														caught.printStackTrace();
-													}
-
-													@Override
-													public void onSuccess(Void result) {
-														System.out.println(result);
-
-													}
-												};
-												return em;
-											}
-
-											private UserTO createUser() {
-												UserTO newUser = new UserTO();
-												newUser.setBirthday(birthDay);
-												newUser.setEmail(email);
-												newUser.setName(fullName);
-												newUser.setGender(gender);
-												newUser.setInterestedArea(interestAreas);
-												newUser.setLocation(userLocation);
-												newUser.setWhoAreYou(whoAreYou);
-												newUser.setLogin(login);
-												newUser.setPassword(password);
-												newUser.setImage(image);
-												return newUser;
-											}
-										});
-						whoAreYouTextArea.addFocusHandler(new FocusHandler() {
-
-							int counter = 0;
-
-							@Override
-							public void onFocus(FocusEvent event) {
-								if (counter == 0) {
-									whoAreYouTextArea.setText("");
-									counter++;
-								}
-							}
-						});
-						
-								whoAreYouTextArea.addChangeHandler(new ChangeHandler() {
-						
-									@Override
-									public void onChange(ChangeEvent event) {
-										setWhoAreYou(whoAreYouTextArea.getText());
-									}
-								});
+			@Override
+			public void onChange(ChangeEvent event) {
+				setWhoAreYou(whoAreYouTextArea.getText());
+			}
+		});
 		return absolutePanel_3;
 	}
 
@@ -363,46 +305,6 @@ public class FirstAccessPage extends Page implements EntryPoint {
 		Label lblLocation = new Label("Location:");
 		absolutePanel_3.add(lblLocation, 173, 318);
 	}
-
-	// private void uploadUserImage(AbsolutePanel absolutePanel) {
-	// final FileUpload fileUpload = new FileUpload();
-	//		
-	// fileUpload.addChangeHandler(new ChangeHandler() {
-	//			
-	// @Override
-	// public void onChange(ChangeEvent event) {
-	// fileName = fileUpload.getFilename();
-	//				
-	// if (fileName.length() == 0) {
-	// Window.alert("Problems...");
-	// } else {
-	// Window.alert("OK");
-	// }
-	// }
-	// });
-	//		
-	// absolutePanel.add(fileUpload, 10, 0);
-	//		
-	//		
-	//		
-	// //File file = new File(fileName);
-	// File file = new File("images" + FILE_SEPARATOR + "sheldon.jpg");
-	//		
-	// byte[] bFile = new byte[(int) file.length()];
-	//		
-	// try {
-	// BufferedImage im = new BufferedImage(width, height, imageType)
-	// FileInputStream fileInputStream = new FileInputStream(file);
-	// // convert file into array of bytes
-	// fileInputStream.read(bFile);
-	// image = bFile;
-	// fileInputStream.close();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	//		
-	//		
-	// }
 
 	private void loginAndPassTextBox(AbsolutePanel absolutePanel_4) {
 		final TextBox loginTextBox = new TextBox();
@@ -647,9 +549,110 @@ public class FirstAccessPage extends Page implements EntryPoint {
 	}
 
 	private boolean isAlldataCompleted() {
+		System.out.println("EXISTE? " + emailAlreadyExists);
 		return email != null && login != null && password != null
 				&& fullName != null && !userLocation.equals("Select...");
 	}
+	
+	private void verifyIfEmailExists(String email) {
+		if (email != null) {
+			zumehService.getUserByEmail(email, new AsyncCallback<UserTO>() {
+				
+				@Override
+				public void onSuccess(UserTO result) {
+					if (result == null) {
+						AsyncCallback<Boolean> assyncCallback = createAsyncCallbackForUser();
+
+						AsyncCallback<Void> emailCallback = createAsyncCallbackForEmail();
+
+						UserTO newUser = createUser();
+						zumehService.addUser(newUser, assyncCallback);
+
+						ClientSessionManager clientSessionManager = createClientSessionManager(newUser);
+						
+						//sendMail(emailCallback);
+
+						Window.alert("Your informations was saved with success.");
+
+						loadProfilePage(clientSessionManager);
+						
+					} else {
+						Window.alert("Some informations is incomplete." +
+								"\nMaybe this email is already in use!");
+					}
+					
+					
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					// TODO Auto-generated method stub
+				}
+			});
+		}
+	}
+	
+	private ClientSessionManager createClientSessionManager(UserTO newUser) {
+		ClientSessionManager clientSessionManager = new ClientSessionManager();
+		clientSessionManager.setUserOwner(newUser);
+		return clientSessionManager;
+	}
+
+	private void sendMail(AsyncCallback<Void> em) {
+		zumehService.sendEmail(ZUMEH_USER, email, "Welcome to Zumeh",
+				MESSAGE, em);
+	}
+
+	private AsyncCallback<Boolean> createAsyncCallbackForUser() {
+		AsyncCallback<Boolean> w = new AsyncCallback<Boolean>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+			}
+
+			@Override
+			public void onSuccess(Boolean result) {
+				System.out
+						.println("DEBUG1: On succes do createAsyncCallbackForUser");
+				System.out.println(result);
+			}
+		};
+		return w;
+	}
+
+	private AsyncCallback<Void> createAsyncCallbackForEmail() {
+		AsyncCallback<Void> em = new AsyncCallback<Void>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				System.out.println(result);
+
+			}
+		};
+		return em;
+	}
+
+	private UserTO createUser() {
+		UserTO newUser = new UserTO();
+		newUser.setBirthday(birthDay);
+		newUser.setEmail(email);
+		newUser.setName(fullName);
+		newUser.setGender(gender);
+		newUser.setInterestedArea(interestAreas);
+		newUser.setLocation(userLocation);
+		newUser.setWhoAreYou(whoAreYou);
+		newUser.setLogin(login);
+		newUser.setPassword(password);
+		newUser.setImageLocation(imagePath);
+		return newUser;
+	}
+
 
 	private void saveButton(AbsolutePanel absolutePanel) {
 	}
@@ -714,6 +717,57 @@ public class FirstAccessPage extends Page implements EntryPoint {
 			// TODO ADD LOG
 		}
 
+	}
+	
+	public FormPanel createImagePanel() {
+		//final FormPanel form = new FormPanel();
+		form.setAction(UPLOAD_ACTION_URL);
+		form.setEncoding(FormPanel.ENCODING_MULTIPART);
+		form.setMethod(FormPanel.METHOD_POST);
+		
+		VerticalPanel panel = new VerticalPanel();
+		form.setWidget(panel);
+		
+		// Create a FileUpload widget.
+		FileUpload upload = new FileUpload();
+		upload.setName("uploadFormElement");
+		panel.add(upload);
+
+		panel.add(new Button("Submit", new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				form.submit();
+			}
+		}));
+
+		// Add an event handler to the form.
+		form.addSubmitHandler(new FormPanel.SubmitHandler() {
+			public void onSubmit(SubmitEvent event) {
+				System.out.println("Submiting...");
+			}
+		});
+
+		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+			public void onSubmitComplete(SubmitCompleteEvent event) {
+				setImagePath(getAbsolutPath(event.getResults()));
+				System.out.println("Terminou com sucesso. lol ");
+			}
+
+		
+		});
+		
+		return form;
+	}
+	
+	private void setImagePath(String absolutPath) {
+		this.imagePath = absolutPath;
+		
+	}
+	
+	private String getAbsolutPath(String result) {
+		int positionInit = result.indexOf(">") + 1;
+		int positionEnd = result.indexOf("/") - 1;
+		
+		return result.substring(positionInit, positionEnd);
 	}
 	
 	/*

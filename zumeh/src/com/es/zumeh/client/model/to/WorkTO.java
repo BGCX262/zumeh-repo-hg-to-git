@@ -19,7 +19,7 @@ public class WorkTO implements Serializable {
 	
 	public NodeTO getNodeTOByNodeId(Long i) {
 		for(NodeTO tmpNodeTO : nodeTOList) {
-			if(tmpNodeTO.getId() == i) {
+			if(tmpNodeTO.getId().equals(i)) {
 				return tmpNodeTO;
 			}
 		}

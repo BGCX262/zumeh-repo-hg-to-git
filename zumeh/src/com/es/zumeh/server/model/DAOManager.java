@@ -102,15 +102,16 @@ public class DAOManager {
 		
 	}
 	
-	public void addRevision(RevisionTO revisionTO) {
+	public Long addRevision(RevisionTO revisionTO) {
 		try {
-			getRevisionDAO().saveRevision(revisionTO);
+			return getRevisionDAO().saveRevision(revisionTO);
 		} catch (Exception e) {
 			e.printStackTrace();
 			HibernateUtil.rollbackAndCloseSession();
 		} finally {
 			HibernateUtil.closeSession();
 		}
+		return 0L;
 		
 	}
 	
@@ -150,8 +151,12 @@ public class DAOManager {
 	}
 	
 	public UserTO getUserByEmail(String email) {
-		return getUserDAO().convertToTransferObjectUser(
-				getUserDAO().getUserByEmail(email));
+		User userByEmail = getUserDAO().getUserByEmail(email);
+		if (userByEmail != null) {
+			return getUserDAO().convertToTransferObjectUser(userByEmail);
+		}
+		
+		return null;
 	}
 	
 	public UserDAO getUserDAO() {

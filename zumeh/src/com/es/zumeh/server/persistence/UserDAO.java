@@ -1,5 +1,10 @@
 package com.es.zumeh.server.persistence;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +17,8 @@ import com.es.zumeh.client.model.to.UserTO;
 import com.es.zumeh.server.model.persistence.User;
 
 public class UserDAO {
+	
+	private static final String SHELDON = "images/sheldon.jpg";
 
 	public void saveUser(User user) {
 		Session session = HibernateUtil.getSession();
@@ -35,7 +42,6 @@ public class UserDAO {
 	}
 
 	public boolean addUser(UserTO user) {
-		
 		User newUser = convertToRealUser(user);
 
 		if (verifyLoginAndEmail(newUser)) { // FIXME add log
@@ -99,7 +105,6 @@ public class UserDAO {
 
 
 	public UserTO verifyUserTO(UserTO user) {
-		
 		User newUser = convertToRealUser(user);
 		if(isUserChecked(newUser)) {
 			return convertToTransferObjectUser(getUserByLogin(newUser.getLogin()));
@@ -117,7 +122,13 @@ public class UserDAO {
 	}
 
 	private boolean isUserChecked(User newUser) {
-		return (existsLogin(newUser.getLogin()) && existPassword(newUser.getPassword()));
+		User userByLogin = getUserByLogin(newUser.getLogin());
+		if (existsLogin(newUser.getLogin()) && existPassword(newUser.getPassword())
+				&& newUser.getLogin().hashCode() == userByLogin.getLogin().hashCode()) {
+			return true;
+		}
+		return false;
+		//return (existsLogin(newUser.getLogin()) && existPassword(newUser.getPassword()));
 	}
 
 	private boolean existPassword(String password) {
@@ -135,7 +146,15 @@ public class UserDAO {
 		newUser.setLocation(user.getLocation());
 		newUser.setName(user.getName());
 		newUser.setWhoAreYou(user.getWhoAreYou());
-		//newUser.setImage(user.getImage());
+		if (user.getImageLocation() == null) {
+			getImageByPath(SHELDON, user.getEmail());
+			newUser.setImageLocation(SHELDON);
+		} else {
+			getImageByPath(user.getImageLocation(), user.getEmail());
+			newUser.setImageLocation(user.getImageLocation());
+		}
+		
+		//newUser.setImage(getImageByPath(user.getImageLocation()));
 		return newUser;
 	}
 
@@ -150,6 +169,7 @@ public class UserDAO {
 		newUser.setLocation(user.getLocation());
 		newUser.setName(user.getName());
 		newUser.setWhoAreYou(user.getWhoAreYou());
+		newUser.setImageLocation("C:\\images\\" + user.getEmail());
 		//newUser.setImage(user.getImage());
 		return newUser;
 	}
@@ -178,5 +198,41 @@ public class UserDAO {
 
 		return user;
 	}
+	
+	private void getImageByPath(String oldName, String newName) {
+		String relativePath = "C:\\images";
+		if (oldName != null && newName != null ) {
+			File inputFile = new File(oldName);
+			File outputFile = new File(relativePath, newName);
+			
+			try {
+				copyFile(inputFile, outputFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			//inputFile.delete();
+		}
+		
+	}
+	
+	public static void copyFile(File source, File destination) throws IOException {  
+	     if (destination.exists())  
+	         destination.delete();  
+	  
+	     FileChannel sourceChannel = null;  
+	     FileChannel destinationChannel = null;  
+	  
+	     try {  
+	         sourceChannel = new FileInputStream(source).getChannel();  
+	         destinationChannel = new FileOutputStream(destination).getChannel();  
+	         sourceChannel.transferTo(0, sourceChannel.size(),  
+	                 destinationChannel);  
+	     } finally {  
+	         if (sourceChannel != null && sourceChannel.isOpen())  
+	             sourceChannel.close();  
+	         if (destinationChannel != null && destinationChannel.isOpen())  
+	             destinationChannel.close();  
+	    }  
+	}  
 
 }
